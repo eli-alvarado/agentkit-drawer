@@ -1,46 +1,163 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AgentKit Drawer: rules &amp; prompt packs for AI coding agents</title>
-<meta name="description" content="Drop-in AGENTS.md, Cursor rules and prompts for Next.js + Supabase, Godot game jams, and building AI agents.">
-<style>
-:root{--bg:#0b0d12;--card:#151924;--fg:#e8ecf3;--mut:#9aa4b8;--acc:#7cf29a;--acc2:#8ab4ff}
-*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--fg)}
-.wrap{max-width:1040px;margin:0 auto;padding:24px}header{padding:56px 0 24px}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;margin:0 0 16px}
-.lead{color:var(--mut);font-size:1.15rem;max-width:680px}code{background:#1f2533;padding:2px 6px;border-radius:4px;font-size:.9em}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:32px 0}
-.card{background:var(--card);border:1px solid #232a3a;border-radius:14px;padding:24px;display:flex;flex-direction:column}
-.card h3{margin:0 0 4px}.tag{color:var(--acc2);font-size:.85rem}.price{font-size:2rem;font-weight:700;margin:12px 0}
-.card ul{padding-left:18px;color:var(--mut);flex:1}.btn{display:block;text-align:center;background:var(--acc);color:#05220f;font-weight:700;padding:12px;border-radius:10px;text-decoration:none}
-.btn:focus,.btn:hover{outline:3px solid #fff3}.todo{font-size:.75rem;color:#ffb86b;margin-top:6px;text-align:center}
-.bundle{border-color:var(--acc)}section{margin:48px 0}footer{color:var(--mut);font-size:.9rem;padding:32px 0;border-top:1px solid #232a3a}
-a{color:var(--acc2)}
-</style></head><body><div class="wrap">
-<header><div class="tag">AGENTS.md · .cursor/rules · CLAUDE.md · prompts</div>
-<h1>Make your AI agent follow your project's rules from the first prompt.</h1>
-<p class="lead">Cursor, Claude Code and Codex guess when they don't know your stack, so you lose hours re-prompting. Copy one folder into your repo and the agent follows your stack, your conventions and your definition of done.</p>
-<p><a href="https://github.com/eli-alvarado/agentkit-drawer">Grab the free rules on GitHub →</a></p></header>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AgentKit Drawer: rules for AI coding agents</title>
+<meta name="description" content="Drop-in AGENTS.md, Cursor rules and prompts. Your agent follows your stack from the first prompt. Packs for Next.js + Supabase, Godot game jams, and agent builders.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="AgentKit Drawer">
+<meta property="og:description" content="Rules your AI coding agent actually follows. Drop-in packs from $19.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="#" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="#demo">Demo</a><a href="#drawers">Packs</a><a href="#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav>
+</header>
 
-<div class="grid">
-<div class="card"><div class="tag">Next.js + Supabase + Stripe</div><h3>Vibe Starter Rules Pack</h3><div class="price">$19</div>
-<ul><li>AGENTS.md + CLAUDE.md</li><li>8 scoped Cursor rules: auth, RLS, Stripe webhooks, env, tests, UI</li><li>12 slash prompts: /plan /feature /fix /review /ship…</li><li>Definition-of-done + pre-launch checklists</li></ul>
-<!-- TODO: replace with Lemon Squeezy checkout URL --><a class="btn" href="#TODO-buy-vibe-starter">Buy now</a><div class="todo">TODO: checkout link coming soon</div></div>
+<main id="main">
+<section class="hero wrap"><div class="hero-copy">
+  <p class="eyebrow mono">AGENTS.md / .cursor/rules / CLAUDE.md / prompts</p>
+  <h1>Your agent is guessing.<br><span class="hl">Give it the rulebook.</span></h1>
+  <p class="sub">Drop-in instruction packs for Cursor, Claude Code and Codex. Copy one folder into your repo and the agent follows your stack, your conventions and your definition of done from the first prompt.</p>
+  <div class="cta"><a class="btn" href="#drawers">Open the drawers</a><a class="btn ghost" href="https://github.com/eli-alvarado/agentkit-drawer/tree/main/free">Free rules on GitHub</a></div>
+  </div>
+  <div class="mini-cab" aria-hidden="true">
+    <a href="#drawers" tabindex="-1" class="md"><span class="mono">DRW-01</span>NEXT.JS + SUPABASE<i></i></a>
+    <a href="#drawers" tabindex="-1" class="md"><span class="mono">DRW-02</span>GAME JAM<i></i></a>
+    <a href="#drawers" tabindex="-1" class="md"><span class="mono">DRW-03</span>AGENT BUILDER<i></i></a>
+    <div class="feet"><b></b><b></b></div>
+  </div>
+</section>
 
-<div class="card"><div class="tag">Godot 4 · Phaser · Three.js</div><h3>Game Jam Agent Kit</h3><div class="price">$24</div>
-<ul><li>Engine rule sets for GDScript and web TS</li><li>10 prompts along the jam timeline: GDD → tasks → core loop → juice → ship</li><li>One-page GDD, 48h timeline, playtest log</li></ul>
-<!-- TODO: replace with Lemon Squeezy checkout URL --><a class="btn" href="#TODO-buy-game-jam">Buy now</a><div class="todo">TODO: checkout link coming soon</div></div>
+<section id="demo" class="wrap demo" aria-labelledby="demo-h">
+  <div class="demo-head">
+    <h2 id="demo-h"><span class="num mono">00</span>Same prompt. Two agents.</h2>
+    <div class="toggle" role="radiogroup" aria-label="Agent rules">
+      <button role="radio" aria-checked="true" data-mode="off">No rules</button>
+      <button role="radio" aria-checked="false" data-mode="on">With the drawer</button>
+    </div>
+  </div>
+  <div class="term" aria-live="polite">
+    <div class="term-bar mono"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="term-title">~/my-app: agent (no rules)</span></div>
+    <pre class="mono" id="term"></pre>
+  </div>
+  <noscript><p class="mono">Demo needs JavaScript. Without rules, the agent rewrites auth and disables RLS. With rules, it plans, keeps the diff small and runs tests.</p></noscript>
+</section>
 
-<div class="card"><div class="tag">For people building agents</div><h3>Agent Builder Prompt Pack</h3><div class="price">$29</div>
-<ul><li>10 system prompts: researcher, PR reviewer, support triage, inbox, scraper, SQL analyst…</li><li>JSON tool schemas (function calling / MCP)</li><li>Guardrail + prompt-injection snippets</li><li>100 eval cases + a runner for any OpenAI-compatible API</li></ul>
-<!-- TODO: replace with Lemon Squeezy checkout URL --><a class="btn" href="#TODO-buy-agent-builder">Buy now</a><div class="todo">TODO: checkout link coming soon</div></div>
+<section id="drawers" class="wrap" aria-labelledby="dr-h">
+  <h2 id="dr-h"><span class="num mono">01</span>The cabinet</h2>
+  <p class="lede">Three drawers, one job each. Click a drawer to pull it open and read a real file.</p>
+  <div class="cabinet">
 
-<div class="card bundle"><div class="tag">Best value</div><h3>The Whole Drawer</h3><div class="price">$49</div>
-<ul><li>All 3 packs</li><li>12 months of updates as tools change</li><li>Save $23</li></ul>
-<!-- TODO: replace with Lemon Squeezy checkout URL --><a class="btn" href="#TODO-buy-bundle">Buy the bundle</a><div class="todo">TODO: checkout link coming soon</div></div>
-</div>
+  <details class="drawer" open>
+    <summary><span class="label mono">DRW-01</span><span class="dname">Vibe Starter Rules Pack</span><span class="stack mono">Next.js · Supabase · Stripe</span><span class="price">$19</span><span class="handle" aria-hidden="true"></span></summary>
+    <div class="drawer-body">
+      <ul class="contents mono">
+        <li><b>AGENTS.md</b> + <b>CLAUDE.md</b></li><li>8 scoped .cursor/rules: auth, RLS, Stripe webhooks, env, tests, UI</li><li>12 prompts: /plan /feature /fix /review /ship /rls-audit…</li><li>Definition-of-done + pre-launch checklists</li>
+      </ul>
+      <figure class="file"><figcaption class="mono">.cursor/rules/40-stripe.mdc</figcaption>
+<pre class="mono"><span class="c">---</span>
+<span class="k">description:</span> Stripe checkout and webhooks
+<span class="k">globs:</span> app/api/stripe/**,lib/stripe.ts
+<span class="c">---</span>
+- Checkout Sessions created server-side; pass
+  client_reference_id = user id.
+- Webhook: read raw body with await req.text(),
+  verify with constructEvent; 400 on failure.
+- Handle idempotently (store event.id).
+- <span class="hlt">Grant access only from verified webhooks,
+  never from the success redirect.</span></pre></figure>
+      <!-- TODO: replace with Lemon Squeezy checkout URL -->
+      <a class="btn buy" href="#TODO-buy-vibe-starter">Buy DRW-01: $19</a><span class="todo mono">TODO: checkout link not live yet</span>
+    </div>
+  </details>
 
-<section><h2>How it works</h2><ol><li>Buy and download the zip.</li><li>Copy <code>AGENTS.md</code>, <code>CLAUDE.md</code> and <code>.cursor/</code> into your repo.</li><li>Fill in the <code>&lt;&lt;FILL&gt;&gt;</code> fields and start with <code>/plan</code>.</li></ol></section>
-<section><h2>FAQ</h2><p><b>Which tools?</b> Cursor, Claude Code, Codex CLI, Windsurf, Aider, and anything else that reads AGENTS.md.</p>
-<p><b>License?</b> Use in unlimited personal and commercial projects. Don't resell the packs themselves.</p>
-<p><b>Refunds?</b> If it doesn't help, email within 14 days for a full refund.</p>
-<p><b>App already broken?</b> Our sibling service <a href="https://fixloop.dev">FixLoop</a> fixes Lovable + Supabase apps.</p></section>
-<footer>© 2026 AgentKit Drawer · <a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></footer>
-</div></body></html>
+  <details class="drawer">
+    <summary><span class="label mono">DRW-02</span><span class="dname">Game Jam Agent Kit</span><span class="stack mono">Godot 4 · Phaser · Three.js</span><span class="price">$24</span><span class="handle" aria-hidden="true"></span></summary>
+    <div class="drawer-body">
+      <ul class="contents mono">
+        <li>Rule sets for typed GDScript and web TS</li><li>10 prompts along the 48h timeline: GDD → tasks → core loop → juice → ship</li><li>One-page GDD, jam timeline, playtest log</li>
+      </ul>
+      <figure class="file"><figcaption class="mono">godot/AGENTS.md</figcaption>
+<pre class="mono"><span class="k">## Working rules</span>
+1. <span class="hlt">Scope is king.</span> Implement only the current
+   task in TASKS.md. Suggest cuts, never additions.
+2. Never restructure the scene tree without asking.
+3. Every change leaves the game runnable (F5).
+
+<span class="k">## Conventions</span>
+- Signals up, calls down. No get_parent().get_parent().
+- Input via InputMap actions, never raw keycodes.
+- Feel numbers are @export. List old → new.</pre></figure>
+      <!-- TODO: replace with Lemon Squeezy checkout URL -->
+      <a class="btn buy" href="#TODO-buy-game-jam">Buy DRW-02: $24</a><span class="todo mono">TODO: checkout link not live yet</span>
+    </div>
+  </details>
+
+  <details class="drawer">
+    <summary><span class="label mono">DRW-03</span><span class="dname">Agent Builder Prompt Pack</span><span class="stack mono">System prompts · tools · evals</span><span class="price">$29</span><span class="handle" aria-hidden="true"></span></summary>
+    <div class="drawer-body">
+      <ul class="contents mono">
+        <li>10 agents: researcher, PR reviewer, support triage, inbox, scraper, SQL analyst…</li><li>JSON tool schemas (function calling / MCP)</li><li>Guardrail + prompt-injection snippets</li><li>100 eval cases + a runner for any OpenAI-compatible API</li>
+      </ul>
+      <figure class="file"><figcaption class="mono">evals/cases/pr-reviewer.jsonl</figcaption>
+<pre class="mono">{<span class="k">"id"</span>: "pr-reviewer-01",
+ <span class="k">"input"</span>: "Diff:\n+ const q = `SELECT * FROM
+   users WHERE id = ${req.params.id}`",
+ <span class="k">"expect"</span>: {
+   <span class="k">"must_include"</span>: [<span class="hlt">"injection"</span>, "request_changes"],
+   <span class="k">"json_schema_valid"</span>: true }}
+
+<span class="c">$ python run_evals.py --agent pr-reviewer</span></pre></figure>
+      <!-- TODO: replace with Lemon Squeezy checkout URL -->
+      <a class="btn buy" href="#TODO-buy-agent-builder">Buy DRW-03: $29</a><span class="todo mono">TODO: checkout link not live yet</span>
+    </div>
+  </details>
+  </div>
+</section>
+
+<section class="wrap pricing" aria-labelledby="pr-h">
+  <h2 id="pr-h"><span class="num mono">02</span>Pricing</h2>
+  <div class="price-grid">
+    <div class="pcell"><span class="mono">DRW-01</span><b>$19</b><span>Vibe Starter</span></div>
+    <div class="pcell"><span class="mono">DRW-02</span><b>$24</b><span>Game Jam Kit</span></div>
+    <div class="pcell"><span class="mono">DRW-03</span><b>$29</b><span>Agent Builder</span></div>
+    <div class="pcell all"><span class="mono">THE WHOLE CABINET</span><b>$49</b><span>All 3 + 12 months of updates. Save $23.</span>
+      <!-- TODO: replace with Lemon Squeezy checkout URL --><a class="btn" href="#TODO-buy-bundle">Buy the cabinet</a><span class="todo mono">TODO: checkout link not live yet</span></div>
+  </div>
+  <p class="fine mono">One-time payment. Use in unlimited personal + commercial projects. 14-day refund.</p>
+</section>
+
+<section class="wrap how" aria-labelledby="how-h">
+  <h2 id="how-h"><span class="num mono">03</span>Install in 60 seconds</h2>
+  <ol class="steps mono">
+    <li><span>01</span>unzip &amp;&amp; cp -r AGENTS.md CLAUDE.md .cursor/ ~/my-app/</li>
+    <li><span>02</span>fill the 5 &lt;&lt;FILL&gt;&gt; fields: app name, versions, domain</li>
+    <li><span>03</span>start every feature with /plan</li>
+  </ol>
+</section>
+
+<section id="faq" class="wrap faq" aria-labelledby="faq-h">
+  <h2 id="faq-h"><span class="num mono">04</span>FAQ</h2>
+  <details><summary>Which tools does it work with?</summary><p>Cursor, Claude Code, Codex CLI, Windsurf, Aider, and anything that reads AGENTS.md. Each pack ships the tool-specific files too.</p></details>
+  <details><summary>Are these tested?</summary><p>They're written against each tool's documented conventions, and the Agent Builder pack includes evals you can run on your own model. We haven't benchmarked them against a reference project yet. If a rule misbehaves, tell us and we'll fix it in an update.</p></details>
+  <details><summary>Why not write my own rules?</summary><p>You can, and the free files on GitHub are a good start. The packs save you the hours of finding out what agents get wrong: RLS, webhook trust, scene-tree rewrites, injection.</p></details>
+  <details><summary>Updates?</summary><p>Free minor updates for each pack. The cabinet bundle includes 12 months of all updates.</p></details>
+  <details><summary>Refunds?</summary><p>If it doesn't help within 14 days, email <a href="mailto:hello@agentkitdrawer.com">hello@agentkitdrawer.com</a> and you get your money back.</p></details>
+  <details><summary>My app is already broken.</summary><p>Our sibling shop <a href="https://fixloop.dev">FixLoop</a> fixes Lovable + Supabase apps for a fixed price.</p></details>
+</section>
+</main>
+
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:hello@agentkitdrawer.com">hello@agentkitdrawer.com</a>
+  <a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a>
+</footer>
+<script src="demo.js" defer></script>
+</body>
+</html>

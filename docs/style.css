@@ -133,3 +133,15 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
   #term{font-size:13px;min-height:360px;padding:14px}
   .term{box-shadow:5px 5px 0 var(--acc)}
 }
+/* article pages */
+.article{max-width:760px;padding-top:56px;padding-bottom:40px}
+.article h1{font-size:clamp(2.2rem,5.6vw,4rem)}
+.article h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-top:44px}
+.article p,.article li{color:var(--mut)}.article strong{color:var(--ink)}
+.snip{border:2px solid var(--ink);background:var(--term);color:var(--term-fg);margin:20px 0}
+.snip .bar{display:flex;justify-content:space-between;align-items:center;font:12px var(--mono);padding:8px 12px;border-bottom:1px solid #2c2822;color:#a39b8a}
+.snip button{font:600 12px var(--mono);background:var(--acc);color:#15130f;border:0;padding:5px 10px;cursor:pointer}
+.snip pre{margin:0;padding:16px;font:13px/1.6 var(--mono);overflow-x:auto;white-space:pre-wrap}
+.ctabox{border:2px solid var(--ink);padding:24px;margin:44px 0;background:var(--paper2)}
+.ctabox h2{margin-top:0}
+.crumb{font:13px var(--mono);color:var(--mut)}

@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGENTS.md for Godot 4: rules that keep AI agents from wrecking your scene tree</title><meta name="description" content="An AGENTS.md template for Godot 4 and typed GDScript. Keeps Cursor, Claude Code and Codex on scope during game jams. Free copy-paste file."><meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/agents-md-godot/">
+<meta property="og:type" content="article"><meta property="og:title" content="AGENTS.md for Godot 4: rules that keep AI agents from wrecking your scene tree"><meta property="og:description" content="An AGENTS.md template for Godot 4 and typed GDScript. Keeps Cursor, Claude Code and Codex on scope during game jams. Free copy-paste file.">
+<meta property="og:url" content="https://agentkitdrawer.com/agents-md-godot/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / AGENTS.md for Godot 4</p>
+<h1>AGENTS.md for Godot 4</h1>
+<p>Point an AI agent at a Godot project and it will happily restructure your scene tree, chain <code>get_parent()</code> calls, hardcode keycodes and quietly "improve" your jump feel. In a 48-hour jam, that's how the build is broken at hour 40.</p>
+<h2>What AGENTS.md is</h2>
+<p><code>AGENTS.md</code> is a plain Markdown file at the repo root that coding agents (Codex, Cursor, Windsurf, Aider, Zed, and Claude Code via an import in CLAUDE.md) read before working. For Godot, put it next to <code>project.godot</code>.</p>
+<h2>The rules that matter most for games</h2>
+<ul><li><strong>Scope is king.</strong> The agent implements only the current task and suggests cuts, never additions.</li>
+<li><strong>Always runnable.</strong> Every change must leave F5 working.</li>
+<li><strong>Signals up, calls down.</strong> This keeps scenes decoupled so the agent can't tangle them.</li>
+<li><strong>Feel numbers are <code>@export</code></strong>, and every change lists old → new values, so you stay in control of game feel.</li>
+<li><strong>InputMap actions only</strong>, so gamepad works for free.</li></ul>
+<h2>Free snippet: copy it</h2>
+<div class="snip"><div class="bar"><span>AGENTS.md (Godot 4)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md (Godot 4)
+Game: &lt;&lt;FILL title&gt;&gt;. Genre: &lt;&lt;FILL&gt;&gt;. Jam: &lt;&lt;FILL name, theme, deadline&gt;&gt;. Engine: Godot 4.x, GDScript (typed). Target: &lt;&lt;FILL web/desktop&gt;&gt;.
+
+## Working rules
+1. Scope is king. Implement only what&#x27;s in the current task from TASKS.md. Suggest cuts, never additions.
+2. Before coding, list the scenes/scripts you&#x27;ll touch. Never restructure the scene tree without asking.
+3. Every change must leave the game runnable (F5). If a change takes more than 30 minutes, split it.
+4. Explain how to test in-editor in 1-3 steps after every change.
+
+## Conventions
+- Folders: `scenes/`, `scripts/`, `assets/{sprites,audio,fonts}/`, `autoload/`, `ui/`.
+- Files are snake_case; class_name is PascalCase. One script per scene root.
+- Static typing everywhere: `var speed: float = 200.0`, typed func signatures, `@export` for tunables.
+- Signals up, calls down: children emit signals, parents call methods on children. No `get_parent().get_parent()`.
+- Global state only in autoloads: `Game` (state machine, score), `Audio` (SFX/music bus), `Events` (signal bus).
+- Input via InputMap actions (`move_left`, `jump`, `action`), never raw keycodes. Support keyboard and gamepad.
+- Physics in `_physics_process`, visuals in `_process`. Use `delta`.
+- State machines: an enum + match for small actors; node-based states only for the player when there are more than 4 states.
+- Tunables (speed, jump, timers) are `@export` vars or live in a `Tuning` resource so they can be tweaked in the inspector.
+
+## Don&#x27;t
+- Don&#x27;t use `await get_tree().create_timer()` chains for gameplay logic; use a Timer node or state.
+- Don&#x27;t load in `_process`. Preload scenes with `preload()`.
+- Don&#x27;t add plugins/addons without asking.
+
+## Web export
+Use the Compatibility renderer for web. Keep total size under 40 MB. Test the exported build in the browser before the deadline, not after.
+</pre></div>
+<div class="ctabox"><h2>Want the whole drawer?</h2><p>The Game Jam Agent Kit ($24) adds scoped Cursor rules for GDScript, player feel and juice, a Phaser/Three.js rule set, 10 prompts along the jam timeline, and GDD + playtest templates.</p><a class="btn" href="/#drawers">See the pack</a></div>
+</main>
+<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
+</body></html>

@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cursor rules for Next.js + Supabase (2026): a working .mdc setup</title><meta name="description" content="Cursor rules for Next.js App Router + Supabase that stop agents from disabling RLS, using getSession on the server, or trusting Stripe redirects. Free .mdc snippet."><meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/cursor-rules-nextjs-supabase/">
+<meta property="og:type" content="article"><meta property="og:title" content="Cursor rules for Next.js + Supabase (2026): a working .mdc setup"><meta property="og:description" content="Cursor rules for Next.js App Router + Supabase that stop agents from disabling RLS, using getSession on the server, or trusting Stripe redirects. Free .mdc snippet.">
+<meta property="og:url" content="https://agentkitdrawer.com/cursor-rules-nextjs-supabase/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / Cursor rules for Next.js + Supabase</p>
+<h1>Cursor rules for Next.js + Supabase</h1>
+<p>Agents get the same few things wrong in a Next.js + Supabase app, and those mistakes are the expensive ones:</p>
+<ul><li><strong>Creating tables without row-level security</strong>, or switching RLS off "to fix the error".</li>
+<li><strong>Trusting <code>getSession()</code> on the server</strong> instead of <code>getUser()</code>, which re-validates the token.</li>
+<li><strong>Creating Supabase clients all over the place</strong> instead of one server helper and one browser helper with <code>@supabase/ssr</code>.</li>
+<li><strong>Granting paid access from the Stripe success redirect</strong> instead of a verified webhook.</li>
+<li><strong>Prefixing secrets with <code>NEXT_PUBLIC_</code></strong>, which ships them to every browser.</li></ul>
+<h2>How Cursor rules work</h2>
+<p>Put <code>.mdc</code> files in <code>.cursor/rules/</code>. The front matter decides when a rule loads: <code>alwaysApply: true</code> for core rules, or <code>globs</code> so a rule loads only when matching files are in context. Keep each rule small and scoped. One giant rules file gets skimmed and ignored. For Codex, Claude Code and other tools, mirror the core rules in <code>AGENTS.md</code>.</p>
+<h2>A layout that works</h2>
+<p><code>00-core</code> (always on), <code>20-supabase-auth</code> (globs: lib/supabase/**, middleware.ts), <code>30-database-rls</code> (supabase/**), <code>40-stripe</code> (app/api/stripe/**), <code>50-env-secrets</code> (.env*, lib/env.ts). The RLS rule below is the one that saves you the most money.</p>
+<h2>Free snippet: copy it</h2>
+<div class="snip"><div class="bar"><span>.cursor/rules/30-database-rls.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: Migrations and row-level security
+globs: supabase/**
+alwaysApply: false
+---
+- Each migration: create table + alter table ... enable row level security + policies, in one file.
+- Policies use (select auth.uid()) for performance; separate policies per command (select/insert/update/delete).
+- Add indexes on every column used in a policy or foreign key.
+- Never disable RLS to &#x27;make it work&#x27;. If a query fails, fix the policy and explain it.
+- Regenerate types after schema changes: pnpm supabase gen types typescript --local &gt; lib/database.types.ts
+</pre></div>
+<div class="ctabox"><h2>Want the whole drawer?</h2><p>The Vibe Starter Rules Pack ($19) adds AGENTS.md, CLAUDE.md, 8 scoped rules (auth, Stripe webhooks, env, tests, UI), 12 slash-command prompts and launch checklists.</p><a class="btn" href="/#drawers">See the pack</a></div>
+</main>
+<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
+</body></html>

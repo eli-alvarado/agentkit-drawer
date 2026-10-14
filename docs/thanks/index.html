@@ -5,11 +5,30 @@
 <link rel="stylesheet" href="/style.css"></head><body>
 <header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a></header>
 <main id="main" class="wrap article">
-<p class="crumb mono">COMING SOON</p>
-<h1>Checkout is opening soon.</h1>
-<p>The drawers aren't for sale just yet. Want a heads-up when they are?</p>
-<p><a class="btn" href="mailto:agentkitdrawer@agentmail.to?subject=Notify%20me%3A%20AgentKit%20Drawer">Notify me</a></p>
+<p class="crumb mono" id="crumb">COMING SOON</p>
+<h1 id="h">Checkout is opening soon.</h1>
+<p id="msg">The drawers aren't for sale just yet. Want a heads-up when they are?</p>
+<p><a class="btn" id="dl" href="mailto:agentkitdrawer@agentmail.to?subject=Notify%20me%3A%20AgentKit%20Drawer">Notify me</a></p>
+<div class="ctabox" id="next" hidden><h2>Next</h2><ol class="mono" style="padding-left:20px"><li>Unzip, then copy AGENTS.md, CLAUDE.md and .cursor/ into your repo.</li><li>Fill in the &lt;&lt;FILL&gt;&gt; fields.</li><li>Start with /plan.</li></ol>
+<p><strong>Bookmark this page.</strong> It's your download link for re-downloads. Trouble? Email <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> with your Stripe receipt.</p></div>
 <p><a href="/">← Back to the cabinet</a></p>
 </main>
+<script>
+(function(){
+  var API="https://dl.agentkitdrawer.com/dl", sid=new URLSearchParams(location.search).get("session_id");
+  if(!sid||!/^cs_(live|test)_[A-Za-z0-9]+$/.test(sid))return;
+  var $=function(i){return document.getElementById(i)};
+  $("crumb").textContent="ORDER";$("h").textContent="Checking your order…";$("msg").textContent="One sec while we confirm payment with Stripe.";$("dl").hidden=true;
+  fetch(API+"?info=1&session_id="+encodeURIComponent(sid)).then(function(r){return r.json()}).then(function(d){
+    if(!d.ok)throw d;
+    $("crumb").textContent="ORDER COMPLETE";$("h").textContent="Drawer unlocked.";
+    $("msg").textContent="Thanks for buying "+d.name+". A Stripe receipt is on its way to your email.";
+    var a=$("dl");a.href=API+"?session_id="+encodeURIComponent(sid);a.textContent="Download "+d.name+" (.zip)";a.hidden=false;$("next").hidden=false;
+  }).catch(function(e){
+    $("h").textContent="We couldn't confirm that order yet.";
+    $("msg").innerHTML=(e&&e.error==="unpaid"?"Your payment is still processing. Refresh in a minute. ":"")+'Still stuck? Email <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> with your receipt and we\'ll send your files.';
+  });
+})();
+</script>
 <footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a></footer>
 </body></html>

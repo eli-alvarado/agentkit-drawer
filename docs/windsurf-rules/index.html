@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Windsurf rules (2026): .windsurf/rules setup for Next.js + Supabase</title><meta name="description" content="How to set up Windsurf rules with .windsurf/rules files and activation modes, plus a free row-level-security rule for Next.js + Supabase you can drop in today."><meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/windsurf-rules/">
+<meta property="og:type" content="article"><meta property="og:title" content="Windsurf rules (2026): .windsurf/rules setup for Next.js + Supabase"><meta property="og:description" content="How to set up Windsurf rules with .windsurf/rules files and activation modes, plus a free row-level-security rule for Next.js + Supabase you can drop in today.">
+<meta property="og:url" content="https://agentkitdrawer.com/windsurf-rules/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / Windsurf rules</p>
+<h1>Windsurf rules that keep Cascade on track</h1>
+<p>Windsurf's Cascade agent follows workspace rules stored as Markdown files in <code>.windsurf/rules/</code>. Like Cursor rules, the trick is lots of small, scoped files rather than one big one.</p>
+<h2>How Windsurf rules load</h2>
+<ul><li><strong>Always on:</strong> core project rules (stack, commands, never-do list).</li>
+<li><strong>Glob:</strong> loads only when matching files are touched, e.g. <code>supabase/**</code>.</li>
+<li><strong>Model decision / manual:</strong> the agent pulls them in when relevant, or you @-mention them.</li></ul>
+<p>Keep each file well under Windsurf's per-rule size limit, and mirror the core rules in <code>AGENTS.md</code> so other tools get them too.</p>
+<h2>Free rule: Supabase row-level security</h2>
+<p>This is the rule that saves the most money in a Next.js + Supabase app. It's written as a Cursor <code>.mdc</code> file; for Windsurf, drop the front matter, save it as <code>.windsurf/rules/database-rls.md</code> and set activation to Glob <code>supabase/**</code>.</p>
+<div class="snip"><div class="bar"><span>.windsurf/rules/database-rls.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>- Each migration: create table + alter table ... enable row level security + policies, in one file.
+- Policies use (select auth.uid()) for performance; separate policies per command (select/insert/update/delete).
+- Add indexes on every column used in a policy or foreign key.
+- Never disable RLS to 'make it work'. If a query fails, fix the policy and explain it.
+- Regenerate types after schema changes.
+</pre></div>
+<p>The original file is free on GitHub: <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc">nextjs-supabase-rls.mdc</a>.</p>
+<div class="ctabox"><h2>Want the whole drawer?</h2><p>The Vibe Starter Rules Pack ($19) has 8 scoped rules (auth, Stripe webhooks, env, tests, UI), AGENTS.md, CLAUDE.md and 12 prompts. The rules are plain Markdown, so they port to Windsurf.</p><a class="btn" href="/#drawers">See the pack</a></div>
+</main>
+<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
+</body></html>

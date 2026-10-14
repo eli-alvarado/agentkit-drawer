@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CLAUDE.md template for Claude Code (2026): a short file that actually works</title><meta name="description" content="A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md."><meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/claude-code-claude-md-template/">
+<meta property="og:type" content="article"><meta property="og:title" content="CLAUDE.md template for Claude Code (2026): a short file that actually works"><meta property="og:description" content="A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md.">
+<meta property="og:url" content="https://agentkitdrawer.com/claude-code-claude-md-template/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / CLAUDE.md template for Claude Code</p>
+<h1>A CLAUDE.md template for Claude Code</h1>
+<p>Claude Code reads <code>CLAUDE.md</code> from your repo root at the start of every session. A good one is short, specific and boring. A bad one is a 600-line wish list the agent skims and ignores.</p>
+<h2>What belongs in CLAUDE.md</h2>
+<ul><li><strong>Project facts:</strong> stack, package manager, where things live.</li>
+<li><strong>Exact commands:</strong> how to dev, test, lint and typecheck. Agents guess these wrong constantly.</li>
+<li><strong>Hard rules:</strong> the 5 to 10 things that must never happen (disable RLS, commit secrets, edit generated files).</li>
+<li><strong>Workflow:</strong> plan first, small diffs, run the tests before saying "done".</li></ul>
+<h2>Share rules with Cursor and Codex</h2>
+<p>Keep the shared rules in <code>AGENTS.md</code> and make <code>CLAUDE.md</code> import it with a single <code>@AGENTS.md</code> line, then add only Claude-specific notes below. One source of truth, every tool.</p>
+<h2>Free template: copy it</h2>
+<div class="snip"><div class="bar"><span>CLAUDE.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>@AGENTS.md
+
+# Claude Code notes
+- Stack: &lt;&lt;FILL: e.g. Next.js 15 App Router, Supabase, Stripe, pnpm&gt;&gt;
+- Commands: pnpm dev | pnpm test | pnpm lint | pnpm typecheck
+- Before editing: write a short plan and wait for "go" on anything touching auth, payments or migrations.
+- Keep diffs small. Never edit generated files (lib/database.types.ts) by hand.
+- Never print, log or commit secrets. Never disable RLS or tests to make something pass.
+- "Done" means: tests and typecheck pass, and you list what you changed.
+</pre></div>
+<p>For a ready-made safety section, grab the free <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agent-guardrails.md">agent-guardrails.md</a> from our GitHub repo and paste it into AGENTS.md.</p>
+<div class="ctabox"><h2>Want the whole drawer?</h2><p>The Vibe Starter Rules Pack ($19) ships a full AGENTS.md + CLAUDE.md pair, 8 scoped rules, 12 slash-command prompts and launch checklists for Next.js + Supabase + Stripe.</p><a class="btn" href="/#drawers">See the pack</a></div>
+</main>
+<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
+</body></html>

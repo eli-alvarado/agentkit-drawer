@@ -1,0 +1,23 @@
+# AgentKit Drawer
+
+> Tested rules packs and prompt templates that keep AI coding agents (Cursor, Claude Code, Codex, Windsurf) on track for a specific stack. One-time purchase, instant download, use in unlimited personal and commercial projects, 14-day refund.
+
+Support: agentkitdrawer@agentmail.to. Free samples are MIT-licensed on GitHub: https://github.com/eli-alvarado/agentkit-drawer
+
+## Packs
+- [Vibe Starter Rules Pack](https://agentkitdrawer.com/#drawers) (DRW-01, $19): Rules for AI coding agents (Cursor, Claude Code, Codex) on Next.js App Router + Supabase + Stripe: AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules (auth, RLS, Stripe webhooks, env/secrets, tests, UI), 12 slash-command prompts, 2 launch checklists.
+- [Game Jam Agent Kit](https://agentkitdrawer.com/#drawers) (DRW-02, $24): AGENTS.md and rules for Godot 4 (GDScript) and Phaser game jams: scope control, InputMap-only input, @export feel numbers, jam timeline, prompts for prototyping and polish.
+- [Agent Builder Prompt Pack](https://agentkitdrawer.com/#drawers) (DRW-03, $29): 10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.
+- [The Whole Cabinet](https://agentkitdrawer.com/#drawers) (BUNDLE, $49): All 3 packs plus 12 months of updates. Saves $23.
+
+## Guides
+- [Cursor rules for Next.js + Supabase](https://agentkitdrawer.com/cursor-rules-nextjs-supabase/)
+- [AGENTS.md for Godot](https://agentkitdrawer.com/agents-md-godot/)
+- [AI agent system prompt templates](https://agentkitdrawer.com/ai-agent-system-prompt-templates/)
+- [CLAUDE.md template for Claude Code](https://agentkitdrawer.com/claude-code-claude-md-template/)
+- [Windsurf rules](https://agentkitdrawer.com/windsurf-rules/)
+
+## Free files
+- [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security
+- [godot-jam-timeline.md](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/godot-jam-timeline.md): 48-hour Godot jam timeline for agents
+- [agent-guardrails.md](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agent-guardrails.md): Guardrail snippets for any system prompt

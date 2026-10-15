@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?</title>
+<meta name="description" content="Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files, no duplicated rules.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?">
+<meta property="og:description" content="Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files.">
+<meta property="og:url" content="https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?">
+<meta name="twitter:description" content="Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do I need AGENTS.md, CLAUDE.md, and .cursor/rules all at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you use more than one tool. Put shared rules in AGENTS.md. Add a thin CLAUDE.md that imports it with @AGENTS.md if you use Claude Code. Add scoped .cursor/rules/*.mdc files when you need path-based rules in Cursor. Avoid copying the same prose into every file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is .cursorrules still supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The single-file .cursorrules format is legacy. Prefer .cursor/rules/*.mdc project rules with frontmatter. Migrate any remaining .cursorrules content into scoped .mdc files or into AGENTS.md."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can Claude Code read AGENTS.md?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Claude Code's native memory file is CLAUDE.md. Point CLAUDE.md at your shared rules with an @AGENTS.md import so you do not maintain two copies. Claude Code expands @path imports when the session starts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should go in AGENTS.md vs a Cursor rule?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Put stack facts, commands, hard never-dos, and the definition of done in AGENTS.md. Put path-scoped guidance (auth helpers, supabase/** migrations, Stripe webhooks) in .cursor/rules/*.mdc with globs so Cursor only loads them when those files are in context."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do Windsurf rules live?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Windsurf Cascade reads Markdown rules under .windsurf/rules/. Mirror the same ideas as your Cursor rules and AGENTS.md, then keep AGENTS.md as the shared source of truth for other tools."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#guides">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / AGENTS.md vs CLAUDE.md vs Cursor rules</p>
+<h1>AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?</h1>
+<p>Different AI coding tools look for different instruction files. If you only keep rules in one tool's format, the others guess. If you copy the same wall of text into every format, the copies drift. This guide maps what each file is for, and a setup that stays maintainable.</p>
+
+<h2>The short answer</h2>
+<ul>
+  <li><strong><code>AGENTS.md</code></strong> is the cross-tool open convention. OpenAI Codex, Cursor, and many other agents read it as plain Markdown project instructions.</li>
+  <li><strong><code>CLAUDE.md</code></strong> is Claude Code's project memory file. It can pull in other files with <code>@path</code> syntax (for example <code>@AGENTS.md</code>).</li>
+  <li><strong>Cursor project rules</strong> live in <code>.cursor/rules/*.mdc</code> with YAML frontmatter (<code>description</code>, <code>globs</code>, <code>alwaysApply</code>). The legacy single-file <code>.cursorrules</code> format is deprecated; prefer <code>.mdc</code> rules.</li>
+  <li><strong>Windsurf</strong> stores Cascade rules as Markdown under <code>.windsurf/rules/</code>.</li>
+</ul>
+
+<h2>Comparison</h2>
+<div class="table-wrap"><table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Who reads it</th>
+      <th>Shape</th>
+      <th>Best for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>AGENTS.md</strong></td>
+      <td>Codex, Cursor, and other AGENTS.md-aware tools</td>
+      <td>Plain Markdown at the repo root (and optionally nested)</td>
+      <td>Shared source of truth: stack, commands, hard rules, definition of done</td>
+    </tr>
+    <tr>
+      <td><strong>CLAUDE.md</strong></td>
+      <td>Claude Code</td>
+      <td>Markdown; can import other files with <code>@path</code></td>
+      <td>Claude-specific notes on top of shared AGENTS.md</td>
+    </tr>
+    <tr>
+      <td><strong>.cursor/rules/*.mdc</strong></td>
+      <td>Cursor</td>
+      <td>Markdown + frontmatter (<code>description</code>, <code>globs</code>, <code>alwaysApply</code>)</td>
+      <td>Path-scoped rules that load only when matching files are in context</td>
+    </tr>
+    <tr>
+      <td><strong>.cursorrules</strong> (legacy)</td>
+      <td>Older Cursor setups</td>
+      <td>Single root file, no frontmatter</td>
+      <td>Migrate away; use <code>.mdc</code> rules or AGENTS.md</td>
+    </tr>
+    <tr>
+      <td><strong>.windsurf/rules/</strong></td>
+      <td>Windsurf Cascade</td>
+      <td>Markdown files with activation modes (always / glob / manual)</td>
+      <td>Same ideas as Cursor rules, in Windsurf's layout</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>What each file is for</h2>
+<h3>AGENTS.md</h3>
+<p><code>AGENTS.md</code> is a simple open format: a README for agents. Put durable project guidance here: how to build and test, folder layout, conventions, and the never-do list. Keep it short enough that tools will follow it. Codex discovers project <code>AGENTS.md</code> files along the path from the repo root to your working directory; closer files can refine broader ones.</p>
+
+<h3>CLAUDE.md</h3>
+<p>Claude Code loads <code>CLAUDE.md</code> at the start of a session. Use <code>@path/to/file</code> anywhere in that file to import more Markdown. Relative paths resolve from the file that contains the import. A common pattern is a one-line import of shared rules, then a few Claude-only notes:</p>
+<div class="snip"><div class="bar"><span>CLAUDE.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>@AGENTS.md
+
+# Claude Code notes
+- Prefer the project package scripts over ad-hoc commands.
+- Before touching auth, payments, or migrations: write a short plan and wait for go.
+</pre></div>
+<p>For a fuller template, see the free <a href="/claude-code-claude-md-template/">CLAUDE.md guide</a>.</p>
+
+<h3>Cursor <code>.cursor/rules/*.mdc</code></h3>
+<p>Each rule is an <code>.mdc</code> file under <code>.cursor/rules/</code>. Frontmatter controls when it loads:</p>
+<ul>
+  <li><code>alwaysApply: true</code> — included in every chat.</li>
+  <li><code>globs</code> with <code>alwaysApply: false</code> — attached when matching files are in context.</li>
+  <li><code>description</code> without globs — Cursor can pull the rule in when it looks relevant.</li>
+  <li>Neither description nor globs — manual via <code>@rule-name</code>.</li>
+</ul>
+<p>Plain <code>.md</code> files in that folder are ignored by the rules system (no frontmatter). Prefer small scoped rules over one giant file. Example RLS rule (also free on GitHub as <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc" target="_blank" rel="noopener noreferrer">nextjs-supabase-rls.mdc</a>):</p>
+<div class="snip"><div class="bar"><span>.cursor/rules/30-database-rls.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: Migrations and row-level security
+globs: supabase/**
+alwaysApply: false
+---
+- Each migration: create table + enable RLS + policies, in one file.
+- Policies use (select auth.uid()); separate policies per command.
+- Never disable RLS to "make it work". Fix the policy instead.
+</pre></div>
+<p>More Next.js + Supabase detail: <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>.</p>
+
+<h3>Windsurf <code>.windsurf/rules/</code></h3>
+<p>Cascade reads Markdown rules from <code>.windsurf/rules/</code>, with activation similar in spirit to Cursor (always on, glob, or manual). Keep those files thin and mirror the ideas already in <code>AGENTS.md</code>. See <a href="/windsurf-rules/">Windsurf rules</a>.</p>
+
+<h2>Recommended setup: one source of truth</h2>
+<ol>
+  <li><strong>Write <code>AGENTS.md</code> first.</strong> Stack, commands, hard rules, workflow, definition of done.</li>
+  <li><strong>Add a thin <code>CLAUDE.md</code></strong> that starts with <code>@AGENTS.md</code>, then only Claude-specific notes.</li>
+  <li><strong>Add scoped Cursor rules</strong> for paths that need extra precision (auth, RLS, Stripe, env). Do not paste the entire AGENTS.md into every <code>.mdc</code>.</li>
+  <li><strong>If you use Windsurf,</strong> port the same scoped ideas into <code>.windsurf/rules/</code> without inventing a third full copy of the essay.</li>
+  <li><strong>Delete or migrate <code>.cursorrules</code></strong> so you are not maintaining a legacy file Agent mode may ignore.</li>
+</ol>
+<p>When a rule misbehaves, fix it in the source of truth (<code>AGENTS.md</code> or the one scoped rule), not in three places.</p>
+
+<div class="snip"><div class="bar"><span>layout sketch</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>repo/
+  AGENTS.md                 # shared source of truth
+  CLAUDE.md                 # @AGENTS.md + Claude-only notes
+  .cursor/rules/
+    00-core.mdc             # alwaysApply: true (short)
+    30-database-rls.mdc     # globs: supabase/**
+    40-stripe.mdc           # globs: app/api/stripe/**
+  .windsurf/rules/          # optional mirror for Cascade
+    database-rls.md
+</pre></div>
+
+<h2>Free files you can drop in today</h2>
+<ul>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc" target="_blank" rel="noopener noreferrer">nextjs-supabase-rls.mdc</a> — Cursor rule for Supabase RLS</li>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agent-guardrails.md" target="_blank" rel="noopener noreferrer">agent-guardrails.md</a> — guardrail snippets for AGENTS.md or system prompts</li>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agents-md-game-modding.md" target="_blank" rel="noopener noreferrer">agents-md-game-modding.md</a> — AGENTS.md template for mods and small game tools</li>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/godot-jam-timeline.md" target="_blank" rel="noopener noreferrer">godot-jam-timeline.md</a> — 48-hour jam timeline for agents</li>
+</ul>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Do I need AGENTS.md, CLAUDE.md, and .cursor/rules all at once?</summary><p>Only if you use more than one tool. Shared rules live in <code>AGENTS.md</code>. Claude Code gets a thin <code>CLAUDE.md</code> with <code>@AGENTS.md</code>. Cursor gets scoped <code>.mdc</code> files when you need path-based loading. Do not duplicate the essay.</p></details>
+<details><summary>Is .cursorrules still supported?</summary><p>It is legacy. Prefer <code>.cursor/rules/*.mdc</code> with frontmatter, and migrate remaining content into those files or into <code>AGENTS.md</code>.</p></details>
+<details><summary>Can Claude Code read AGENTS.md?</summary><p>Its native file is <code>CLAUDE.md</code>. Import shared rules with <code>@AGENTS.md</code> so you maintain one copy. Imports are expanded when the session starts.</p></details>
+<details><summary>What goes in AGENTS.md vs a Cursor rule?</summary><p>AGENTS.md: stack, commands, never-dos, done criteria. Cursor <code>.mdc</code>: path-scoped guidance via <code>globs</code> so auth, migrations, or webhooks only load when those files are in context.</p></details>
+<details><summary>Where do Windsurf rules live?</summary><p>Under <code>.windsurf/rules/</code> as Markdown. Keep them aligned with <code>AGENTS.md</code> rather than inventing a separate doctrine.</p></details>
+</div>
+
+<div class="ctabox">
+  <h2>Want the whole drawer?</h2>
+  <p>The Vibe Starter Rules Pack ($19) ships a ready AGENTS.md + CLAUDE.md pair, 8 scoped <code>.cursor/rules</code>, 12 slash-command prompts, and launch checklists for Next.js + Supabase + Stripe.</p>
+  <a class="btn" href="/#drawers">See the pack</a>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>
+    <li><a href="/agents-md-godot/">AGENTS.md for Godot 4</a></li>
+    <li><a href="/ai-agent-system-prompt-templates/">AI agent system prompt templates</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="agents-md-vs-claude-md-vs-cursor-rules"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

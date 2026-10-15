@@ -1,12 +1,12 @@
 :root{--sh:#15130f;
   --paper:#efeadf;--paper2:#e4ddcd;--ink:#15130f;--mut:#5d574b;--line:#15130f;
-  --acc:#ff5a1f;--acc-ink:#15130f;--ok:#1f7a3a;--bad:#c2261a;--warn:#9a6400;
+  --acc:#ff5a1f;--acc-text:#a8380a;--acc-ink:#15130f;--ok:#1f7a3a;--bad:#c2261a;--warn:#9a6400;
   --term:#14120f;--term-fg:#e9e3d6;--steel:#d6cfbf;
   --display:"Archivo",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root{
   --paper:#12110e;--paper2:#1b1915;--ink:#ece6d8;--mut:#a39b8a;--line:#3a352c;
-  --acc:#ff6a33;--sh:#000;--term:#0a0907;--steel:#2f2b24;--ok:#5fd27f;--bad:#ff6b5e;--warn:#e7b04a;
+  --acc:#ff6a33;--acc-text:#ff6a33;--sh:#000;--term:#0a0907;--steel:#2f2b24;--ok:#5fd27f;--bad:#ff6b5e;--warn:#e7b04a;
 }}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -47,7 +47,7 @@ h1{font-size:clamp(2.6rem,7.4vw,6rem);line-height:.92;margin:0;font-weight:900;f
 section{padding:48px 0}
 #demo{padding-bottom:88px}
 h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-transform:uppercase;letter-spacing:-.01em;margin:0 0 12px;display:flex;align-items:baseline;gap:14px;line-height:1.02}
-.num{font-size:14px;font-weight:600;color:var(--acc);border:2px solid currentColor;padding:2px 6px;letter-spacing:0}
+.num{font-size:14px;font-weight:600;color:var(--acc-text);border:2px solid currentColor;padding:2px 6px;letter-spacing:0}
 .lede{color:var(--mut);margin:0 0 28px}
 
 .demo-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
@@ -99,7 +99,7 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
 .steps{list-style:none;padding:0;margin:0;border:2px solid var(--ink)}
 .steps li{display:flex;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line);font-size:15px;overflow-wrap:anywhere}
 .steps li:last-child{border-bottom:0}
-.steps span{color:var(--acc);font-weight:600;flex-shrink:0}
+.steps span{color:var(--acc-text);font-weight:600;flex-shrink:0}
 
 .faq details{border-top:2px solid var(--line);padding:4px 0}
 .faq details:last-child{border-bottom:2px solid var(--line)}

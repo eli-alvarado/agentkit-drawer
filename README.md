@@ -16,6 +16,7 @@ Agents without project rules guess: they disable RLS, trust the Stripe redirect,
 
 ## Godot / game jams
 - [`free/godot-jam-timeline.md`](free/godot-jam-timeline.md): a 48-hour jam plan with hard cut-off points that your agent (and you) can follow. [AGENTS.md for Godot guide →](https://agentkitdrawer.com/agents-md-godot/)
+- [`free/agents-md-game-modding.md`](free/agents-md-game-modding.md): AGENTS.md for Minecraft/Godot/Unity mods and small game tools. Pins the game version, patches via hooks instead of vanilla files, and protects saves. [Guide →](https://agentkitdrawer.com/agents-md-game-modding/)
 
 ## Building AI agents
 - [`free/agent-guardrails.md`](free/agent-guardrails.md): paste-in snippets for prompt-injection defense, ask-before-acting, honest uncertainty, tool budgets, citations and refusals. [System prompt templates guide →](https://agentkitdrawer.com/ai-agent-system-prompt-templates/)

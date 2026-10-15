@@ -51,5 +51,8 @@ Use the Compatibility renderer for web. Keep total size under 40 MB. Test the ex
 </pre></div>
 <div class="ctabox"><h2>Want the whole drawer?</h2><p>The Game Jam Agent Kit ($24) adds scoped Cursor rules for GDScript, player feel and juice, a Phaser/Three.js rule set, 10 prompts along the jam timeline, and GDD + playtest templates.</p><a class="btn" href="/#drawers">See the pack</a></div>
 </main>
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="agents-md-godot"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
 <footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
 </body></html>

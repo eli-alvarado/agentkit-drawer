@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGENTS.md template for game modding (2026): Minecraft, Godot, Unity mods and tools</title><meta name="description" content="Free MIT AGENTS.md for AI coding agents on game mods and small game tools: pin the game version, patch via hooks not vanilla files, protect saves, stay mod-compatible."><meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/agents-md-game-modding/">
+<meta property="og:type" content="article"><meta property="og:title" content="AGENTS.md template for game modding (2026): Minecraft, Godot, Unity mods and tools"><meta property="og:description" content="Free MIT AGENTS.md for AI coding agents on game mods and small game tools: pin the game version, patch via hooks not vanilla files, protect saves, stay mod-compatible.">
+<meta property="og:url" content="https://agentkitdrawer.com/agents-md-game-modding/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / AGENTS.md for game modding</p>
+<h1>An AGENTS.md for game mods and small game tools</h1>
+<p>AI agents are great at boilerplate mod code and terrible at one thing modders care about most: <strong>which version of the game they're targeting</strong>. They'll call a Minecraft API that was renamed two versions ago, overwrite a vanilla method when an event would do, or write straight into your only save file.</p>
+<h2>What the template enforces</h2>
+<ul><li><strong>Pin the version:</strong> exact game, engine and loader versions; no guessing APIs.</li>
+<li><strong>Hooks, not edits:</strong> mixins, Harmony patches, events, signals or editor plugins. Never edit vanilla or decompiled files.</li>
+<li><strong>Smallest patch + compatibility:</strong> namespaced IDs, no global overwrites, vanilla-like defaults.</li>
+<li><strong>Protect saves:</strong> tools work on copies or make a backup first, with <code>--dry-run</code> for anything that writes.</li>
+<li><strong>Verify in game:</strong> "done" means it builds, loads without log errors and doesn't break a fresh world.</li></ul>
+<p>It works for Minecraft (Fabric, Forge, NeoForge), Unity games via BepInEx/Harmony, Godot editor plugins and standalone tools like save inspectors or level converters. Drop it in your repo root as <code>AGENTS.md</code>. Codex, Cursor and others read it directly, and Claude Code can import it with <code>@AGENTS.md</code> in CLAUDE.md.</p>
+<h2>Get the free template</h2>
+<p><a class="btn" href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agents-md-game-modding.md">AGENTS.md for game modding on GitHub</a> (MIT, fill in the &lt;&lt;FILL&gt;&gt; fields).</p>
+<div class="ctabox"><h2>Building a whole game, not a mod?</h2><p>The Game Jam Agent Kit ($24) has AGENTS.md and rules for Godot 4 and Phaser, a 48-hour jam timeline, and prompts for prototyping, juice and polish, so the agent cuts scope instead of adding it.</p><a class="btn" href="/#drawers">See the Game Jam pack</a></div>
+</main>
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="agents-md-game-modding"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
+</body></html>

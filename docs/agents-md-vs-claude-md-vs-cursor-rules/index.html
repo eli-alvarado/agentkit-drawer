@@ -166,7 +166,7 @@ description: Migrations and row-level security
 globs: supabase/**
 alwaysApply: false
 ---
-- Each migration: create table + enable RLS + policies, in one file.
+- For each new table: enable RLS + policies in the same migration.
 - Policies use (select auth.uid()); separate policies per command.
 - Never disable RLS to "make it work". Fix the policy instead.
 </pre></div>

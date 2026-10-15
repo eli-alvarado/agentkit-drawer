@@ -25,7 +25,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="top wrap">
   <a class="logo" href="#" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
-  <nav aria-label="Main"><a href="#demo">Demo</a><a href="#drawers">Packs</a><a href="#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+  <nav aria-label="Main"><a href="#demo">Demo</a><a href="#drawers">Packs</a><a href="#guides">Guides</a><a href="#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
 </header>
 
 <main id="main">
@@ -151,8 +151,23 @@
   </ol>
 </section>
 
+
+<section id="guides" class="wrap guides" aria-labelledby="gu-h">
+  <h2 id="gu-h"><span class="num mono">04</span>Free guides</h2>
+  <p class="lede">Short how-tos for the files your agent actually reads. No signup.</p>
+  <div class="guide-grid">
+    <a class="gcard new" href="/agents-md-vs-claude-md-vs-cursor-rules/"><span class="tag mono">COMPARE</span><b>AGENTS.md vs CLAUDE.md vs Cursor rules</b><span class="blurb">Which file does your AI agent read, and how to keep one source of truth.</span></a>
+    <a class="gcard" href="/cursor-rules-nextjs-supabase/"><span class="tag mono">CURSOR</span><b>Cursor rules for Next.js + Supabase</b><span class="blurb">Scoped .mdc rules that stop RLS-off and webhook mistakes.</span></a>
+    <a class="gcard" href="/claude-code-claude-md-template/"><span class="tag mono">CLAUDE CODE</span><b>CLAUDE.md template</b><span class="blurb">A short memory file with @AGENTS.md import and hard rules.</span></a>
+    <a class="gcard" href="/windsurf-rules/"><span class="tag mono">WINDSURF</span><b>Windsurf rules setup</b><span class="blurb">.windsurf/rules layout plus a free RLS rule for Cascade.</span></a>
+    <a class="gcard" href="/agents-md-godot/"><span class="tag mono">GODOT</span><b>AGENTS.md for Godot 4</b><span class="blurb">Keep agents from wrecking your scene tree in a jam.</span></a>
+    <a class="gcard" href="/agents-md-game-modding/"><span class="tag mono">MODDING</span><b>AGENTS.md for game modding</b><span class="blurb">Pin the game version, patch via hooks, protect saves.</span></a>
+    <a class="gcard" href="/ai-agent-system-prompt-templates/"><span class="tag mono">PROMPTS</span><b>AI agent system prompt templates</b><span class="blurb">Guardrails, injection defense, and eval-minded prompts.</span></a>
+  </div>
+</section>
+
 <section id="faq" class="wrap faq" aria-labelledby="faq-h">
-  <h2 id="faq-h"><span class="num mono">04</span>FAQ</h2>
+  <h2 id="faq-h"><span class="num mono">05</span>FAQ</h2>
   <details><summary>Which tools does it work with?</summary><p>Cursor, Claude Code, Codex CLI, Windsurf, Aider, and anything that reads AGENTS.md. Each pack ships the tool-specific files too.</p></details>
   <details><summary>Are these tested?</summary><p>They're written against each tool's documented conventions, and the Agent Builder pack includes evals you can run on your own model. We haven't benchmarked them against a reference project yet. If a rule misbehaves, tell us and we'll fix it in an update.</p></details>
   <details><summary>Why not write my own rules?</summary><p>You can, and the free files on GitHub are a good start. The packs save you the hours of finding out what agents get wrong: RLS, webhook trust, scene-tree rewrites, injection.</p></details>
@@ -169,6 +184,8 @@
   <span>© 2026 AgentKit Drawer</span>
   <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
   <a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a>
+  <a href="#guides">Free guides</a>
+  <a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a>
   <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>
   <a href="/agents-md-godot/">AGENTS.md for Godot</a>
   <a href="/ai-agent-system-prompt-templates/">Agent system prompt templates</a>

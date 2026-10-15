@@ -17,6 +17,7 @@ Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Fre
 - [CLAUDE.md template for Claude Code](https://agentkitdrawer.com/claude-code-claude-md-template/)
 - [Windsurf rules](https://agentkitdrawer.com/windsurf-rules/)
 - [AGENTS.md for game modding](https://agentkitdrawer.com/agents-md-game-modding/)
+- [AGENTS.md vs CLAUDE.md vs Cursor rules](https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/)
 
 ## Free files
 - [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security

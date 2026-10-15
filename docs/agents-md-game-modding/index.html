@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/style.css"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
-<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer">GitHub</a></nav></header>
+<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
 <main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / AGENTS.md for game modding</p>
 <h1>An AGENTS.md for game mods and small game tools</h1>
 <p>AI agents are great at boilerplate mod code and terrible at one thing modders care about most: <strong>which version of the game they're targeting</strong>. They'll call a Minecraft API that was renamed two versions ago, overwrite a vanilla method when an event would do, or write straight into your only save file.</p>
@@ -20,11 +20,11 @@
 <li><strong>Verify in game:</strong> "done" means it builds, loads without log errors and doesn't break a fresh world.</li></ul>
 <p>It works for Minecraft (Fabric, Forge, NeoForge), Unity games via BepInEx/Harmony, Godot editor plugins and standalone tools like save inspectors or level converters. Drop it in your repo root as <code>AGENTS.md</code>. Codex, Cursor and others read it directly, and Claude Code can import it with <code>@AGENTS.md</code> in CLAUDE.md.</p>
 <h2>Get the free template</h2>
-<p><a class="btn" href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agents-md-game-modding.md">AGENTS.md for game modding on GitHub</a> (MIT, fill in the &lt;&lt;FILL&gt;&gt; fields).</p>
+<p><a class="btn" href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agents-md-game-modding.md" target="_blank" rel="noopener noreferrer">AGENTS.md for game modding on GitHub</a> (MIT, fill in the &lt;&lt;FILL&gt;&gt; fields).</p>
 <div class="ctabox"><h2>Building a whole game, not a mod?</h2><p>The Game Jam Agent Kit ($24) has AGENTS.md and rules for Godot 4 and Phaser, a 48-hour jam timeline, and prompts for prototyping, juice and polish, so the agent cuts scope instead of adding it.</p><a class="btn" href="/#drawers">See the Game Jam pack</a></div>
 </main>
 <section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
 <form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
 <label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="agents-md-game-modding"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
 <footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a></footer>
-</body></html>
+<script src="/links.js" defer></script></body></html>

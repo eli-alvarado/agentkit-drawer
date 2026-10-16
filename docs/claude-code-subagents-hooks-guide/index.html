@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code subagents and hooks (2026): .claude/agents, settings.json hooks, slash commands</title>
+<meta name="description" content="How to set up Claude Code subagents in .claude/agents, PreToolUse/PostToolUse/Stop hooks in settings.json, and slash commands. Free hook that blocks rm -rf and force-push.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/claude-code-subagents-hooks-guide/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code subagents and hooks (2026): .claude/agents, settings.json hooks, slash commands">
+<meta property="og:description" content="Claude Code subagents in .claude/agents, hooks in settings.json, and slash commands. Free hook that blocks rm -rf and force-push.">
+<meta property="og:url" content="https://agentkitdrawer.com/claude-code-subagents-hooks-guide/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Code subagents and hooks (2026): .claude/agents, settings.json hooks, slash commands">
+<meta name="twitter:description" content="Claude Code subagents in .claude/agents, hooks in settings.json, and slash commands. Free hook that blocks rm -rf and force-push.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where do Claude Code subagents live?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Project subagents go in .claude/agents/ as Markdown files with YAML frontmatter (name, description, optional tools). Personal ones go in ~/.claude/agents/. Use /agents to manage them."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I block dangerous commands in Claude Code?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a PreToolUse hook with matcher Bash in .claude/settings.json. The script reads the tool call JSON from stdin and exits with code 2 to block it; its stderr is shown to Claude. Add matching permissions.deny rules as a second layer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does exit code 2 mean in a Claude Code hook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 allows. Other codes are non-blocking errors shown to you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I make Claude Code run tests before it finishes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use a Stop hook that runs your test command when code changed and exits 2 on failure. Check the stop_hook_active field in the input and exit 0 when it is true, so the hook cannot loop forever."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do subagents see the main conversation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Each subagent starts with a fresh context window and only gets the task you hand it, so include file paths and the goal in the delegation."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Claude Code subagents, hooks and slash commands: a working setup", "description": "How to set up Claude Code subagents in .claude/agents, PreToolUse/PostToolUse/Stop hooks in settings.json, and slash commands. Free hook that blocks rm -rf and force-push.", "url": "https://agentkitdrawer.com/claude-code-subagents-hooks-guide/", "datePublished": "2026-10-16", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#guides">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / Claude Code subagents + hooks</p>
+<h1>Claude Code subagents, hooks and slash commands: a working setup</h1>
+<p><code>CLAUDE.md</code> tells Claude Code what to do. Subagents, hooks and slash commands are how you make it actually happen: focused reviewers with limited tools, shell scripts that <em>enforce</em> your rules instead of hoping the model remembers them, and one-word commands for your workflow.</p>
+<h2>Subagents: <code>.claude/agents/*.md</code></h2>
+<p>A subagent is a Markdown file with YAML frontmatter: <code>name</code>, a <code>description</code> that tells Claude <em>when</em> to delegate (write “Use PROACTIVELY after…” to get it used automatically), and an optional <code>tools</code> list. Each subagent runs in its own fresh context, so it does not clutter the main conversation, and it does not see that conversation either: pass it the exact files and goal.</p>
+<ul><li><strong>Least privilege:</strong> a reviewer or security auditor gets <code>Read, Grep, Glob</code> only. If it cannot edit, it cannot “fix” things you did not ask for.</li>
+<li><strong>One job each:</strong> planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer covers most teams.</li>
+<li><strong>Output contracts:</strong> “Report MUST / SHOULD / NIT with path:line” beats “review the code”.</li></ul>
+<p>Run <code>/agents</code> in Claude Code to list, create and edit them.</p>
+<h2>Hooks: rules the model cannot skip</h2>
+<p>Hooks live in <code>.claude/settings.json</code> under <code>"hooks"</code>. Each event (<code>PreToolUse</code>, <code>PostToolUse</code>, <code>Stop</code>, and others) has a <code>matcher</code> on the tool name (<code>Bash</code>, <code>Edit|Write</code>) and a command. The hook gets the tool call as JSON on stdin. <strong>Exit code 2 blocks the action</strong> and sends your stderr message back to Claude; exit 0 allows it.</p>
+<ul><li><strong>PreToolUse on Bash:</strong> block <code>rm -rf</code>, <code>git push --force</code>, <code>git reset --hard</code>, <code>curl | sh</code>, pushes to main.</li>
+<li><strong>PreToolUse on Read|Edit|Write:</strong> refuse <code>.env</code>, <code>*.pem</code> and lockfiles, while still allowing <code>.env.example</code>.</li>
+<li><strong>PostToolUse on Edit|Write:</strong> run your formatter on the edited file. Never block here.</li>
+<li><strong>Stop:</strong> run tests when code changed; exit 2 keeps Claude working. Check <code>stop_hook_active</code> to avoid loops.</li></ul>
+<p>Hooks run with your user's permissions. Read every script before enabling it and keep them in version control. Pair them with <code>permissions.deny</code> entries in the same file for a second layer.</p>
+<h2>Slash commands: <code>.claude/commands/*.md</code></h2>
+<p>Each file becomes <code>/filename</code>. Use <code>$ARGUMENTS</code> for what you type after the command, and frontmatter such as <code>description</code>, <code>argument-hint</code> and <code>allowed-tools</code>. Good commands chain your subagents: <code>/feature</code> = plan → implement → test-writer → tests → code-reviewer → summary.</p>
+<h2>Free snippet: copy it</h2>
+<div class="snip"><div class="bar"><span>.claude/hooks/block-dangerous-bash.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/usr/bin/env bash
+# PreToolUse (matcher: Bash). Exit 2 = block; stderr is shown to Claude.
+cmd=$(jq -r &#x27;.tool_input.command // &quot;&quot;&#x27;)
+deny=(
+  &#x27;rm -rf /&#x27; &#x27;rm -rf ~&#x27; &#x27;rm -rf \*&#x27; &#x27;rm -rf \.&#x27; &#x27;git push --force&#x27; &#x27;git push -f&#x27; &#x27;git reset --hard&#x27;
+  &#x27;git clean -fd&#x27; &#x27;DROP DATABASE&#x27; &#x27;DROP TABLE&#x27; &#x27;TRUNCATE &#x27; &#x27;supabase db reset&#x27; &#x27;prisma migrate reset&#x27;
+  &#x27;alembic downgrade base&#x27; &#x27;chmod -R 777&#x27; &#x27;mkfs&#x27; &#x27;dd if=&#x27; &#x27;:(){&#x27;
+)
+for p in &quot;${deny[@]}&quot;; do
+  if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qiF -- &quot;${p//\\/}&quot;; then
+    echo &quot;Blocked by .claude/hooks/block-dangerous-bash.sh: &#x27;$p&#x27; is destructive. Explain why it&#x27;s needed and ask the human to run it.&quot; &gt;&amp;2
+    exit 2
+  fi
+done
+if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qE &#x27;(curl|wget)[^|]*\|\s*(ba|z)?sh&#x27;; then
+  echo &quot;Blocked: piping a download into a shell. Download, inspect, then ask.&quot; &gt;&amp;2; exit 2
+fi
+if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qE &#x27;git push[^&amp;;|]*\b(main|master)\b&#x27;; then
+  echo &quot;Blocked: pushing to main/master. Push a branch and open a PR.&quot; &gt;&amp;2; exit 2
+fi
+exit 0
+</pre></div>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Where do Claude Code subagents live?</summary><p>Project subagents go in <code>.claude/agents/</code> as Markdown files with YAML frontmatter (name, description, optional tools). Personal ones go in <code>~/.claude/agents/</code>. Use <code>/agents</code> to manage them.</p></details>
+<details><summary>How do I block dangerous commands in Claude Code?</summary><p>Add a PreToolUse hook with matcher <code>Bash</code> in <code>.claude/settings.json</code>. The script reads the tool call JSON from stdin and exits with code 2 to block it; its stderr is shown to Claude. Add matching <code>permissions.deny</code> rules as a second layer.</p></details>
+<details><summary>What does exit code 2 mean in a Claude Code hook?</summary><p>Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 allows. Other codes are non-blocking errors shown to you.</p></details>
+<details><summary>How do I make Claude Code run tests before it finishes?</summary><p>Use a Stop hook that runs your test command when code changed and exits 2 on failure. Check the <code>stop_hook_active</code> field in the input and exit 0 when it is true, so the hook cannot loop forever.</p></details>
+<details><summary>Do subagents see the main conversation?</summary><p>No. Each subagent starts with a fresh context window and only gets the task you hand it, so include file paths and the goal in the delegation.</p></details>
+</div>
+
+<div class="ctabox">
+  <h2>Want the whole drawer?</h2>
+  <p>The Claude Code Kit ($24) ships a fill-in <code>CLAUDE.md</code>, 6 least-privilege subagents, 10 slash commands, a <code>settings.json</code> with permissions and hook wiring, and 4 tested hooks (dangerous Bash, secret files, lockfiles, format, tests-before-stop).</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/5kQ3cuawQ6Ndayp0wS7kc04" target="_blank" rel="noopener noreferrer">Buy Claude Code Kit · $24</a>
+    <a class="btn ghost" href="https://buy.stripe.com/28EdR88oI0oPeOF6Vg7kc05" target="_blank" rel="noopener noreferrer">Buy FastAPI Kit · $19</a>
+  </div>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
+    <li><a href="/codex-agents-md-template/">Codex AGENTS.md template</a></li>
+    <li><a href="/ai-agent-system-prompt-templates/">AI agent system prompt templates</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="claude-code-subagents-hooks-guide"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

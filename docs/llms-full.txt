@@ -8,7 +8,9 @@ Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Fre
 - [Vibe Starter Rules Pack](https://agentkitdrawer.com/#drawers) (DRW-01, $19): Rules for AI coding agents (Cursor, Claude Code, Codex) on Next.js App Router + Supabase + Stripe: AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules (auth, RLS, Stripe webhooks, env/secrets, tests, UI), 12 slash-command prompts, 2 launch checklists.
 - [Game Jam Agent Kit](https://agentkitdrawer.com/#drawers) (DRW-02, $24): AGENTS.md and rules for Godot 4 (GDScript) and Phaser game jams: scope control, InputMap-only input, @export feel numbers, jam timeline, prompts for prototyping and polish.
 - [Agent Builder Prompt Pack](https://agentkitdrawer.com/#drawers) (DRW-03, $29): 10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.
-- [The Whole Cabinet](https://agentkitdrawer.com/#drawers) (BUNDLE, $49): All 3 packs plus 12 months of updates. Saves $23.
+- [Claude Code Kit](https://agentkitdrawer.com/#drawers) (DRW-04, $24): Claude Code setup: CLAUDE.md, 6 least-privilege subagents (planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer), 10 slash commands, settings.json permissions and 4 hooks (block dangerous Bash, protect secrets and lockfiles, auto-format, tests before stop).
+- [Python/FastAPI Backend Kit](https://agentkitdrawer.com/#drawers) (DRW-05, $19): AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules and 10 prompts for FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic + pytest: ownership checks, migrations, security and testing rules, plus definition-of-done and pre-deploy checklists.
+- [The Whole Cabinet](https://agentkitdrawer.com/#drawers) (BUNDLE, $49): DRW-01 to DRW-03 plus 12 months of updates. Saves $23.
 
 ## Guides
 - [Cursor rules for Next.js + Supabase](https://agentkitdrawer.com/cursor-rules-nextjs-supabase/)
@@ -19,6 +21,8 @@ Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Fre
 - [AGENTS.md for game modding](https://agentkitdrawer.com/agents-md-game-modding/)
 - [AGENTS.md vs CLAUDE.md vs Cursor rules](https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/)
 - [Codex AGENTS.md template](https://agentkitdrawer.com/codex-agents-md-template/)
+- [Claude Code subagents, hooks and slash commands](https://agentkitdrawer.com/claude-code-subagents-hooks-guide/)
+- [AGENTS.md and Cursor rules for FastAPI](https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/)
 
 ## Free files
 - [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security
@@ -120,3 +124,49 @@ Builds cleanly, loads in the target version without errors in the log, doesn't b
 - Which tools? Plain Markdown rules for Cursor (.mdc), Claude Code (CLAUDE.md), Codex and other AGENTS.md-aware agents; ports to Windsurf.
 - Testing status: written for these tools; pack pages note which parts have not yet been verified in each tool.
 - Payment: Stripe checkout; download link right after payment.
+
+## Guide summary: Claude Code subagents, hooks and slash commands
+URL: https://agentkitdrawer.com/claude-code-subagents-hooks-guide/
+Subagents live in .claude/agents/*.md (frontmatter: name, description, optional tools) and run in a fresh context; give reviewers and auditors read-only tools. Hooks live in .claude/settings.json under "hooks" (PreToolUse, PostToolUse, Stop) with a matcher on the tool name; the script gets the tool call as JSON on stdin and exit code 2 blocks the action and returns stderr to Claude. Slash commands are .claude/commands/*.md with $ARGUMENTS. Free hook (block-dangerous-bash.sh):
+
+```bash
+#!/usr/bin/env bash
+# PreToolUse (matcher: Bash). Exit 2 = block; stderr is shown to Claude.
+cmd=$(jq -r '.tool_input.command // ""')
+deny=(
+  'rm -rf /' 'rm -rf ~' 'rm -rf \*' 'rm -rf \.' 'git push --force' 'git push -f' 'git reset --hard'
+  'git clean -fd' 'DROP DATABASE' 'DROP TABLE' 'TRUNCATE ' 'supabase db reset' 'prisma migrate reset'
+  'alembic downgrade base' 'chmod -R 777' 'mkfs' 'dd if=' ':(){'
+)
+for p in "${deny[@]}"; do
+  if printf '%s' "$cmd" | grep -qiF -- "${p//\\/}"; then
+    echo "Blocked by .claude/hooks/block-dangerous-bash.sh: '$p' is destructive. Explain why it's needed and ask the human to run it." >&2
+    exit 2
+  fi
+done
+if printf '%s' "$cmd" | grep -qE '(curl|wget)[^|]*\|\s*(ba|z)?sh'; then
+  echo "Blocked: piping a download into a shell. Download, inspect, then ask." >&2; exit 2
+fi
+if printf '%s' "$cmd" | grep -qE 'git push[^&;|]*\b(main|master)\b'; then
+  echo "Blocked: pushing to main/master. Push a branch and open a PR." >&2; exit 2
+fi
+exit 0
+```
+
+## Guide summary: AGENTS.md and Cursor rules for FastAPI
+URL: https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/
+Key rules for FastAPI + SQLAlchemy 2 + Pydantic v2 agents: filter ownership in the query and return 404 for other users' objects; Pydantic v2 idioms only (ConfigDict, field_validator, model_dump); SQLAlchemy 2 typed Mapped[] and select(), no lazy loads in async; every model change ships a reviewed Alembic migration with a working downgrade; every endpoint tested for 2xx, 422, 401 and other-user 404 against real Postgres. Free rule (.cursor/rules/20-api-routes.mdc):
+
+```
+---
+description: FastAPI routes and dependencies
+globs: app/api/**/*.py,app/main.py
+alwaysApply: false
+---
+- Every route: explicit response_model (or return annotation), status_code, and summary. POST create → 201, DELETE → 204 with no body.
+- Use Annotated dependencies: SessionDep = Annotated[AsyncSession, Depends(get_session)], CurrentUser = Annotated[User, Depends(get_current_user)].
+- Any route touching user data depends on CurrentUser and passes user.id into the service; ownership is filtered in the query. Other users' objects → 404.
+- List endpoints are paginated (limit ≤ 100, default 20) and have a stable order_by.
+- Don't catch broad Exception in routes. No business logic in routes.
+- CORS: explicit allow_origins from Settings; never ["*"] together with allow_credentials=True.
+```

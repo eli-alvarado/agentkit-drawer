@@ -8,7 +8,9 @@ Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Fre
 - [Vibe Starter Rules Pack](https://agentkitdrawer.com/#drawers) (DRW-01, $19): Rules for AI coding agents (Cursor, Claude Code, Codex) on Next.js App Router + Supabase + Stripe: AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules (auth, RLS, Stripe webhooks, env/secrets, tests, UI), 12 slash-command prompts, 2 launch checklists.
 - [Game Jam Agent Kit](https://agentkitdrawer.com/#drawers) (DRW-02, $24): AGENTS.md and rules for Godot 4 (GDScript) and Phaser game jams: scope control, InputMap-only input, @export feel numbers, jam timeline, prompts for prototyping and polish.
 - [Agent Builder Prompt Pack](https://agentkitdrawer.com/#drawers) (DRW-03, $29): 10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.
-- [The Whole Cabinet](https://agentkitdrawer.com/#drawers) (BUNDLE, $49): All 3 packs plus 12 months of updates. Saves $23.
+- [Claude Code Kit](https://agentkitdrawer.com/#drawers) (DRW-04, $24): Claude Code setup: CLAUDE.md, 6 least-privilege subagents (planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer), 10 slash commands, settings.json permissions and 4 hooks (block dangerous Bash, protect secrets and lockfiles, auto-format, tests before stop).
+- [Python/FastAPI Backend Kit](https://agentkitdrawer.com/#drawers) (DRW-05, $19): AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules and 10 prompts for FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic + pytest: ownership checks, migrations, security and testing rules, plus definition-of-done and pre-deploy checklists.
+- [The Whole Cabinet](https://agentkitdrawer.com/#drawers) (BUNDLE, $49): DRW-01 to DRW-03 plus 12 months of updates. Saves $23.
 
 ## Guides
 - [Cursor rules for Next.js + Supabase](https://agentkitdrawer.com/cursor-rules-nextjs-supabase/)
@@ -19,6 +21,8 @@ Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Fre
 - [AGENTS.md for game modding](https://agentkitdrawer.com/agents-md-game-modding/)
 - [AGENTS.md vs CLAUDE.md vs Cursor rules](https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/)
 - [Codex AGENTS.md template](https://agentkitdrawer.com/codex-agents-md-template/)
+- [Claude Code subagents, hooks and slash commands](https://agentkitdrawer.com/claude-code-subagents-hooks-guide/)
+- [AGENTS.md and Cursor rules for FastAPI](https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/)
 
 ## Free files
 - [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security

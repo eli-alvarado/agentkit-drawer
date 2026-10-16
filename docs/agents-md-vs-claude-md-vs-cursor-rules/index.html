@@ -140,7 +140,7 @@
 
 <h2>What each file is for</h2>
 <h3>AGENTS.md</h3>
-<p><code>AGENTS.md</code> is a simple open format: a README for agents. Put durable project guidance here: how to build and test, folder layout, conventions, and the never-do list. Keep it short enough that tools will follow it. Codex discovers project <code>AGENTS.md</code> files along the path from the repo root to your working directory; closer files can refine broader ones.</p>
+<p><code>AGENTS.md</code> is a simple open format: a README for agents. Put durable project guidance here: how to build and test, folder layout, conventions, and the never-do list. Keep it short enough that tools will follow it. Codex discovers project <code>AGENTS.md</code> files along the path from the repo root to your working directory; closer files can refine broader ones. Copy-paste starter: <a href="/codex-agents-md-template/">Codex AGENTS.md template</a>.</p>
 
 <h3>CLAUDE.md</h3>
 <p>Claude Code loads <code>CLAUDE.md</code> at the start of a session. Use <code>@path/to/file</code> anywhere in that file to import more Markdown. Relative paths resolve from the file that contains the import. A common pattern is a one-line import of shared rules, then a few Claude-only notes:</p>
@@ -222,6 +222,7 @@ alwaysApply: false
 <nav class="related" aria-labelledby="rel-h">
   <h2 id="rel-h">Related guides</h2>
   <ul>
+    <li><a href="/codex-agents-md-template/">Codex AGENTS.md template</a></li>
     <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
     <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
     <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>

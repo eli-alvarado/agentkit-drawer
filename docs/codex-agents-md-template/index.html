@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions</title>
+<meta name="description" content="A copy-paste AGENTS.md template for OpenAI Codex CLI. What Codex reads, how nested files and AGENTS.override.md work, and how it differs from CLAUDE.md and Cursor rules.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/codex-agents-md-template/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions">
+<meta property="og:description" content="A copy-paste AGENTS.md template for OpenAI Codex CLI. What Codex reads, how nested files work, and how it differs from CLAUDE.md and Cursor rules.">
+<meta property="og:url" content="https://agentkitdrawer.com/codex-agents-md-template/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions">
+<meta name="twitter:description" content="A copy-paste AGENTS.md template for OpenAI Codex CLI. What Codex reads, how nested files work, and how it differs from CLAUDE.md and Cursor rules.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What file does OpenAI Codex read for project instructions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Codex CLI reads AGENTS.md before it starts work. It also checks AGENTS.override.md in the same directory, which wins if both exist. Personal defaults can live in ~/.codex/AGENTS.md."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Codex read CLAUDE.md or Cursor .cursor/rules?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Claude Code's native memory file is CLAUDE.md. Cursor path-scoped rules live in .cursor/rules/*.mdc. Codex uses the AGENTS.md convention. Keep shared rules in AGENTS.md so Codex, Cursor, and a thin CLAUDE.md import can all follow one source of truth."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where should a Codex AGENTS.md template live?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Put the main file at the repository root (usually the Git root). Codex walks from that root down to your current working directory and concatenates one instruction file per directory. Nested AGENTS.md files refine the root file for a subdirectory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is AGENTS.override.md?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In each directory Codex looks at, AGENTS.override.md is preferred over AGENTS.md. Use it for a local or temporary override without deleting the shared file. Codex includes at most one instruction file per directory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is AGENTS.md different from Cursor rules?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AGENTS.md is plain Markdown with no frontmatter. Cursor .mdc rules add YAML (description, globs, alwaysApply) so a rule loads only when matching files are in context. Put stack facts, commands, hard never-dos, and the definition of done in AGENTS.md. Put path-scoped guidance in .cursor/rules/*.mdc."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#guides">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / Codex AGENTS.md template</p>
+<h1>A Codex AGENTS.md template for OpenAI Codex CLI</h1>
+<p>OpenAI Codex reads <code>AGENTS.md</code> before it does any work. That file is the Codex CLI agent instructions for the repo: stack, commands, hard never-dos, and what “done” means. A short, specific file gets followed. A 600-line essay gets skimmed.</p>
+<p>This guide is a Codex <code>AGENTS.md</code> template you can paste today, plus how Codex actually discovers those files, and how that differs from <code>CLAUDE.md</code> and Cursor rules.</p>
+
+<h2>What Codex reads</h2>
+<p>Codex builds an instruction chain once per run (in the TUI, once per session):</p>
+<ul>
+  <li><strong>Global:</strong> <code>~/.codex/AGENTS.override.md</code> if it exists, otherwise <code>~/.codex/AGENTS.md</code>. Personal defaults, not repo rules.</li>
+  <li><strong>Project:</strong> from the repo root (usually the Git root) down to the current working directory. In each directory it prefers <code>AGENTS.override.md</code>, then <code>AGENTS.md</code>. At most one file per directory.</li>
+  <li><strong>Merge:</strong> files concatenate root → cwd. Closer files appear later, so they override broader guidance.</li>
+</ul>
+<p>Empty files are skipped. Combined project instructions cap at about 32&nbsp;KiB by default (<code>project_doc_max_bytes</code>). Keep the root file short; put specialist rules in nested directories instead of one giant README. Official discovery notes: <a href="https://developers.openai.com/codex/guides/agents-md" target="_blank" rel="noopener noreferrer">Custom instructions with AGENTS.md</a>.</p>
+<p>Codex does <em>not</em> read <code>CLAUDE.md</code> or <code>.cursor/rules/*.mdc</code>. If those are your only instruction files, Codex guesses.</p>
+
+<h2>Minimal copy-paste template</h2>
+<p>Drop this at the repo root as <code>AGENTS.md</code>. Fill every <code>&lt;&lt;FILL&gt;&gt;</code>. Codex’s <code>/init</code> can scaffold a starter; edit that result the same way — exact commands beat vague vibes.</p>
+<div class="snip"><div class="bar"><span>AGENTS.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md
+&lt;!-- OpenAI Codex CLI agent instructions. Fill every &lt;&lt;FILL&gt;&gt;. --&gt;
+
+## Project
+- App: &lt;&lt;FILL: name and one-line purpose&gt;&gt;
+- Stack: &lt;&lt;FILL: e.g. Next.js 15 App Router, Supabase, Stripe, pnpm&gt;&gt;
+- Layout: &lt;&lt;FILL: where app/, lib/, tests, and generated types live&gt;&gt;
+
+## Commands
+- Dev: &lt;&lt;FILL: e.g. pnpm dev&gt;&gt;
+- Test: &lt;&lt;FILL&gt;&gt;
+- Lint: &lt;&lt;FILL&gt;&gt;
+- Typecheck: &lt;&lt;FILL&gt;&gt;
+
+## Hard rules
+- Never print, log, or commit secrets. Never prefix secrets with NEXT_PUBLIC_.
+- Never disable tests, typecheck, RLS, or other safety checks to make something pass.
+- Keep diffs small. Never edit generated files by hand.
+- For auth, payments, or migrations: write a short plan and wait for go.
+
+## Workflow
+1. Restate the goal in one line and list the files you will touch.
+2. Make one small change, then run the tests / typecheck you listed.
+3. Report what you verified, and what you could not verify.
+
+## Done means
+The commands above pass, the change is described in plain words, and you did not expand the scope.
+</pre></div>
+<p>Paste a safety section from the free <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agent-guardrails.md" target="_blank" rel="noopener noreferrer">agent-guardrails.md</a> (MIT) when the agent will call tools or read untrusted content. For Next.js + Supabase, the free <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc" target="_blank" rel="noopener noreferrer">nextjs-supabase-rls.mdc</a> is a Cursor-shaped rule; copy the bullets into <code>AGENTS.md</code> (or a nested <code>supabase/AGENTS.md</code>) so Codex sees them too.</p>
+
+<h2>How this differs from CLAUDE.md and Cursor rules</h2>
+<div class="table-wrap"><table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Who reads it</th>
+      <th>Shape</th>
+      <th>Use it for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>AGENTS.md</strong></td>
+      <td>OpenAI Codex CLI, Cursor, and other AGENTS.md-aware tools</td>
+      <td>Plain Markdown; nested files concatenate root → cwd</td>
+      <td>Shared source of truth: stack, commands, never-dos, done criteria</td>
+    </tr>
+    <tr>
+      <td><strong>CLAUDE.md</strong></td>
+      <td>Claude Code</td>
+      <td>Markdown; can import files with <code>@path</code></td>
+      <td>A thin file that starts with <code>@AGENTS.md</code>, then Claude-only notes</td>
+    </tr>
+    <tr>
+      <td><strong>.cursor/rules/*.mdc</strong></td>
+      <td>Cursor</td>
+      <td>Markdown + YAML frontmatter (<code>globs</code>, <code>alwaysApply</code>)</td>
+      <td>Path-scoped rules that load only when matching files are in context</td>
+    </tr>
+  </tbody>
+</table></div>
+<p>Recommended layout: write <code>AGENTS.md</code> first so Codex has instructions. Add a one-line <code>CLAUDE.md</code> that imports it. Add scoped Cursor <code>.mdc</code> files for auth, RLS, or Stripe — do not paste the whole essay into every format. Full comparison: <a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a>. Claude-specific template: <a href="/claude-code-claude-md-template/">CLAUDE.md template</a>.</p>
+
+<h2>Nested files and overrides</h2>
+<p>When a subdirectory has different commands or never-dos, put a second <code>AGENTS.md</code> there. Codex running from that directory loads the root file, then the nested one. If you need to replace the directory’s file without deleting it, use <code>AGENTS.override.md</code> in that folder — Codex will take the override and ignore the sibling <code>AGENTS.md</code>.</p>
+<div class="snip"><div class="bar"><span>layout sketch</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>repo/
+  AGENTS.md                      # shared source of truth (Codex + others)
+  CLAUDE.md                      # @AGENTS.md + Claude-only notes
+  .cursor/rules/                 # Cursor-only, path-scoped
+  services/payments/
+    AGENTS.md                    # payments commands and never-dos
+</pre></div>
+
+<h2>Free files (MIT)</h2>
+<p>All of these live in the public <a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">eli-alvarado/agentkit-drawer</a> repo:</p>
+<ul>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agent-guardrails.md" target="_blank" rel="noopener noreferrer">agent-guardrails.md</a> — injection defense, ask-vs-act, uncertainty</li>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc" target="_blank" rel="noopener noreferrer">nextjs-supabase-rls.mdc</a> — RLS bullets you can mirror into AGENTS.md</li>
+  <li><a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/godot-jam-timeline.md" target="_blank" rel="noopener noreferrer">godot-jam-timeline.md</a> and <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/agents-md-game-modding.md" target="_blank" rel="noopener noreferrer">agents-md-game-modding.md</a> — game-shaped AGENTS.md starters</li>
+</ul>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>What file does OpenAI Codex read?</summary><p>Codex CLI reads <code>AGENTS.md</code> (and <code>AGENTS.override.md</code> when present) before it starts work. Personal defaults can live in <code>~/.codex/AGENTS.md</code>. It does not read <code>CLAUDE.md</code> or Cursor <code>.mdc</code> rules.</p></details>
+<details><summary>Does Codex read CLAUDE.md or .cursor/rules?</summary><p>No. Keep shared rules in <code>AGENTS.md</code>. Point Claude Code at that file with <code>@AGENTS.md</code>. Keep Cursor path rules in <code>.cursor/rules/*.mdc</code>.</p></details>
+<details><summary>Where should the Codex AGENTS.md template live?</summary><p>Repo root, next to your lockfile. Nested <code>AGENTS.md</code> files refine the root file for a subdirectory. Codex concatenates from the Git root down to the working directory.</p></details>
+<details><summary>What is AGENTS.override.md?</summary><p>In a given directory, it wins over <code>AGENTS.md</code>. Use it for a local or temporary override without deleting the shared file. Codex still takes only one instruction file per directory.</p></details>
+<details><summary>How is this different from Cursor rules?</summary><p><code>AGENTS.md</code> is unscoped plain Markdown. Cursor <code>.mdc</code> files add frontmatter so a rule loads only for matching paths. Shared facts belong in <code>AGENTS.md</code>; path-scoped extras belong in Cursor rules.</p></details>
+</div>
+
+<div class="ctabox">
+  <h2>Want the whole drawer?</h2>
+  <p>The Vibe Starter Rules Pack ($19) ships a ready <code>AGENTS.md</code> + <code>CLAUDE.md</code> pair, 8 scoped Cursor rules, 12 slash-command prompts, and launch checklists for Next.js + Supabase + Stripe — the file Codex actually reads, plus the tool-specific extras. The Agent Builder Prompt Pack ($29) is the system-prompt and eval kit for Codex-class agents.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/cNi4gy7kEfjJgWN7Zk7kc00" target="_blank" rel="noopener noreferrer">Buy Vibe Starter · $19</a>
+    <a class="btn ghost" href="https://buy.stripe.com/6oU3cueN68VleOFdjE7kc02" target="_blank" rel="noopener noreferrer">Buy Agent Builder · $29</a>
+  </div>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>
+    <li><a href="/ai-agent-system-prompt-templates/">AI agent system prompt templates</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="codex-agents-md-template"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

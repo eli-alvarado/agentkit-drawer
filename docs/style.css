@@ -39,6 +39,13 @@ h1{font-size:clamp(2.6rem,7.4vw,6rem);line-height:.92;margin:0;font-weight:900;f
 .hl{background:linear-gradient(transparent 58%,var(--acc) 58% 92%,transparent 92%)}
 .sub{max-width:620px;font-size:1.15rem;color:var(--mut);margin:28px 0 32px}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
+.promo{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin:24px 0 0;padding:12px 14px;border:2px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--acc);max-width:620px}
+.promo-label{flex-shrink:0;font-size:11px;font-weight:600;background:var(--ink);color:var(--paper);padding:3px 7px;letter-spacing:.04em}
+.promo p{margin:0;color:var(--mut);font-size:15px;line-height:1.45}
+.promo kbd,.promo-fine kbd,.fine kbd{font-family:var(--mono);font-weight:700;font-size:12px;background:var(--ink);color:var(--paper);padding:1px 6px}
+.promo-fine{margin:0 0 22px;font-size:13px;color:var(--mut)}
+.promo-fine b{color:var(--ink);font-weight:700}
+.ctabox .cta{margin-top:16px}
 .btn{display:inline-block;background:var(--acc);color:var(--acc-ink);font-weight:800;font-stretch:110%;padding:14px 22px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--sh);text-decoration:none;transition:transform .12s,box-shadow .12s}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sh)}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--sh)}

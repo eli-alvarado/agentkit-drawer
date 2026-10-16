@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGENTS.md and Cursor rules for FastAPI (2026): SQLAlchemy 2, Pydantic v2, Alembic, pytest</title>
+<meta name="description" content="An AGENTS.md and .cursor/rules setup for FastAPI + SQLAlchemy 2 + Pydantic v2 that stops AI agents from skipping ownership checks, hand-waving migrations and mocking the database. Free .mdc rule.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AGENTS.md and Cursor rules for FastAPI (2026): SQLAlchemy 2, Pydantic v2, Alembic, pytest">
+<meta property="og:description" content="AGENTS.md and Cursor rules for FastAPI + SQLAlchemy 2 + Pydantic v2: ownership checks, Alembic migrations, real-DB pytest. Free .mdc rule.">
+<meta property="og:url" content="https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AGENTS.md and Cursor rules for FastAPI (2026): SQLAlchemy 2, Pydantic v2, Alembic, pytest">
+<meta name="twitter:description" content="AGENTS.md and Cursor rules for FastAPI + SQLAlchemy 2 + Pydantic v2: ownership checks, Alembic migrations, real-DB pytest. Free .mdc rule.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does Cursor read AGENTS.md for a FastAPI project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Cursor reads AGENTS.md at the repo root as well as .cursor/rules/*.mdc. Keep shared stack rules in AGENTS.md and path-scoped FastAPI, SQLAlchemy and Alembic details in .mdc rules with globs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I stop AI agents from creating IDOR bugs in FastAPI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a rule that every route touching user data depends on get_current_user and filters ownership in the query (owner_id == user.id), returning 404 for other users’ objects, plus a required test for the other-user case."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should AI agents use Alembic autogenerate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, but the rule should require reading and fixing the generated file: autogenerate misses renames, some server defaults, enums and constraint changes. Require a working downgrade and an upgrade, downgrade -1, upgrade round trip."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I keep agents on Pydantic v2 and SQLAlchemy 2.0?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Say it explicitly in a scoped rule: ConfigDict, field_validator and model_dump instead of class Config, @validator and .dict(); Mapped[] with mapped_column and select() instead of session.query()."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should FastAPI tests use SQLite?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not if production is Postgres. Use a real Postgres via Docker or testcontainers, run migrations once per session, and wrap each test in a transaction that rolls back."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "AGENTS.md and Cursor rules for FastAPI + SQLAlchemy + Pydantic", "description": "An AGENTS.md and .cursor/rules setup for FastAPI + SQLAlchemy 2 + Pydantic v2 that stops AI agents from skipping ownership checks, hand-waving migrations and mocking the database. Free .mdc rule.", "url": "https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/", "datePublished": "2026-10-16", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/#guides">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / FastAPI AGENTS.md + Cursor rules</p>
+<h1>AGENTS.md and Cursor rules for FastAPI + SQLAlchemy + Pydantic</h1>
+<p>AI agents write FastAPI code that runs. The problem is what it quietly gets wrong:</p>
+<ul><li><strong>No ownership check.</strong> <code>GET /invoices/{id}</code> fetches any invoice by ID. That is an IDOR, and the most common API bug there is.</li>
+<li><strong>Pydantic v1 habits:</strong> <code>class Config</code>, <code>.dict()</code>, <code>@validator</code> in a v2 codebase.</li>
+<li><strong>Legacy SQLAlchemy:</strong> <code>session.query()</code>, lazy loads inside <code>async def</code>, N+1 on every list endpoint.</li>
+<li><strong>Schema drift:</strong> models changed with no Alembic migration, or an autogenerated one committed without reading it.</li>
+<li><strong>Tests that test nothing:</strong> SQLite instead of Postgres, mocked sessions, no 401/404 cases.</li></ul>
+<h2>Where the rules go</h2>
+<p><code>AGENTS.md</code> at the repo root holds the stack, layout, commands and non-negotiables. Codex, Cursor, Windsurf and others read it, and Claude Code picks it up through <code>@AGENTS.md</code> in <code>CLAUDE.md</code>. Path-scoped details go in <code>.cursor/rules/*.mdc</code> with <code>globs</code>, so the Alembic rule loads only when <code>alembic/**</code> or models are in context.</p>
+<h2>A layout that works</h2>
+<p><code>00-core</code> (always on), <code>10-structure</code> (app/**), <code>20-api-routes</code> (app/api/**), <code>30-pydantic-schemas</code> (app/schemas/**), <code>40-sqlalchemy-models</code> (models, services), <code>50-alembic-migrations</code> (alembic/**), <code>60-security</code> (core, deps, auth routes), <code>70-testing</code> (tests/**).</p>
+<h2>The three rules that matter most</h2>
+<ul><li><strong>Authorization in the query:</strong> <code>select(Invoice).where(Invoice.id == id, Invoice.owner_id == user.id)</code>, with 404 for other users’ objects.</li>
+<li><strong>Migrations are reviewed code:</strong> autogenerate, then read and fix it; every migration has a working <code>downgrade()</code> and is round-trip tested.</li>
+<li><strong>Every endpoint gets four tests:</strong> happy path, 422, 401, and 404 for another user, against a real Postgres in a rolled-back transaction.</li></ul>
+<h2>Free snippet: copy it</h2>
+<div class="snip"><div class="bar"><span>.cursor/rules/20-api-routes.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: FastAPI routes and dependencies
+globs: app/api/**/*.py,app/main.py
+alwaysApply: false
+---
+- Every route: explicit response_model (or return annotation), status_code, and summary. POST create → 201, DELETE → 204 with no body.
+- Use Annotated dependencies: SessionDep = Annotated[AsyncSession, Depends(get_session)], CurrentUser = Annotated[User, Depends(get_current_user)].
+- Any route touching user data depends on CurrentUser and passes user.id into the service; ownership is filtered in the query. Other users&#x27; objects → 404.
+- List endpoints are paginated (limit ≤ 100, default 20) and have a stable order_by.
+- Don&#x27;t catch broad Exception in routes. No business logic in routes.
+- CORS: explicit allow_origins from Settings; never [&quot;*&quot;] together with allow_credentials=True.
+</pre></div>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Does Cursor read AGENTS.md for a FastAPI project?</summary><p>Yes. Cursor reads AGENTS.md at the repo root as well as .cursor/rules/*.mdc. Keep shared stack rules in AGENTS.md and path-scoped FastAPI, SQLAlchemy and Alembic details in .mdc rules with globs.</p></details>
+<details><summary>How do I stop AI agents from creating IDOR bugs in FastAPI?</summary><p>Add a rule that every route touching user data depends on get_current_user and filters ownership in the query (owner_id == user.id), returning 404 for other users’ objects, plus a required test for the other-user case.</p></details>
+<details><summary>Should AI agents use Alembic autogenerate?</summary><p>Yes, but the rule should require reading and fixing the generated file: autogenerate misses renames, some server defaults, enums and constraint changes. Require a working downgrade and an upgrade, downgrade -1, upgrade round trip.</p></details>
+<details><summary>How do I keep agents on Pydantic v2 and SQLAlchemy 2.0?</summary><p>Say it explicitly in a scoped rule: ConfigDict, field_validator and model_dump instead of class Config, @validator and .dict(); Mapped[] with mapped_column and select() instead of session.query().</p></details>
+<details><summary>Should FastAPI tests use SQLite?</summary><p>Not if production is Postgres. Use a real Postgres via Docker or testcontainers, run migrations once per session, and wrap each test in a transaction that rolls back.</p></details>
+</div>
+
+<div class="ctabox">
+  <h2>Want the whole drawer?</h2>
+  <p>The Python/FastAPI Backend Kit ($19) ships a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (structure, routes, Pydantic v2, SQLAlchemy 2, Alembic, security, testing), 10 prompts (/endpoint, /migration, /security-audit…) and definition-of-done + pre-deploy checklists.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/28EdR88oI0oPeOF6Vg7kc05" target="_blank" rel="noopener noreferrer">Buy FastAPI Kit · $19</a>
+    <a class="btn ghost" href="https://buy.stripe.com/5kQ3cuawQ6Ndayp0wS7kc04" target="_blank" rel="noopener noreferrer">Buy Claude Code Kit · $24</a>
+  </div>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/claude-code-subagents-hooks-guide/">Claude Code subagents + hooks</a></li>
+    <li><a href="/codex-agents-md-template/">Codex AGENTS.md template</a></li>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><h2 id="news-h">The Drawer Notes</h2><p>One short email when a pack ships or a free rule drops. No spam, unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?'You\'re in. Thanks!':'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="fastapi-agents-md-cursor-rules"><button class="btn" type="submit">Subscribe</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

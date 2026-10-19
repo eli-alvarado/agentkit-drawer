@@ -8,7 +8,7 @@
 <h1 id="h">Looking for your download?</h1>
 <p id="msg">Use the link from your checkout redirect, or email us with your Stripe receipt and we'll send your files.</p>
 <p><a class="btn" id="dl" href="mailto:agentkitdrawer@agentmail.to?subject=Download%20help">Email support</a></p>
-<div class="ctabox" id="next" hidden><h2>Next</h2><ol class="mono" style="padding-left:20px"><li>Unzip, then copy AGENTS.md, CLAUDE.md and .cursor/ into your repo.</li><li>Fill in the &lt;&lt;FILL&gt;&gt; fields.</li><li>Start with /plan.</li></ol>
+<div class="ctabox" id="next" hidden><h2>Next</h2><ol class="mono" id="steps" style="padding-left:20px"><li>Unzip, then copy AGENTS.md, CLAUDE.md and .cursor/ into your repo.</li><li>Fill in the &lt;&lt;FILL&gt;&gt; fields.</li><li>Start with /plan.</li></ol>
 <p><strong>Bookmark this page.</strong> It's your download link for re-downloads. Trouble? Email <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> with your Stripe receipt.</p></div>
 <p><a href="/">← Back to the cabinet</a></p>
 </main>
@@ -22,7 +22,9 @@
     if(!d.ok)throw d;
     $("crumb").textContent="ORDER COMPLETE";$("h").textContent="Drawer unlocked.";
     $("msg").textContent="Thanks for buying "+d.name+". A Stripe receipt is on its way to your email.";
-    var a=$("dl");a.href=API+"?session_id="+encodeURIComponent(sid);a.textContent="Download "+d.name+" (.zip)";a.hidden=false;$("next").hidden=false;
+    var a=$("dl");a.href=API+"?session_id="+encodeURIComponent(sid);var md=/\.md$/.test(d.file||"");a.textContent=md?"Download AGENTS.md":"Download "+d.name+" (.zip)";a.hidden=false;
+    if(md)$("steps").innerHTML="<li>Save AGENTS.md in your repo root.</li><li>Fill the &lt;&lt;FILL&gt;&gt; fields and delete the stack modules you don't use.</li><li>Claude Code: add a CLAUDE.md with the line @AGENTS.md. Then start with /plan.</li>";
+    $("next").hidden=false;
   }).catch(function(e){
     $("h").textContent="We couldn't confirm that order yet.";
     $("msg").innerHTML=(e&&e.error==="unpaid"?"Your payment is still processing. Refresh in a minute. ":"")+'Still stuck? Email <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> with your receipt and we\'ll send your files.';

@@ -2,9 +2,10 @@
 
 > Tested rules packs and prompt templates that keep AI coding agents (Cursor, Claude Code, Codex, Windsurf) on track for a specific stack. One-time purchase, instant download, use in unlimited personal and commercial projects, 14-day refund.
 
-Support: agentkitdrawer@agentmail.to. Newsletter: signup form on every page. Free samples are MIT-licensed on GitHub: https://github.com/eli-alvarado/agentkit-drawer
+Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: enter your email in the form on the homepage or any guide and it is emailed instantly. Free samples are MIT-licensed on GitHub: https://github.com/eli-alvarado/agentkit-drawer
 
 ## Packs
+- [One-File Agent Rules](https://agentkitdrawer.com/#one-file) (DRW-00, $9): One universal AGENTS.md for Cursor, Claude Code, Codex, Windsurf and Copilot: plan gate, verify-before-done, 8 built-in commands, self-review gate and stack modules for Next.js + Supabase, FastAPI, Node, React and Godot. The easy first purchase.
 - [Vibe Starter Rules Pack](https://agentkitdrawer.com/#drw-01) (DRW-01, $19): Rules for AI coding agents (Cursor, Claude Code, Codex) on Next.js App Router + Supabase + Stripe: AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules (auth, RLS, Stripe webhooks, env/secrets, tests, UI), 12 slash-command prompts, 2 launch checklists.
 - [Game Jam Agent Kit](https://agentkitdrawer.com/#drw-02) (DRW-02, $24): AGENTS.md and rules for Godot 4 (GDScript) and Phaser game jams: scope control, InputMap-only input, @export feel numbers, jam timeline, prompts for prototyping and polish.
 - [Agent Builder Prompt Pack](https://agentkitdrawer.com/#drw-03) (DRW-03, $29): 10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.

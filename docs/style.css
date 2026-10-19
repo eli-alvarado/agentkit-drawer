@@ -92,7 +92,7 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
 .buy{justify-self:start}
 .todo{display:block;font-size:11px;color:var(--mut);margin-top:-12px}
 
-.price-grid{display:grid;grid-template-columns:repeat(5,1fr) 1.6fr;border:2px solid var(--ink)}
+.price-grid{display:grid;grid-template-columns:repeat(6,1fr) 1.6fr;border:2px solid var(--ink)}
 .pcell{padding:22px;min-height:150px;display:flex;flex-direction:column;gap:4px;border-right:2px solid var(--ink)}
 .pcell:last-child{border-right:0}
 .pcell .mono{font-size:12px;color:var(--mut)}
@@ -133,7 +133,7 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
   .drawer-body{grid-template-columns:1fr;padding:18px 16px}
   .file{grid-row:auto;grid-column:auto}
   .price-grid{grid-template-columns:1fr 1fr}
-  .pcell:nth-child(2){border-right:0}
+  .pcell:nth-child(2n){border-right:0}
   .pcell{border-bottom:2px solid var(--ink)}
   .pcell.all{grid-column:1/-1;border-bottom:0}
   .pcell:nth-child(3){grid-column:1/-1;border-right:0}.pcell:nth-child(5){border-right:0}
@@ -185,7 +185,7 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
 .related ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:8px}
 .related a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
-@media (min-width:761px) and (max-width:1100px){.price-grid{grid-template-columns:repeat(5,1fr)}.price-grid .pcell.all{grid-column:1/-1;border-top:2px solid var(--ink)}.pcell:nth-child(5){border-right:0}}
+@media (min-width:761px) and (max-width:1100px){.price-grid{grid-template-columns:repeat(3,1fr)}.price-grid .pcell.all{grid-column:1/-1;border-top:2px solid var(--ink)}.pcell:nth-child(3n){border-right:0}}
 .foot .follow{display:inline-flex;align-items:center;gap:.6rem}
 .foot .follow a{display:inline-flex;line-height:0}
 .foot .follow svg{width:16px;height:16px;display:block}
@@ -196,3 +196,7 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
 .pick a:hover,.pick a:focus-visible{background:var(--ink);color:var(--paper)}
 .mini-cab .md{padding:12px 14px 22px}
 .drawer{scroll-margin-top:16px}
+.news-k{font-size:12px;letter-spacing:.08em;margin:0 0 6px!important;color:var(--acc)!important}
+.free-line{font-size:13px;margin:10px 0 0}.free-line a{color:inherit}
+.onefile{margin-top:48px}.upgrade{margin:14px 0 0;font-size:13px}.upgrade a{color:inherit}
+.pcell.first{outline:3px solid var(--acc);outline-offset:-3px}

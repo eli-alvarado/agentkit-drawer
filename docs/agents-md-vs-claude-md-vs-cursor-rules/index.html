@@ -74,7 +74,7 @@
 }
 </script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "AGENTS.md vs CLAUDE.md vs Cursor rules", "item": "https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/"}]}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?", "description": "Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files, no duplicated rules.", "url": "https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/", "mainEntityOfPage": "https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/", "datePublished": "2026-10-15", "dateModified": "2026-10-17", "image": "https://agentkitdrawer.com/og.png", "author": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/"}, "publisher": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/", "logo": {"@type": "ImageObject", "url": "https://agentkitdrawer.com/icon-512.png"}}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?", "description": "Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files, no duplicated rules.", "url": "https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/", "mainEntityOfPage": "https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/", "datePublished": "2026-10-15", "dateModified": "2026-10-19", "image": "https://agentkitdrawer.com/og.png", "author": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/"}, "publisher": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/", "logo": {"@type": "ImageObject", "url": "https://agentkitdrawer.com/icon-512.png"}}}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -172,7 +172,7 @@ alwaysApply: false
 - Policies use (select auth.uid()); separate policies per command.
 - Never disable RLS to "make it work". Fix the policy instead.
 </pre></div>
-<p>More Next.js + Supabase detail: <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>.</p>
+<p>More Next.js + Supabase detail: <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>. For a Python backend skeleton (venv, pytest, type hints), see <a href="/cursor-rules-for-python/">Cursor rules for Python</a>.</p>
 
 <h3>Windsurf <code>.windsurf/rules/</code></h3>
 <p>Cascade reads Markdown rules from <code>.windsurf/rules/</code>, with activation similar in spirit to Cursor (always on, glob, or manual). Keep those files thin and mirror the ideas already in <code>AGENTS.md</code>. See <a href="/windsurf-rules/">Windsurf rules</a>.</p>
@@ -229,6 +229,7 @@ alwaysApply: false
 <nav class="related" aria-labelledby="rel-h">
   <h2 id="rel-h">Related guides</h2>
   <ul>
+    <li><a href="/cursor-rules-for-python/">Cursor rules for Python</a></li>
     <li><a href="/codex-agents-md-template/">Codex AGENTS.md template</a></li>
     <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
     <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>

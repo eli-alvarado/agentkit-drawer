@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>AgentKit Drawer: free guides for AI coding agents</title>
+  <subtitle>Short how-tos for AGENTS.md, CLAUDE.md, Cursor rules, Windsurf rules, Codex and agent system prompts.</subtitle>
+  <link rel="self" type="application/atom+xml" href="https://agentkitdrawer.com/feed.xml"/>
+  <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/guides/"/>
+  <id>https://agentkitdrawer.com/feed.xml</id>
+  <updated>2026-10-19T09:00:00-05:00</updated>
+  <author><name>AgentKit Drawer</name><uri>https://agentkitdrawer.com/</uri></author>
+  <icon>https://agentkitdrawer.com/icon-192.png</icon>
+  <entry>
+    <title>Cursor rules for Python: AGENTS.md template</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/cursor-rules-for-python/"/>
+    <id>https://agentkitdrawer.com/cursor-rules-for-python/</id>
+    <published>2026-10-19T09:00:00-05:00</published>
+    <updated>2026-10-19T09:00:00-05:00</updated>
+    <summary>A Python Cursor rules template: AGENTS.md and .cursor/rules for venv, pytest, type hints, no secrets, plan-first. How it differs from the FastAPI kit.</summary>
+  </entry>
+  <entry>
+    <title>AGENTS.md and Cursor rules for FastAPI (2026): SQLAlchemy 2, Pydantic v2, Alembic, pytest</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/"/>
+    <id>https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/</id>
+    <published>2026-10-16T09:00:00-05:00</published>
+    <updated>2026-10-16T09:00:00-05:00</updated>
+    <summary>An AGENTS.md and .cursor/rules setup for FastAPI + SQLAlchemy 2 + Pydantic v2 that stops AI agents from skipping ownership checks, hand-waving migrations and mocking the database. Free .mdc rule.</summary>
+  </entry>
+  <entry>
+    <title>Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/codex-agents-md-template/"/>
+    <id>https://agentkitdrawer.com/codex-agents-md-template/</id>
+    <published>2026-10-16T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>A copy-paste AGENTS.md template for OpenAI Codex CLI. What Codex reads, how nested files and AGENTS.override.md work, and how it differs from CLAUDE.md and Cursor rules.</summary>
+  </entry>
+  <entry>
+    <title>Claude Code subagents and hooks (2026): .claude/agents, settings.json hooks, slash commands</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/claude-code-subagents-hooks-guide/"/>
+    <id>https://agentkitdrawer.com/claude-code-subagents-hooks-guide/</id>
+    <published>2026-10-16T09:00:00-05:00</published>
+    <updated>2026-10-16T09:00:00-05:00</updated>
+    <summary>How to set up Claude Code subagents in .claude/agents, PreToolUse/PostToolUse/Stop hooks in settings.json, and slash commands. Free hook that blocks rm -rf and force-push.</summary>
+  </entry>
+  <entry>
+    <title>AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/"/>
+    <id>https://agentkitdrawer.com/agents-md-vs-claude-md-vs-cursor-rules/</id>
+    <published>2026-10-15T09:00:00-05:00</published>
+    <updated>2026-10-19T09:00:00-05:00</updated>
+    <summary>Clear comparison of AGENTS.md, CLAUDE.md, Cursor .cursor/rules, and Windsurf .windsurf/rules. One source of truth, thin tool-specific files, no duplicated rules.</summary>
+  </entry>
+  <entry>
+    <title>Windsurf rules (2026): .windsurf/rules setup for Next.js + Supabase</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/windsurf-rules/"/>
+    <id>https://agentkitdrawer.com/windsurf-rules/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>How to set up Windsurf rules with .windsurf/rules files and activation modes, plus a free row-level-security rule for Next.js + Supabase you can drop in today.</summary>
+  </entry>
+  <entry>
+    <title>Cursor rules for Next.js + Supabase (2026): a working .mdc setup</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/cursor-rules-nextjs-supabase/"/>
+    <id>https://agentkitdrawer.com/cursor-rules-nextjs-supabase/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>Cursor rules for Next.js App Router + Supabase that stop agents from disabling RLS, using getSession on the server, or trusting Stripe redirects. Free .mdc snippet.</summary>
+  </entry>
+  <entry>
+    <title>CLAUDE.md template for Claude Code (2026): a short file that actually works</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/claude-code-claude-md-template/"/>
+    <id>https://agentkitdrawer.com/claude-code-claude-md-template/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md.</summary>
+  </entry>
+  <entry>
+    <title>System prompt templates for AI agents: researcher, PR reviewer, support triage</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/ai-agent-system-prompt-templates/"/>
+    <id>https://agentkitdrawer.com/ai-agent-system-prompt-templates/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>Production-style system prompt templates for AI agents, with tool schemas, guardrails, prompt-injection defense and eval cases. Free guardrail snippet.</summary>
+  </entry>
+  <entry>
+    <title>AGENTS.md for Godot 4: rules that keep AI agents from wrecking your scene tree</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/agents-md-godot/"/>
+    <id>https://agentkitdrawer.com/agents-md-godot/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>An AGENTS.md template for Godot 4 and typed GDScript. Keeps Cursor, Claude Code and Codex on scope during game jams. Free copy-paste file.</summary>
+  </entry>
+  <entry>
+    <title>AGENTS.md template for game modding (2026): Minecraft, Godot, Unity mods and tools</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/agents-md-game-modding/"/>
+    <id>https://agentkitdrawer.com/agents-md-game-modding/</id>
+    <published>2026-10-14T09:00:00-05:00</published>
+    <updated>2026-10-17T09:00:00-05:00</updated>
+    <summary>Free MIT AGENTS.md for AI coding agents on game mods and small game tools: pin the game version, patch via hooks not vanilla files, protect saves, stay mod-compatible.</summary>
+  </entry>
+</feed>

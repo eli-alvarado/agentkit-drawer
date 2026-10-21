@@ -13,22 +13,49 @@
 <p><a href="/">← Back to the cabinet</a></p>
 </main>
 <script>
-(function(){
-  var API="https://dl.agentkitdrawer.com/dl", sid=new URLSearchParams(location.search).get("session_id");
-  if(!sid||!/^cs_(live|test)_[A-Za-z0-9]+$/.test(sid))return;
-  var $=function(i){return document.getElementById(i)};
-  $("crumb").textContent="ORDER";$("h").textContent="Checking your order…";$("msg").textContent="One sec while we confirm payment with Stripe.";$("dl").hidden=true;
-  fetch(API+"?info=1&session_id="+encodeURIComponent(sid)).then(function(r){return r.json()}).then(function(d){
-    if(!d.ok)throw d;
-    $("crumb").textContent="ORDER COMPLETE";$("h").textContent="Drawer unlocked.";
-    $("msg").textContent="Thanks for buying "+d.name+". A Stripe receipt is on its way to your email.";
-    var a=$("dl");a.href=API+"?session_id="+encodeURIComponent(sid);var md=/\.md$/.test(d.file||"");a.textContent=md?"Download AGENTS.md":"Download "+d.name+" (.zip)";a.hidden=false;
-    if(md)$("steps").innerHTML="<li>Save AGENTS.md in your repo root.</li><li>Fill the &lt;&lt;FILL&gt;&gt; fields and delete the stack modules you don't use.</li><li>Claude Code: add a CLAUDE.md with the line @AGENTS.md. Then start with /plan.</li>";
-    $("next").hidden=false;
-  }).catch(function(e){
-    $("h").textContent="We couldn't confirm that order yet.";
-    $("msg").innerHTML=(e&&e.error==="unpaid"?"Your payment is still processing. Refresh in a minute. ":"")+'Still stuck? Email <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> with your receipt and we\'ll send your files.';
+(function () {
+  var API = "https://dl.agentkitdrawer.com/dl";
+  var sid = new URLSearchParams(location.search).get("session_id");
+  if (!sid || !/^cs_(live|test)_[A-Za-z0-9]+$/.test(sid)) return;
+  var $ = function (i) { return document.getElementById(i); };
+  $("crumb").textContent = "ORDER";
+  $("h").textContent = "Checking your order…";
+  $("msg").textContent = "One sec while we confirm payment with Stripe.";
+  $("dl").hidden = true;
+  fetch(API + "?info=1&session_id=" + encodeURIComponent(sid)).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d.ok) throw d;
+    $("crumb").textContent = "ORDER COMPLETE";
+    $("h").textContent = "Drawer unlocked.";
+    $("msg").textContent = "Thanks for buying " + d.name + ". A Stripe receipt is on its way to your email. Your license key is below — keep it for npx github:eli-alvarado/agentkit-drawer-cli.";
+    var a = $("dl");
+    a.href = API + "?session_id=" + encodeURIComponent(sid);
+    var md = /\.md$/.test(d.file || "");
+    a.textContent = md ? "Download AGENTS.md" : "Download " + d.name + " (.zip)";
+    a.hidden = false;
+    if (d.key) {
+      var box = document.getElementById("keybox");
+      if (!box) {
+        box = document.createElement("div");
+        box.id = "keybox";
+        box.className = "ctabox";
+        $("next").parentNode.insertBefore(box, $("next"));
+      }
+      box.innerHTML = "<h2>Install with one command</h2>"
+        + "<p>Paste this in your repo. The key is also in the email we just sent.</p>"
+        + "<pre class=\"mono\" style=\"white-space:pre-wrap;padding:12px;overflow:auto\">" + escapeHtml(d.install || ("npx github:eli-alvarado/agentkit-drawer-cli add " + (d.kits || []).join(" ") + " --key " + d.key)) + "</pre>"
+        + "<p>License key: <code>" + escapeHtml(d.key) + "</code></p>";
+    }
+    if (md) $("steps").innerHTML = "<li>Save AGENTS.md in your repo root.</li><li>Fill the &lt;&lt;FILL&gt;&gt; fields and delete the stack modules you don't use.</li><li>Claude Code: add a CLAUDE.md with the line @AGENTS.md. Then start with /plan.</li>";
+    else $("steps").innerHTML = "<li>Run the npx command above <em>or</em> unzip and copy AGENTS.md, CLAUDE.md, .cursor/ and .claude/ into your repo.</li><li>Fill the &lt;&lt;FILL&gt;&gt; fields.</li><li>Start with /plan.</li>";
+    $("next").hidden = false;
+  }).catch(function (e) {
+    $("h").textContent = "We couldn't confirm that order yet.";
+    $("msg").innerHTML = (e && e.error === "unpaid" ? "Your payment is still processing. Refresh in a minute. " : "")
+      + "Still stuck? Email <a href=\"mailto:agentkitdrawer@agentmail.to\">agentkitdrawer@agentmail.to</a> with your receipt and we'll send your files.";
   });
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
 })();
 </script>
 <footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a> <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a> <a href="/press/">Press</a> <a href="/refund/">Refunds</a> <a href="/privacy/">Privacy</a> <a href="/terms/">Terms</a>

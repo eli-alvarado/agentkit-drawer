@@ -11,6 +11,7 @@ Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: enter your email i
 - [Agent Builder Prompt Pack](https://agentkitdrawer.com/#drw-03) (DRW-03, $29): 10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.
 - [Claude Code Kit](https://agentkitdrawer.com/#drw-04) (DRW-04, $24): Claude Code setup: CLAUDE.md, 6 least-privilege subagents (planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer), 10 slash commands, settings.json permissions and 4 hooks (block dangerous Bash, protect secrets and lockfiles, auto-format, tests before stop).
 - [Python/FastAPI Backend Kit](https://agentkitdrawer.com/#drw-05) (DRW-05, $19): AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules and 10 prompts for FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic + pytest: ownership checks, migrations, security and testing rules, plus definition-of-done and pre-deploy checklists.
+- [Supabase + Next.js Agent Kit](https://agentkitdrawer.com/supabase-nextjs-agent-kit/) (DRW-06, $19): AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules, 10 prompts, a read-only migration-reviewer subagent and a Claude Code hook that blocks a new Supabase table without RLS, for Next.js App Router + @supabase/ssr, typed queries, Edge Functions and Stripe webhooks.
 - [The Whole Cabinet](https://agentkitdrawer.com/#bundle) (BUNDLE, $49): DRW-01 to DRW-03 plus 12 months of updates. Saves $23.
 
 ## Guides

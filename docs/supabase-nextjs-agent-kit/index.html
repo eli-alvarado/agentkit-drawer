@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supabase + Next.js Agent Kit: AGENTS.md, Cursor rules, Claude Code hook</title>
+<meta name="description" content="DRW-06 ($19): AGENTS.md, CLAUDE.md, 8 Cursor rules, 10 prompts and a Claude Code hook that blocks a Supabase table without RLS. For Next.js App Router + Supabase.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/supabase-nextjs-agent-kit/">
+<meta property="og:type" content="product">
+<meta property="og:title" content="Supabase + Next.js Agent Kit: AGENTS.md, Cursor rules, Claude Code hook">
+<meta property="og:description" content="DRW-06 ($19): AGENTS.md, CLAUDE.md, 8 Cursor rules, 10 prompts and a Claude Code hook that blocks a Supabase table without RLS. For Next.js App Router + Supabase.">
+<meta property="og:url" content="https://agentkitdrawer.com/supabase-nextjs-agent-kit/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Supabase + Next.js Agent Kit: AGENTS.md, Cursor rules, Claude Code hook">
+<meta name="twitter:description" content="DRW-06 ($19): AGENTS.md, CLAUDE.md, 8 Cursor rules, 10 prompts and a Claude Code hook that blocks a Supabase table without RLS. For Next.js App Router + Supabase.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Supabase + Next.js Agent Kit", "sku": "DRW-06", "description": "AGENTS.md, CLAUDE.md, 8 scoped Cursor rules, 10 prompts and a Claude Code RLS migration hook for Next.js App Router + Supabase: @supabase/ssr auth, RLS in every migration, typed queries, server-only secret key, Edge Functions and Stripe webhooks.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/supabase-nextjs-agent-kit/", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "19.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/bJeaEWcEYb3tcGx93o7kc07?client_reference_id=drw-06_supabase-nextjs-agent-kit&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=supabase-nextjs-agent-kit&utm_content=drw-06", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Supabase + Next.js Agent Kit", "item": "https://agentkitdrawer.com/supabase-nextjs-agent-kit/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / DRW-06 Supabase + Next.js Agent Kit</p>
+<h1>Supabase + Next.js Agent Kit</h1>
+<p><strong>DRW-06 · $19 · one-time.</strong> Drop-in instructions so Cursor, Claude Code, Codex and Windsurf build a Next.js App Router app on Supabase the same way, every time. It targets the mistakes agents make most on this stack:</p>
+<ul><li><strong>Tables with no RLS.</strong> A new table ships with no row level security, or with policies but the default grants still in place.</li>
+<li><strong>Old auth helpers:</strong> <code>@supabase/auth-helpers</code>, <code>getSession()</code> trusted on the server, cookies handled by hand.</li>
+<li><strong>The secret key in client code:</strong> <code>sb_secret_…</code> or the service role key imported into a client component.</li>
+<li><strong>Untyped queries</strong> and hand-written row types that drift from the schema.</li>
+<li><strong>Stripe access before payment:</strong> unlocking features from the success URL instead of a verified webhook.</li></ul>
+<h2>What's in the zip</h2>
+<ul>
+<li><code>AGENTS.md</code>: the main rules file, read by Codex, Cursor, Windsurf, Aider and Zed. You fill in 5 fields: app name, Next.js version, package manager, deploy target and production domain.</li>
+<li><code>CLAUDE.md</code>: the Claude Code entry point. It imports AGENTS.md.</li>
+<li>8 scoped <code>.cursor/rules/*.mdc</code> rules that attach by path: core, structure, SSR auth, RLS migrations, typed queries, secret key, Edge Functions and Stripe webhooks.</li>
+<li><code>.claude/agents/migration-reviewer.md</code>: a read-only Claude Code subagent that reviews each new migration.</li>
+<li><code>.claude/hooks/review-migration.sh</code> + <code>settings.json</code>: a PostToolUse hook that blocks a new table or view unless the same file enables RLS and revokes default grants. It needs <code>jq</code>.</li>
+<li>10 prompts: /plan /feature /migration /rls-audit /auth /edge-function /stripe-webhook /fix /review /ship.</li>
+<li>Definition-of-done and pre-launch checklists.</li>
+</ul>
+<h2>Sample rule</h2>
+<figure class="file"><figcaption class="mono">.cursor/rules/30-rls-migrations.mdc (excerpt)</figcaption>
+<pre class="mono">- Every CREATE TABLE in an exposed schema ships, in the same
+  migration: enable row level security, revoke all from anon,
+  authenticated, grant only the commands the app needs, and a
+  separate policy per command.
+- Policies filter with (select auth.uid()) and name the role
+  in "to authenticated" / "to anon".
+- Views: create view ... with (security_invoker = true).</pre></figure>
+<h2>Written for</h2>
+<p>Next.js 16 App Router (<code>proxy.ts</code>; on Next.js 15 the same <code>@supabase/ssr</code> code goes in <code>middleware.ts</code>), <code>@supabase/ssr</code> + <code>@supabase/supabase-js</code> with publishable and secret keys, Supabase RLS, generated types and Edge Functions, and Stripe Checkout webhook fulfillment. The rules follow each product's documentation as of October 2026. They haven't been run against a reference project yet, so if something misbehaves, email us and we'll fix it in an update.</p>
+<p>Want the free version first? <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a> and <a href="/supabase-rls-ai-agents/">Supabase RLS for AI agents</a> are free guides.</p>
+
+<div class="ctabox" id="get">
+  <h2>Get the Supabase + Next.js Agent Kit</h2>
+  <p>One zip, instant download after checkout. Use it in unlimited personal and commercial projects.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/bJeaEWcEYb3tcGx93o7kc07?client_reference_id=drw-06_supabase-nextjs-agent-kit&amp;utm_source=agentkitdrawer&amp;utm_medium=site&amp;utm_campaign=supabase-nextjs-agent-kit&amp;utm_content=drw-06" target="_blank" rel="noopener noreferrer">Buy Supabase + Next.js Kit · $19</a>
+  </div>
+  <p class="fine starter-line">Not ready for a full pack? Start with <a href="/#one-file">One-File Agent Rules ($9)</a>, one universal AGENTS.md for any stack, or <a href="#news-h">get the free Starter AGENTS.md</a> by email.</p>
+  <p class="fine mono">Launch week: 30% off any kit with code <kbd>LAUNCH</kbd> at Stripe checkout, through Oct 28, 2026. 14-day refund.</p>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/supabase-rls-ai-agents/">Supabase RLS for AI agents</a></li>
+    <li><a href="/stripe-webhooks-ai-agents/">Stripe webhooks for AI agents</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p><h2 id="news-h">Get the free Starter AGENTS.md</h2><p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests before saying "done". We email it to you instantly, plus a short note when a new pack ships. Unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\'re already on the list. Check your inbox (and spam) for AGENTS.md.':'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="supabase-nextjs-agent-kit"><button class="btn" type="submit">Email me the file</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+
+<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code Stop hook that runs tests (exit 2 blocks)</title>
+<meta name="description" content="A Claude Code Stop hook that runs your test suite before the agent finishes. Exit 2 keeps it working; check stop_hook_active so the hook cannot loop.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/claude-code-stop-hook-tests/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code Stop hook that runs tests (exit 2 blocks)">
+<meta property="og:description" content="A Claude Code Stop hook that runs your test suite before the agent finishes. Exit 2 keeps it working; check stop_hook_active so the hook cannot loop.">
+<meta property="og:url" content="https://agentkitdrawer.com/claude-code-stop-hook-tests/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Code Stop hook that runs tests (exit 2 blocks)">
+<meta name="twitter:description" content="A Claude Code Stop hook that runs your test suite before the agent finishes. Exit 2 keeps it working; check stop_hook_active so the hook cannot loop.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does exit 2 do in a Claude Code Stop hook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Exit 2 prevents Claude from stopping and sends stderr back as the reason to keep working. Exit 0 lets the turn end. This is the tests gate: failing tests exit 2."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is stop_hook_active?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Stop hook input sets stop_hook_active to true when Claude Code is already continuing because a Stop hook blocked. Exit 0 in that case so a red suite you cannot fix does not burn eight extra turns."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a Stop hook support a matcher?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Stop fires on every completed turn (not user interrupts). Register the command under hooks.Stop with no matcher. Use /hooks to confirm it loaded."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will a Stop hook loop forever if tests stay red?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Claude Code overrides a Stop hook after eight consecutive blocks with no tool call in between. Check stop_hook_active and exit 0 when it is true if you want a single retry. Raise the cap with CLAUDE_CODE_STOP_HOOK_BLOCK_CAP only if you need more."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do I put a tests-before-stop hook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Commit the script at .claude/hooks/ and register it in .claude/settings.json under Stop. Use $CLAUDE_PROJECT_DIR so the path is stable. chmod +x the script."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Claude Code Stop hook that runs tests (exit 2 blocks)", "description": "A Claude Code Stop hook that runs your test suite before the agent finishes. Exit 2 keeps it working; check stop_hook_active so the hook cannot loop.", "url": "https://agentkitdrawer.com/claude-code-stop-hook-tests/", "datePublished": "2026-10-21", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "Stop hook that runs tests", "item": "https://agentkitdrawer.com/claude-code-stop-hook-tests/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Stop hook that runs tests</p>
+<h1>A Stop hook that runs tests before Claude Code finishes</h1>
+<p><code>CLAUDE.md</code> can say “run the tests before you stop.” The model still forgets. A <strong>Stop hook</strong> is a shell command Claude Code runs when the main agent finishes a turn. If the suite is red, <strong>exit 2</strong> blocks the stop and the stderr message becomes Claude’s next instruction.</p>
+<p>This page is only that gate: one hook, test command, exit codes, and the loop guard. It is not a tour of every hook event. For format-on-edit, <code>.env</code> protection, <code>rm -rf</code> blocks, notifications and <code>/compact</code> context, use the separate <a href="/claude-code-hooks-examples/">Claude Code hooks examples</a> page. Subagents and slash commands: <a href="/claude-code-subagents-hooks-guide/">Claude Code subagents + hooks</a>.</p>
+<p class="fine">Shapes below follow Anthropic’s <a href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener noreferrer">hooks reference</a> and <a href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener noreferrer">hooks guide</a> (checked October 21, 2026). The script uses <code>jq</code>.</p>
+
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">One-File Agent Rules ($9)</a>.</p></aside>
+
+<h2>What Stop actually receives</h2>
+<p>Stop runs when the main agent has finished responding. It does not run on a user interrupt. The hook reads JSON on stdin. Besides the common fields (<code>session_id</code>, <code>cwd</code>, <code>transcript_path</code>), Stop includes:</p>
+<ul>
+<li><strong><code>stop_hook_active</code></strong> — <code>true</code> when this turn is already a continuation caused by a Stop hook.</li>
+<li><strong><code>last_assistant_message</code></strong> — the text Claude just produced (do not parse the transcript file for that).</li>
+<li><strong><code>background_tasks</code> / <code>session_crons</code></strong> — in-flight work, so you can tell “done” from “paused waiting for a task”.</li>
+</ul>
+<p>On exit 2, Claude Code prevents the stop and feeds stderr to Claude as the reason to continue. Exit 0 lets the turn end. You can instead print JSON with <code>decision: "block"</code> and a <code>reason</code>; exit 2 is the smaller script. Official docs also note an <strong>8-consecutive-continuation cap</strong>: eight blocks in a row with no tool call, and Claude Code overrides the next one. The count resets when Claude calls a tool.</p>
+
+<h2>Register it (no matcher)</h2>
+<p>Stop does not use a matcher. Put the command in project settings so the whole team gets the gate. <code>$CLAUDE_PROJECT_DIR</code> is the project root for the session.</p>
+<div class="snip"><div class="bar"><span>.claude/settings.json</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;\&quot;$CLAUDE_PROJECT_DIR\&quot;/.claude/hooks/tests-before-stop.sh&quot;,
+            &quot;timeout&quot;: 300
+          }
+        ]
+      }
+    ]
+  }
+}</pre></div>
+<p>Default command-hook timeout is 600 seconds; set <code>timeout</code> if your suite should fail faster than that. Run <code>/hooks</code> and confirm the script is listed under Stop. <code>chmod +x .claude/hooks/tests-before-stop.sh</code>. Invalid JSON in settings (a trailing comma) silently drops the hook.</p>
+
+<h2>The tests-before-stop script</h2>
+<p>Read stdin once. If this is already a continuation, let Claude stop. If the worktree is clean, skip the suite. Otherwise run the real project command — not a command the agent invented — and exit 2 on failure with the last lines of output.</p>
+<div class="snip"><div class="bar"><span>.claude/hooks/tests-before-stop.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/bin/bash
+# Stop hook. Exit 2 = keep working (stderr is the reason).
+set -u
+cd &quot;$CLAUDE_PROJECT_DIR&quot; || exit 0
+
+INPUT=$(cat)
+if [ &quot;$(echo &quot;$INPUT&quot; | jq -r &#x27;.stop_hook_active // false&#x27;)&quot; = &quot;true&quot; ]; then
+  exit 0
+fi
+
+# Nothing changed this turn: do not tax the suite.
+git rev-parse --is-inside-work-tree &gt;/dev/null 2&gt;&amp;1 || exit 0
+git diff --quiet &amp;&amp; git diff --cached --quiet &amp;&amp; \
+  [ -z &quot;$(git ls-files --others --exclude-standard)&quot; ] &amp;&amp; exit 0
+
+# Swap for: pytest -q   /   pnpm test --silent   /   go test ./...
+if ! npm test --silent &gt;/tmp/claude-stop-tests.log 2&gt;&amp;1; then
+  echo &quot;Tests failed. Fix the code, not the tests.&quot; &gt;&amp;2
+  echo &quot;Last lines:&quot; &gt;&amp;2
+  tail -n 40 /tmp/claude-stop-tests.log &gt;&amp;2
+  exit 2
+fi
+exit 0
+</pre></div>
+<p>Point the test line at what CI runs. A Python repo uses <code>pytest -q</code>; a pnpm monorepo uses the package script, not a raw <code>npm test</code> the agent guessed. Write the command in <code>AGENTS.md</code> so the hook and the model agree.</p>
+
+<h2>Why <code>stop_hook_active</code> matters</h2>
+<p>Without the guard, a red suite that Claude cannot fix becomes: stop → exit 2 → Claude retries → stop → exit 2, up to eight times. That is tokens and time, then an override. Checking <code>stop_hook_active</code> gives you <strong>one</strong> forced retry, then a stop so a human can look.</p>
+<p>If you want Claude to keep iterating, omit the early exit and rely on the eight-block cap (or raise <code>CLAUDE_CODE_STOP_HOOK_BLOCK_CAP</code>). The safer default for a shared repo hook is: block once, then stand down. The input’s <code>background_tasks</code> array distinguishes “done” from “paused on a long task”.</p>
+
+<h2>What the hook must not do</h2>
+<ul>
+<li><strong>Do not delete or skip tests to go green.</strong> Put that in <code>CLAUDE.md</code> as well; the hook only re-runs the suite, it cannot stop the model editing <code>tests/</code>. Pair with a <code>PreToolUse</code> deny on test deletions if you need a hard stop; that pattern lives on the <a href="/claude-code-hooks-examples/">hooks examples</a> page, not here.</li>
+<li><strong>Do not run the full suite on an empty diff.</strong> Stop fires after every finished turn, including “I read two files and I am done.” The git check keeps the hook cheap.</li>
+<li><strong>Do not block from a PostToolUse formatter.</strong> Formatters run after an edit and cannot undo it. Stop is the place that can refuse “done”.</li>
+<li><strong>Do not treat exit 0 as a special approval.</strong> On Stop, exit 0 means “no objection, you may stop.” There is no extra permission flow.</li>
+</ul>
+
+<h2>Test the hook without waiting for a session</h2>
+<p>Pipe a fixture and check the exit code:</p>
+<div class="snip"><div class="bar"><span>manual check</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>export CLAUDE_PROJECT_DIR=&quot;$PWD&quot;
+echo &#x27;{&quot;stop_hook_active&quot;:true}&#x27; | .claude/hooks/tests-before-stop.sh; echo $?
+# expect 0
+
+# Dirty the tree, then:
+echo &#x27;{&quot;stop_hook_active&quot;:false}&#x27; | .claude/hooks/tests-before-stop.sh; echo $?
+# expect 2 if the suite is red, 0 if green
+</pre></div>
+<p>If <code>jq</code> is missing, decide whether to fail open (<code>exit 0</code>) or fail closed (<code>exit 2</code> with “install jq”). Fail open is less surprising on a new machine; fail closed is the right call once the hook is required in CI-equivalent local work.</p>
+
+<h2>Prompt-based Stop hooks (optional)</h2>
+<p>Claude Code also supports <code>type: "prompt"</code> Stop hooks that ask a model whether the turn may end. That judges the conversation; it does not run pytest. Keep the command hook for a real tests gate. Agent-type hooks that spawn a subagent to run the suite are marked experimental; prefer the shell script above.</p>
+
+<h2>AGENTS.md / CLAUDE.md lines</h2>
+<div class="snip"><div class="bar"><span>CLAUDE.md (excerpt)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>@AGENTS.md
+
+# Tests
+- Done means the project test command in AGENTS.md is green.
+- Never delete, skip, or # noqa a test to make the Stop hook pass.
+- If the Stop hook reports failures, fix the code and re-run that same command.
+</pre></div>
+<p>Keep the test command in <code>AGENTS.md</code> so Cursor and Codex get the same definition of done even though they do not run this hook. Thin <code>CLAUDE.md</code> plus shared rules: <a href="/claude-code-claude-md-template/">CLAUDE.md template</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>What does exit 2 do in a Claude Code Stop hook?</summary><p>Exit 2 prevents Claude from stopping and sends stderr back as the reason to keep working. Exit 0 lets the turn end. This is the tests gate: failing tests exit 2.</p></details>
+<details><summary>What is stop_hook_active?</summary><p>The Stop hook input sets <code>stop_hook_active</code> to true when Claude Code is already continuing because a Stop hook blocked. Exit 0 in that case so a red suite you cannot fix does not burn eight extra turns.</p></details>
+<details><summary>Does a Stop hook support a matcher?</summary><p>No. Stop fires on every completed turn (not user interrupts). Register the command under <code>hooks.Stop</code> with no matcher. Use <code>/hooks</code> to confirm it loaded.</p></details>
+<details><summary>Will a Stop hook loop forever if tests stay red?</summary><p>Claude Code overrides a Stop hook after eight consecutive blocks with no tool call in between. Check <code>stop_hook_active</code> and exit 0 when it is true if you want a single retry. Raise the cap with <code>CLAUDE_CODE_STOP_HOOK_BLOCK_CAP</code> only if you need more.</p></details>
+<details><summary>Where do I put a tests-before-stop hook?</summary><p>Commit the script at <code>.claude/hooks/</code> and register it in <code>.claude/settings.json</code> under Stop. Use <code>$CLAUDE_PROJECT_DIR</code> so the path is stable. <code>chmod +x</code> the script.</p></details>
+</div>
+
+<div class="ctabox" id="get">
+  <h2>Want the whole drawer?</h2>
+  <p>One-File Agent Rules ($9) is one universal <code>AGENTS.md</code> with verify-before-done and a plan gate. The Claude Code Kit ($24) ships a fill-in <code>CLAUDE.md</code>, 6 least-privilege subagents, 10 slash commands, a <code>settings.json</code> with permissions and hook wiring, and 4 tested hooks including tests-before-stop.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_claude-code-stop-hook-tests&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=claude-code-stop-hook-tests&utm_content=drw-00" target="_blank" rel="noopener noreferrer">Buy One-File Agent Rules · $9</a>
+    <a class="btn ghost" href="https://buy.stripe.com/5kQ3cuawQ6Ndayp0wS7kc04?client_reference_id=drw-04_claude-code-stop-hook-tests&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=claude-code-stop-hook-tests&utm_content=drw-04" target="_blank" rel="noopener noreferrer">Buy Claude Code Kit · $24</a>
+  </div>
+  <p class="fine starter-line">Or <a href="#news-h">get the free Starter AGENTS.md</a> by email. One-time purchase, instant download. Packs are written against documented conventions; we have not benchmarked them against a reference project.</p>
+  <p class="fine mono">Launch week: 30% off any kit with code <kbd>LAUNCH</kbd> at Stripe checkout, through Oct 28, 2026. 14-day refund.</p>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/claude-code-hooks-examples/">Claude Code hooks examples</a></li>
+    <li><a href="/claude-code-subagents-hooks-guide/">Claude Code subagents, hooks and slash commands</a></li>
+    <li><a href="/claude-code-claude-md-template/">CLAUDE.md examples and template</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/fastapi-async-blocking-ai-agents/">Blocking calls in FastAPI async def</a></li>
+    <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p><h2 id="news-h">Get the free Starter AGENTS.md</h2><p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests before saying "done". We email it to you instantly, plus a short note when a new pack ships. Unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\'re already on the list. Check your inbox (and spam) for AGENTS.md.':'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="claude-code-stop-hook-tests"><button class="btn" type="submit">Email me the file</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+
+<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

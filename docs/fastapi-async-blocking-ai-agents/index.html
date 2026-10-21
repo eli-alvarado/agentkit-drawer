@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blocking calls in FastAPI async def: what AI agents miss</title>
+<meta name="description" content="AI agents put requests, time.sleep and sync SQLAlchemy inside FastAPI async def. That blocks the event loop. Use await, def routes, or run_in_threadpool.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blocking calls in FastAPI async def: what AI agents miss">
+<meta property="og:description" content="AI agents put requests, time.sleep and sync SQLAlchemy inside FastAPI async def. That blocks the event loop. Use await, def routes, or run_in_threadpool.">
+<meta property="og:url" content="https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blocking calls in FastAPI async def: what AI agents miss">
+<meta name="twitter:description" content="AI agents put requests, time.sleep and sync SQLAlchemy inside FastAPI async def. That blocks the event loop. Use await, def routes, or run_in_threadpool.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is requests.get inside async def a problem in FastAPI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "async def routes run on the event loop. requests, time.sleep, and sync ORM calls block that loop, so every other request on the worker waits. Use httpx.AsyncClient, asyncio.sleep, or declare the route as def so FastAPI runs it in a threadpool."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should FastAPI routes be def or async def?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use async def when you await async libraries. Use plain def when the library only has blocking calls. FastAPI runs def path operations and def dependencies in a threadpool. Mixing both in one app is supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I call blocking code from an async FastAPI route?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Await fastapi.concurrency.run_in_threadpool(sync_fn, *args). Do not call the sync function directly from async def. Prefer an async client or AsyncSession when the library has one."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is SQLAlchemy session.query safe in async def?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The 1.x query API is blocking. Use SQLAlchemy 2 AsyncSession with an async driver (asyncpg), or keep a def route / run_in_threadpool around the sync session. Do not lazy-load relationships inside async def."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does FastAPI make my utilities async automatically?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Only path operations and dependencies that FastAPI calls for you get the threadpool treatment when they are def. A def helper you call from async def runs on the event loop and will block it."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Blocking calls in FastAPI async def: what AI agents miss", "description": "AI agents put requests, time.sleep and sync SQLAlchemy inside FastAPI async def. That blocks the event loop. Use await, def routes, or run_in_threadpool.", "url": "https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/", "datePublished": "2026-10-21", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "FastAPI async blocking", "item": "https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / FastAPI async blocking</p>
+<h1>Don't put blocking calls inside FastAPI <code>async def</code></h1>
+<p>Agents love <code>async def</code>. It looks modern, and FastAPI examples use it. Then they call <code>requests.get</code>, <code>time.sleep</code>, or <code>session.query(User)</code> inside that coroutine. Those calls never yield. One slow dependency freezes every other request on that worker.</p>
+<p>FastAPI’s own <a href="https://fastapi.tiangolo.com/async/" target="_blank" rel="noopener noreferrer">async docs</a> say: if the library supports <code>await</code>, use <code>async def</code>; if it only blocks, use plain <code>def</code>. This page is that one rule, with the mistakes agents actually ship. For ownership checks, Alembic and pytest on FastAPI + SQLAlchemy 2, see <a href="/fastapi-agents-md-cursor-rules/">AGENTS.md and Cursor rules for FastAPI</a>. For a venv / pytest skeleton without FastAPI, see <a href="/cursor-rules-for-python/">Cursor rules for Python</a>.</p>
+
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">One-File Agent Rules ($9)</a>.</p></aside>
+
+<h2>What “blocking” means here</h2>
+<p>An <code>async def</code> path operation runs on the event loop. <code>await</code> is the only way that coroutine gives the loop back. A function that sits in C or in a socket recv without an event-loop integration holds the loop until it returns. During that time the worker cannot accept other connections, cannot run other coroutines, and cannot flush background tasks.</p>
+<p>Plain <code>def</code> path operations are different. FastAPI runs those in a threadpool and awaits the thread. Dependencies declared as <code>def</code> get the same treatment. Helpers <em>you</em> call from <code>async def</code> do not. That last sentence is the one agents miss.</p>
+
+<h2>The usual blocking calls</h2>
+<div class="snip"><div class="bar"><span>app/api/slow.py (don't)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>import time
+import requests
+from sqlalchemy.orm import Session
+
+@app.get(&quot;/slow&quot;)
+async def slow(db: Session):
+    time.sleep(2)                          # blocks the loop
+    r = requests.get(&quot;https://example.com&quot;)  # blocks the loop
+    user = db.query(User).get(1)           # sync ORM, blocks
+    return {&quot;ok&quot;: r.ok, &quot;user&quot;: user.id}
+</pre></div>
+<p>Replace each one with something that yields, or stop claiming the route is async.</p>
+<div class="snip"><div class="bar"><span>app/api/ok.py</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>import asyncio
+import httpx
+from fastapi.concurrency import run_in_threadpool
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+@app.get(&quot;/ok&quot;)
+async def ok(db: AsyncSession):
+    await asyncio.sleep(2)
+    async with httpx.AsyncClient() as client:
+        r = await client.get(&quot;https://example.com&quot;)
+    user = (await db.execute(select(User).where(User.id == 1))).scalar_one()
+    return {&quot;ok&quot;: r.is_success, &quot;user&quot;: user.id}
+
+@app.get(&quot;/legacy-sync&quot;)
+def legacy_sync(db: Session):
+    # FastAPI runs this def route in a threadpool.
+    return db.query(User).get(1)
+
+@app.get(&quot;/must-stay-async&quot;)
+async def must_stay_async():
+    return await run_in_threadpool(legacy_report)
+</pre></div>
+<p>Use <code>httpx.AsyncClient</code> (or any client whose methods are <code>await</code>-able), <code>asyncio.sleep</code>, and SQLAlchemy 2 <code>AsyncSession</code> with an async driver such as <code>asyncpg</code>. If a library has no async API, either declare the route as <code>def</code> or wrap the call in <code>run_in_threadpool</code>.</p>
+
+<h2>SQLAlchemy specifics agents get wrong</h2>
+<ul>
+<li><strong><code>session.query()</code> is the 1.x API</strong> and it is synchronous. In a 2.x codebase the rule is <code>select()</code> + <code>await session.execute</code> on an <code>AsyncSession</code>.</li>
+<li><strong>Lazy loads inside <code>async def</code></strong> issue implicit sync IO when you touch a relationship. That is a blocking call you cannot see on the line you wrote. Use <code>selectinload</code> / <code>await session.refresh</code> instead.</li>
+<li><strong>Do not share one sync <code>Session</code> across async tasks.</strong> Thread-local sync sessions and the event loop do not mix. One async session per request, closed in a dependency.</li>
+</ul>
+<p>If the app is not on async SQLAlchemy yet, it is valid to keep the routes as <code>def</code>. That is what FastAPI recommends when the library cannot be awaited. Do not sprinkle <code>async def</code> on top of a sync session “for speed”.</p>
+
+<h2>A rule the agent can follow</h2>
+<div class="snip"><div class="bar"><span>.cursor/rules/25-async-io.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: No blocking IO in async def
+globs: app/**/*.py
+alwaysApply: false
+---
+- Inside async def, only call await-able IO. No time.sleep, requests, boto3 sync, httpx.Client, or session.query().
+- HTTP: httpx.AsyncClient (or equivalent) and await it.
+- Sleep: asyncio.sleep. ORM: AsyncSession + select(); no lazy loads.
+- If a library is sync-only: declare the path operation as def, or await run_in_threadpool(sync_fn).
+- def helpers you call from async def are not moved to a threadpool. Wrap them.
+</pre></div>
+<p>Add the same four bullets to <code>AGENTS.md</code> so Codex and Claude Code see them. Pair with the existing FastAPI ownership rule: authorization still belongs in the query, <code>owner_id == user.id</code>, other users’ objects return 404. Blocking IO and IDOR are separate bugs; agents often introduce both in one endpoint.</p>
+
+<h2>How to catch it in review</h2>
+<p>Grep is enough for a first pass:</p>
+<div class="snip"><div class="bar"><span>review commands</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>rg -n &quot;async def&quot; -g &#x27;app/**/*.py&#x27;
+rg -n &quot;time\\.sleep|requests\\.|httpx\\.Client\\(|\\.query\\(|boto3\\.|subprocess\\.run&quot; -g &#x27;app/**/*.py&#x27;
+</pre></div>
+<p>If both match in the same function, the agent blocked the loop. Also search for <code>open(</code> on large files and <code>json.load</code> of a remote download inside <code>async def</code>. CPU-heavy work (image resize, PDF render) belongs in a thread or a worker, not on the loop.</p>
+<p>A useful pytest is concurrency, not just status codes: fire 20 overlapping requests at a route that “sleeps” 200ms. If wall time is ~4 seconds, you serialized on the loop. If it is ~200–400ms, the sleeps overlapped. You do not need a benchmark suite; one overlapping-request test is enough to fail a PR.</p>
+
+<h2>When <code>async def</code> is the right default</h2>
+<p>Use it when the route awaits an async engine, an async HTTP client, or several of those concurrently with <code>asyncio.gather</code>. FastAPI will still serve <code>def</code> routes quickly for typical apps. Tiangolo’s guidance is: if you are not sure, use <code>def</code>. Agents invert that and stamp <code>async def</code> on every handler. The rule is not “never async”. The rule is “do not lie to the event loop”.</p>
+<p>Background tasks have the same trap. A <code>BackgroundTasks</code> function that is <code>def</code> is fine. An <code>async def</code> background task that calls <code>requests</code> blocks the loop after the response is sent, which still stalls the worker. Wrap or rewrite those too.</p>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Why is requests.get inside async def a problem in FastAPI?</summary><p><code>async def</code> routes run on the event loop. <code>requests</code>, <code>time.sleep</code>, and sync ORM calls block that loop, so every other request on the worker waits. Use <code>httpx.AsyncClient</code>, <code>asyncio.sleep</code>, or declare the route as <code>def</code> so FastAPI runs it in a threadpool.</p></details>
+<details><summary>Should FastAPI routes be def or async def?</summary><p>Use <code>async def</code> when you await async libraries. Use plain <code>def</code> when the library only has blocking calls. FastAPI runs <code>def</code> path operations and <code>def</code> dependencies in a threadpool. Mixing both in one app is supported.</p></details>
+<details><summary>How do I call blocking code from an async FastAPI route?</summary><p>Await <code>fastapi.concurrency.run_in_threadpool(sync_fn, *args)</code>. Do not call the sync function directly from <code>async def</code>. Prefer an async client or <code>AsyncSession</code> when the library has one.</p></details>
+<details><summary>Is SQLAlchemy session.query safe in async def?</summary><p>No. The 1.x query API is blocking. Use SQLAlchemy 2 <code>AsyncSession</code> with an async driver (asyncpg), or keep a <code>def</code> route / <code>run_in_threadpool</code> around the sync session. Do not lazy-load relationships inside <code>async def</code>.</p></details>
+<details><summary>Does FastAPI make my utilities async automatically?</summary><p>No. Only path operations and dependencies that FastAPI calls for you get the threadpool treatment when they are <code>def</code>. A <code>def</code> helper you call from <code>async def</code> runs on the event loop and will block it.</p></details>
+</div>
+
+<div class="ctabox" id="get">
+  <h2>Want the whole drawer?</h2>
+  <p>One-File Agent Rules ($9) is one universal <code>AGENTS.md</code> with a plan gate, verify-before-done, and a FastAPI stack module. The Python/FastAPI Backend Kit ($19) ships a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (structure, routes, Pydantic v2, SQLAlchemy 2, Alembic, security, testing), 10 prompts and definition-of-done + pre-deploy checklists.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_fastapi-async-blocking-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=fastapi-async-blocking-ai-agents&utm_content=drw-00" target="_blank" rel="noopener noreferrer">Buy One-File Agent Rules · $9</a>
+    <a class="btn ghost" href="https://buy.stripe.com/28EdR88oI0oPeOF6Vg7kc05?client_reference_id=drw-05_fastapi-async-blocking-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=fastapi-async-blocking-ai-agents&utm_content=drw-05" target="_blank" rel="noopener noreferrer">Buy FastAPI Kit · $19</a>
+  </div>
+  <p class="fine starter-line">Or <a href="#news-h">get the free Starter AGENTS.md</a> by email. One-time purchase, instant download. Packs are written against documented conventions; we have not benchmarked them against a reference project.</p>
+  <p class="fine mono">Launch week: 30% off any kit with code <kbd>LAUNCH</kbd> at Stripe checkout, through Oct 28, 2026. 14-day refund.</p>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
+    <li><a href="/cursor-rules-for-python/">Cursor rules for Python</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/claude-code-stop-hook-tests/">Claude Code Stop hook that runs tests</a></li>
+    <li><a href="/stripe-webhooks-ai-agents/">Stripe webhooks for AI agents</a></li>
+    <li><a href="/codex-agents-md-template/">Codex AGENTS.md template</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p><h2 id="news-h">Get the free Starter AGENTS.md</h2><p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests before saying "done". We email it to you instantly, plus a short note when a new pack ships. Unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\'re already on the list. Check your inbox (and spam) for AGENTS.md.':'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="fastapi-async-blocking-ai-agents"><button class="btn" type="submit">Email me the file</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+
+<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

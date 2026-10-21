@@ -18,3 +18,7 @@ Score = buying intent / winnability / fit (1-3).
 |---|---|---|
 | claude code hooks examples | /claude-code-hooks-examples/ | new page |
 | claude.md examples | /claude-code-claude-md-template/#examples | extended existing page |
+| supabase rls ai agents / tables without rls | /supabase-rls-ai-agents/ | new page |
+| stripe webhook success url / duplicate events | /stripe-webhooks-ai-agents/ | new page |
+| fastapi async def blocking | /fastapi-async-blocking-ai-agents/ | new page |
+| claude code stop hook tests | /claude-code-stop-hook-tests/ | new page |

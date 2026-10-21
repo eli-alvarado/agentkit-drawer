@@ -6,6 +6,7 @@
 - Added /contact/ page, linked from every footer, added to sitemap.
 
 ## 2026-10-21
+- Four new guides: /supabase-rls-ai-agents/, /stripe-webhooks-ai-agents/, /fastapi-async-blocking-ai-agents/, /claude-code-stop-hook-tests/. Wired sitemap, feed.xml, /guides/, llms.txt, home cards. Stop-hook page is a tests-gate deep dive (distinct title/H1/meta from /claude-code-hooks-examples/); the examples page links to it instead of expanding.
 - New guide /claude-code-hooks-examples/ (target: "claude code hooks examples"). 7 hooks verified against code.claude.com/docs/en/hooks-guide. Inbound links from the subagents guide, CLAUDE.md page, home and /guides/.
 - Extended /claude-code-claude-md-template/ with a "CLAUDE.md examples" section (target: "claude.md examples"); retitled "CLAUDE.md examples and template for Claude Code (2026)". Verified against code.claude.com/docs/en/memory.
 - Fixed subagents guide: "Exit 0 allows" was inaccurate (exit 0 = no decision, normal permission flow applies), body + FAQ JSON-LD.

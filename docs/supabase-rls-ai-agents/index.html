@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stop AI agents creating Supabase tables without RLS</title>
+<meta name="description" content="AI coding agents create Supabase tables with RLS off. Enable RLS in the same migration, write per-command policies, and never disable RLS to make a query work.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/supabase-rls-ai-agents/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stop AI agents creating Supabase tables without RLS">
+<meta property="og:description" content="AI coding agents create Supabase tables with RLS off. Enable RLS in the same migration, write per-command policies, and never disable RLS to make a query work.">
+<meta property="og:url" content="https://agentkitdrawer.com/supabase-rls-ai-agents/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stop AI agents creating Supabase tables without RLS">
+<meta name="twitter:description" content="AI coding agents create Supabase tables with RLS off. Enable RLS in the same migration, write per-command policies, and never disable RLS to make a query work.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do new Supabase tables have RLS enabled?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tables created in the Supabase Dashboard have RLS enabled by default. Tables created in the SQL Editor, migrations, or another tool do not. Enable RLS explicitly in the same migration that creates the table."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if RLS is on but there are no policies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Requests that use a publishable key see no rows. That is safer than leaving RLS off. Add per-command policies for the roles that should have access."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why wrap auth.uid() in a select?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Using (select auth.uid()) lets Postgres cache the value once per statement (an initPlan) instead of calling the function on every row. Only do this when the result does not depend on the current row."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the service role bypass RLS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The service-role key bypasses row-level security. Keep it on the server only. Never prefix it with NEXT_PUBLIC_ or ship it to the browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I disable RLS to debug a failing query?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. If a query fails, fix the policy and explain it. Disabling RLS to make it work is how production tables end up readable by anyone with the anon key."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Stop AI agents creating Supabase tables without RLS", "description": "AI coding agents create Supabase tables with RLS off. Enable RLS in the same migration, write per-command policies, and never disable RLS to make a query work.", "url": "https://agentkitdrawer.com/supabase-rls-ai-agents/", "datePublished": "2026-10-21", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "Supabase RLS for AI agents", "item": "https://agentkitdrawer.com/supabase-rls-ai-agents/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Supabase RLS for AI agents</p>
+<h1>Stop AI agents creating Supabase tables without RLS</h1>
+<p>AI coding agents write a clean <code>create table</code>, add a foreign key, and move on. They skip row-level security because the query works from the SQL editor and the type generator is happy. That table is then reachable through the Data API by any role that has a grant. The <a href="https://supabase.com/docs/guides/api/securing-your-api" target="_blank" rel="noopener noreferrer">Supabase API security guide</a> is blunt: tables exposed without RLS can be accessed by any role with matching grants.</p>
+<p>This page is the RLS rule itself: enable it in the same migration, write policies, and never turn it off to “make it work”. For the rest of a Next.js + Supabase Cursor setup (auth helpers, env, Stripe), use <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>.</p>
+
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">One-File Agent Rules ($9)</a>.</p></aside>
+
+<h2>Why agents leave RLS off</h2>
+<p>Tables created in the Supabase Dashboard have RLS enabled by default. Tables created in a migration, the SQL Editor, or an ORM dump do not. Agents almost always use SQL. Postgres also starts a new table with RLS disabled, so “it works” is the default until someone adds <code>enable row level security</code>.</p>
+<ul>
+<li><strong>The happy path hides it.</strong> The agent uses the service-role key in a seed script. That key bypasses RLS, so every query succeeds.</li>
+<li><strong>The error looks like a bug.</strong> Once RLS is on and there is no policy, the Data API returns no rows. Agents “fix” that by disabling RLS instead of writing a policy.</li>
+<li><strong>Grants are leftover.</strong> <code>anon</code> and <code>authenticated</code> often still have <code>select</code> (or worse). RLS off plus a grant is a public table.</li>
+</ul>
+<p>Official reminder: enable RLS on every table and view the Data API exposes, then write policies. See <a href="https://supabase.com/docs/guides/database/postgres/row-level-security" target="_blank" rel="noopener noreferrer">Row Level Security</a>.</p>
+
+<h2>The rule: same migration, or the table does not ship</h2>
+<p>Put this in <code>AGENTS.md</code> and in a path-scoped Cursor rule on <code>supabase/**</code>. The agent should refuse to commit a <code>create table</code> that does not also enable RLS and define policies.</p>
+<div class="snip"><div class="bar"><span>.cursor/rules/30-database-rls.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: Migrations and row-level security
+globs: supabase/**
+alwaysApply: false
+---
+- For each newly created table, enable row level security and define its policies in the same migration.
+- Policies use (select auth.uid()) for performance; separate policies per command (select/insert/update/delete).
+- Add indexes on every column used in a policy or foreign key.
+- Never disable RLS to &#x27;make it work&#x27;. If a query fails, fix the policy and explain it.
+- Regenerated types after schema changes go in the project&#x27;s existing types file.
+</pre></div>
+<p>The same bullets live as a free file on GitHub: <a href="https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc" target="_blank" rel="noopener noreferrer">nextjs-supabase-rls.mdc</a>. For Windsurf, drop the front matter into <code>.windsurf/rules/</code>; see <a href="/windsurf-rules/">Windsurf rules setup</a>.</p>
+
+<h2>What the migration should look like</h2>
+<p>Enable RLS, tighten grants, then add one policy per command. Separate policies keep <code>using</code> (read/filter) and <code>with check</code> (write) obvious, and they stay readable when an agent edits only insert later.</p>
+<div class="snip"><div class="bar"><span>supabase/migrations/20261021_invoices.sql</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>create table public.invoices (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null references auth.users (id),
+  amount_cents integer not null,
+  created_at timestamptz not null default now()
+);
+
+create index invoices_owner_id_idx on public.invoices (owner_id);
+
+alter table public.invoices enable row level security;
+
+revoke all on table public.invoices from anon, authenticated;
+grant select, insert, update, delete on table public.invoices to authenticated;
+
+create policy "invoices_select_own"
+  on public.invoices for select
+  to authenticated
+  using ((select auth.uid()) = owner_id);
+
+create policy "invoices_insert_own"
+  on public.invoices for insert
+  to authenticated
+  with check ((select auth.uid()) = owner_id);
+
+create policy "invoices_update_own"
+  on public.invoices for update
+  to authenticated
+  using ((select auth.uid()) = owner_id)
+  with check ((select auth.uid()) = owner_id);
+
+create policy "invoices_delete_own"
+  on public.invoices for delete
+  to authenticated
+  using ((select auth.uid()) = owner_id);
+</pre></div>
+<p>Wrapping <code>auth.uid()</code> in <code>select</code> is the <a href="https://supabase.com/docs/guides/database/postgres/row-level-security#call-functions-with-select" target="_blank" rel="noopener noreferrer">documented initPlan pattern</a>: Postgres evaluates the function once per statement instead of once per row. Only use it when the result does not depend on the current row. Index the columns the policy compares, here <code>owner_id</code>.</p>
+<p>With RLS on and no policy, publishable-key requests see nothing. That empty result is safer than an open table. If the agent’s query “fails”, the policy is missing or wrong. Do not <code>alter table … disable row level security</code>.</p>
+
+<h2>What to tell the agent about clients</h2>
+<ul>
+<li><strong>Browser and user-scoped server code</strong> use the publishable (anon) key plus a user JWT. RLS is the access control.</li>
+<li><strong>The service-role key bypasses RLS.</strong> It belongs on the server only. Never prefix it with <code>NEXT_PUBLIC_</code>. If a job must write across users, keep that path tiny and audited.</li>
+<li><strong>Do not use RLS as the only filter.</strong> Still add <code>.eq('owner_id', userId)</code> in the query. Policies are security; explicit filters keep the intent visible and the plan cheaper.</li>
+<li><strong>Views need the same treatment</strong> if they are exposed through the Data API.</li>
+</ul>
+
+<h2>Prove it with a database test</h2>
+<p>A rule without a test is a comment. Supabase can run pgTAP files with <code>supabase test db</code>. Ask the agent for a case that inserts as user A and fails to read as user B.</p>
+<div class="snip"><div class="bar"><span>supabase/tests/invoices_rls.test.sql</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>begin;
+select plan(2);
+
+-- user A can read their row; user B cannot.
+-- Use supabase test helpers / auth.uid() stubs your project already has.
+select ok(
+  (select count(*) from public.invoices) &gt;= 0,
+  &#x27;suite loads; replace with two auth.uid() cases&#x27;
+);
+select ok(
+  true,
+  &#x27;other-user select returns 0 rows under authenticated&#x27;
+);
+
+select * from finish();
+rollback;
+</pre></div>
+<p>Replace the stubs with your project’s auth helpers. The point of the rule is: no new table without an other-user case. If you do not want to teach the agent pgTAP, require a failing-then-passing integration test that uses two sessions instead.</p>
+
+<h2>AGENTS.md lines that actually get followed</h2>
+<p>Keep the always-on file short. The migration glob rule above does the path-scoped work. These four lines belong in the shared <code>AGENTS.md</code>:</p>
+<div class="snip"><div class="bar"><span>AGENTS.md (excerpt)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>## Database
+- Every new table enables RLS and defines per-command policies in the same migration.
+- Policies use (select auth.uid()). Never disable RLS to make a query work.
+- Service-role key stays on the server. Never NEXT_PUBLIC_ it.
+- After schema changes, regenerate types into the existing types file.
+</pre></div>
+<p>Put the file at the repo root so Cursor, Codex and Windsurf all see it. Claude Code picks it up with <code>@AGENTS.md</code> in <code>CLAUDE.md</code>. Which file each tool reads: <a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a>.</p>
+<p>If the same agent is about to grant paid access from a Stripe redirect, that is a different hole. Pair this page with <a href="/stripe-webhooks-ai-agents/">Stripe webhooks for AI agents</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Do new Supabase tables have RLS enabled?</summary><p>Tables created in the Supabase Dashboard have RLS enabled by default. Tables created in the SQL Editor, migrations, or another tool do not. Enable RLS explicitly in the same migration that creates the table.</p></details>
+<details><summary>What happens if RLS is on but there are no policies?</summary><p>Requests that use a publishable key see no rows. That is safer than leaving RLS off. Add per-command policies for the roles that should have access.</p></details>
+<details><summary>Why wrap auth.uid() in a select?</summary><p>Using <code>(select auth.uid())</code> lets Postgres cache the value once per statement (an initPlan) instead of calling the function on every row. Only do this when the result does not depend on the current row.</p></details>
+<details><summary>Does the service role bypass RLS?</summary><p>Yes. The service-role key bypasses row-level security. Keep it on the server only. Never prefix it with <code>NEXT_PUBLIC_</code> or ship it to the browser.</p></details>
+<details><summary>Should I disable RLS to debug a failing query?</summary><p>No. If a query fails, fix the policy and explain it. Disabling RLS to make it work is how production tables end up readable by anyone with the anon key.</p></details>
+</div>
+
+<div class="ctabox" id="get">
+  <h2>Want the whole drawer?</h2>
+  <p>One-File Agent Rules ($9) is one universal <code>AGENTS.md</code> with a plan gate, verify-before-done, and a Next.js + Supabase stack module that includes the RLS rule. The Vibe Starter Rules Pack ($19) adds a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (auth, RLS, Stripe webhooks, env, tests, UI), 12 prompts and launch checklists.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_supabase-rls-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=supabase-rls-ai-agents&utm_content=drw-00" target="_blank" rel="noopener noreferrer">Buy One-File Agent Rules · $9</a>
+    <a class="btn ghost" href="https://buy.stripe.com/cNi4gy7kEfjJgWN7Zk7kc00?client_reference_id=drw-01_supabase-rls-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=supabase-rls-ai-agents&utm_content=drw-01" target="_blank" rel="noopener noreferrer">Buy Vibe Starter · $19</a>
+  </div>
+  <p class="fine starter-line">Or <a href="#news-h">get the free Starter AGENTS.md</a> by email. One-time purchase, instant download. Packs are written against documented conventions; we have not benchmarked them against a reference project.</p>
+  <p class="fine mono">Launch week: 30% off any kit with code <kbd>LAUNCH</kbd> at Stripe checkout, through Oct 28, 2026. 14-day refund.</p>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/stripe-webhooks-ai-agents/">Stripe webhooks for AI agents</a></li>
+    <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
+    <li><a href="/cursor-rules-for-python/">Cursor rules for Python</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p><h2 id="news-h">Get the free Starter AGENTS.md</h2><p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests before saying "done". We email it to you instantly, plus a short note when a new pack ships. Unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\'re already on the list. Check your inbox (and spam) for AGENTS.md.':'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="supabase-rls-ai-agents"><button class="btn" type="submit">Email me the file</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+
+<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

@@ -204,6 +204,16 @@ rollback;
 <details><summary>Should I disable RLS to debug a failing query?</summary><p>No. If a query fails, fix the policy and explain it. Disabling RLS to make it work is how production tables end up readable by anyone with the anon key.</p></details>
 </div>
 
+<div class="ctabox" id="drw-06-kit">
+  <h2>Building on Next.js + Supabase?</h2>
+  <p>The Supabase + Next.js Agent Kit (DRW-06, $19) puts this RLS rule into a full setup: a migration rule that requires RLS, revoked default grants and one policy per command in the same file, a Claude Code hook that blocks a new table without them, a read-only migration-reviewer subagent, plus <code>@supabase/ssr</code> auth, typed queries, secret-key and Edge Function rules.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/bJeaEWcEYb3tcGx93o7kc07?client_reference_id=drw-06_supabase-rls-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=supabase-rls-ai-agents&utm_content=drw-06" target="_blank" rel="noopener noreferrer">Buy Supabase + Next.js Kit · $19</a>
+    <a class="btn ghost" href="/supabase-nextjs-agent-kit/">What's inside</a>
+  </div>
+  <p class="fine">Written against documented conventions as of October 2026; not yet run against a reference project. 14-day refund.</p>
+</div>
+
 <div class="ctabox" id="get">
   <h2>Want the whole drawer?</h2>
   <p>One-File Agent Rules ($9) is one universal <code>AGENTS.md</code> with a plan gate, verify-before-done, and a Next.js + Supabase stack module that includes the RLS rule. The Vibe Starter Rules Pack ($19) adds a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (auth, RLS, Stripe webhooks, env, tests, UI), 12 prompts and launch checklists.</p>

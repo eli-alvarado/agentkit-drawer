@@ -94,6 +94,8 @@
 <li><strong>Tests that test nothing:</strong> SQLite instead of Postgres, mocked sessions, no 401/404 cases.</li></ul>
 <h2>Where the rules go</h2>
 <p><code>AGENTS.md</code> at the repo root holds the stack, layout, commands and non-negotiables. Codex, Cursor, Windsurf and others read it, and Claude Code picks it up through <code>@AGENTS.md</code> in <code>CLAUDE.md</code>. Path-scoped details go in <code>.cursor/rules/*.mdc</code> with <code>globs</code>, so the Alembic rule loads only when <code>alembic/**</code> or models are in context. For a generic Python skeleton (venv, pytest, type hints, no FastAPI yet), start with <a href="/cursor-rules-for-python/">Cursor rules for Python</a>.</p>
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">the Python/FastAPI Backend Kit ($19) &rarr;</a></p></aside>
+
 <h2>A layout that works</h2>
 <p><code>00-core</code> (always on), <code>10-structure</code> (app/**), <code>20-api-routes</code> (app/api/**), <code>30-pydantic-schemas</code> (app/schemas/**), <code>40-sqlalchemy-models</code> (models, services), <code>50-alembic-migrations</code> (alembic/**), <code>60-security</code> (core, deps, auth routes), <code>70-testing</code> (tests/**).</p>
 <h2>The three rules that matter most</h2>
@@ -123,7 +125,7 @@ alwaysApply: false
 <details><summary>Should FastAPI tests use SQLite?</summary><p>Not if production is Postgres. Use a real Postgres via Docker or testcontainers, run migrations once per session, and wrap each test in a transaction that rolls back.</p></details>
 </div>
 
-<div class="ctabox">
+<div class="ctabox" id="get">
   <h2>Want the whole drawer?</h2>
   <p>The Python/FastAPI Backend Kit ($19) ships a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (structure, routes, Pydantic v2, SQLAlchemy 2, Alembic, security, testing), 10 prompts (/endpoint, /migration, /security-audit…) and definition-of-done + pre-deploy checklists.</p>
   <div class="cta">

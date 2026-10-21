@@ -93,6 +93,8 @@
 <li><strong>One job each:</strong> planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer covers most teams.</li>
 <li><strong>Output contracts:</strong> “Report MUST / SHOULD / NIT with path:line” beats “review the code”.</li></ul>
 <p>Run <code>/agents</code> in Claude Code to list, create and edit them.</p>
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">the Claude Code Kit ($24): 6 subagents, 10 commands, 4 tested hooks &rarr;</a></p></aside>
+
 <h2>Hooks: rules the model cannot skip</h2>
 <p>Hooks live in <code>.claude/settings.json</code> under <code>"hooks"</code>. Each event (<code>PreToolUse</code>, <code>PostToolUse</code>, <code>Stop</code>, and others) has a <code>matcher</code> on the tool name (<code>Bash</code>, <code>Edit|Write</code>) and a command. The hook gets the tool call as JSON on stdin. <strong>Exit code 2 blocks the action</strong> and sends your stderr message back to Claude; exit 0 allows it.</p>
 <ul><li><strong>PreToolUse on Bash:</strong> block <code>rm -rf</code>, <code>git push --force</code>, <code>git reset --hard</code>, <code>curl | sh</code>, pushes to main.</li>
@@ -135,7 +137,7 @@ exit 0
 <details><summary>Do subagents see the main conversation?</summary><p>No. Each subagent starts with a fresh context window and only gets the task you hand it, so include file paths and the goal in the delegation.</p></details>
 </div>
 
-<div class="ctabox">
+<div class="ctabox" id="get">
   <h2>Want the whole drawer?</h2>
   <p>The Claude Code Kit ($24) ships a fill-in <code>CLAUDE.md</code>, 6 least-privilege subagents, 10 slash commands, a <code>settings.json</code> with permissions and hook wiring, and 4 tested hooks (dangerous Bash, secret files, lockfiles, format, tests-before-stop).</p>
   <div class="cta">

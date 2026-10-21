@@ -96,8 +96,10 @@
   <li><strong>Project:</strong> from the repo root (usually the Git root) down to the current working directory. In each directory it prefers <code>AGENTS.override.md</code>, then <code>AGENTS.md</code>. At most one file per directory.</li>
   <li><strong>Merge:</strong> files concatenate root → cwd. Closer files appear later, so they override broader guidance.</li>
 </ul>
-<p>Empty files are skipped. Combined project instructions cap at about 32&nbsp;KiB by default (<code>project_doc_max_bytes</code>). Keep the root file short; put specialist rules in nested directories instead of one giant README. Official discovery notes: <a href="https://developers.openai.com/codex/guides/agents-md" target="_blank" rel="noopener noreferrer">Custom instructions with AGENTS.md</a>.</p>
+<p>Empty files are skipped. Combined project instructions cap at about 32&nbsp;KiB by default (<code>project_doc_max_bytes</code>). Keep the root file short; put specialist rules in nested directories instead of one giant README. Official discovery notes: <a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener noreferrer">Custom instructions with AGENTS.md</a>.</p>
 <p>Codex does <em>not</em> read <code>CLAUDE.md</code> or <code>.cursor/rules/*.mdc</code>. If those are your only instruction files, Codex guesses.</p>
+
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">the Vibe Starter Rules Pack ($19) &rarr;</a></p></aside>
 
 <h2>Minimal copy-paste template</h2>
 <p>Drop this at the repo root as <code>AGENTS.md</code>. Fill every <code>&lt;&lt;FILL&gt;&gt;</code>. Codex’s <code>/init</code> can scaffold a starter; edit that result the same way — exact commands beat vague vibes.</p>
@@ -191,7 +193,7 @@ The commands above pass, the change is described in plain words, and you did not
 <details><summary>How is this different from Cursor rules?</summary><p><code>AGENTS.md</code> is unscoped plain Markdown. Cursor <code>.mdc</code> files add frontmatter so a rule loads only for matching paths. Shared facts belong in <code>AGENTS.md</code>; path-scoped extras belong in Cursor rules.</p></details>
 </div>
 
-<div class="ctabox">
+<div class="ctabox" id="get">
   <h2>Want the whole drawer?</h2>
   <p>The Vibe Starter Rules Pack ($19) ships a ready <code>AGENTS.md</code> + <code>CLAUDE.md</code> pair, 8 scoped Cursor rules, 12 slash-command prompts, and launch checklists for Next.js + Supabase + Stripe — the file Codex actually reads, plus the tool-specific extras. The Agent Builder Prompt Pack ($29) is the system-prompt and eval kit for Codex-class agents.</p>
   <div class="cta">

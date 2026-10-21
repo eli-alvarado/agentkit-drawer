@@ -100,6 +100,8 @@
 <p><code>AGENTS.md</code> at the repo root is the shared source of truth: stack, venv, commands, never-dos, definition of done. Cursor, Codex, Windsurf and others read it. Claude Code picks it up through <code>@AGENTS.md</code> in <code>CLAUDE.md</code>. Path-scoped extras go in <code>.cursor/rules/*.mdc</code> with YAML frontmatter (<code>description</code>, <code>globs</code>, <code>alwaysApply</code>). Which file each tool actually reads: <a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a>.</p>
 <p>Keep the always-on core tiny. Put pytest details on <code>tests/**</code>, env rules on <code>.env*</code>, and library-specific notes only when those files are in context. One 600-line rule file gets skimmed.</p>
 
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">the Python/FastAPI Backend Kit ($19) &rarr;</a></p></aside>
+
 <h2>Minimal AGENTS.md for Python</h2>
 <p>Drop this at the repo root. Fill every <code>&lt;&lt;FILL&gt;&gt;</code>. Point the commands at what you actually run (<a href="https://docs.python.org/3/library/venv.html" target="_blank" rel="noopener noreferrer">venv</a>, <a href="https://docs.pytest.org/en/stable/" target="_blank" rel="noopener noreferrer">pytest</a>, ruff or the type checker you use).</p>
 <div class="snip"><div class="bar"><span>AGENTS.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md
@@ -173,7 +175,7 @@ alwaysApply: true
 <details><summary>When should I buy the FastAPI Backend Kit?</summary><p>Buy DRW-05 ($19) when the project is FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic and you want the fill-in AGENTS.md, 8 scoped Cursor rules, 10 prompts, and checklists. Stay on this free template for Flask, Django, CLIs, or any Python repo that is not that stack.</p></details>
 </div>
 
-<div class="ctabox">
+<div class="ctabox" id="get">
   <h2>Want the whole drawer?</h2>
   <p>This page is the generic Python skeleton. The Python/FastAPI Backend Kit ($19) ships a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (structure, routes, Pydantic v2, SQLAlchemy 2, Alembic, security, testing), 10 prompts (/endpoint, /migration, /security-audit…) and definition-of-done + pre-deploy checklists.</p>
   <div class="cta">

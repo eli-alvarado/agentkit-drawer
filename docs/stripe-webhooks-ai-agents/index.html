@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Don't grant Stripe access on /success: verify webhooks</title>
+<meta name="description" content="AI agents grant paid access on the Stripe /success page. Fulfill from a verified webhook, handle duplicate events, and never trust the redirect.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://agentkitdrawer.com/stripe-webhooks-ai-agents/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Don't grant Stripe access on /success: verify webhooks">
+<meta property="og:description" content="AI agents grant paid access on the Stripe /success page. Fulfill from a verified webhook, handle duplicate events, and never trust the redirect.">
+<meta property="og:url" content="https://agentkitdrawer.com/stripe-webhooks-ai-agents/">
+<meta property="og:image" content="https://agentkitdrawer.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Don't grant Stripe access on /success: verify webhooks">
+<meta name="twitter:description" content="AI agents grant paid access on the Stripe /success page. Fulfill from a verified webhook, handle duplicate events, and never trust the redirect.">
+<meta name="twitter:image" content="https://agentkitdrawer.com/og.png">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15130f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I grant paid access on the Stripe success URL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. success_url is a browser redirect anyone can visit, and paying customers may close the tab before they reach it. Fulfill from a verified webhook, then use /success only to show status."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I verify a Stripe webhook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Read the raw request body and the Stripe-Signature header, then call the official constructEvent helper with your endpoint secret. Return 400 if verification fails. Do not JSON.parse the body first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do Stripe webhooks fire twice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stripe retries deliveries and may send the same event more than once. Store processed event IDs and return 200 without doing the work again. Also key fulfillment on the Checkout Session ID so checkout.session.completed and async_payment_succeeded cannot double-grant."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which events should grant access?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For Checkout, handle checkout.session.completed and checkout.session.async_payment_succeeded. Retrieve the session, check payment_status, then fulfill once per session. Delayed methods such as ACH are not paid on completed alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should the success page retrieve the Checkout Session?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can retrieve it to render a receipt, but do not write entitlements there. Customers may never land on the page. Stripe's fulfillment docs treat the webhook as the source of truth."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Don't grant Stripe access on /success: verify webhooks", "description": "AI agents grant paid access on the Stripe /success page. Fulfill from a verified webhook, handle duplicate events, and never trust the redirect.", "url": "https://agentkitdrawer.com/stripe-webhooks-ai-agents/", "datePublished": "2026-10-21", "author": {"@type": "Organization", "name": "AgentKit Drawer"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "Stripe webhooks for AI agents", "item": "https://agentkitdrawer.com/stripe-webhooks-ai-agents/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top wrap">
+  <a class="logo" href="/" aria-label="AgentKit Drawer home"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
+  <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+</header>
+
+<main id="main" class="wrap article">
+<p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Stripe webhooks for AI agents</p>
+<h1>Don't grant Stripe access on /success. Verify the webhook.</h1>
+<p>Ask an agent to “add Stripe Checkout” and you often get this: create a Checkout Session, set <code>success_url</code> to <code>/success</code>, and on that page write <code>paid = true</code>. Two problems. Anyone can open <code>/success</code>. Paying customers can close the tab and never reach it. Stripe’s <a href="https://docs.stripe.com/checkout/fulfillment" target="_blank" rel="noopener noreferrer">fulfillment guide</a> treats the webhook as the source of truth for that reason.</p>
+<p>This page is the payment rule: verify the signature, fulfill from the event, and survive duplicates. For the rest of a Next.js + Supabase Cursor layout, see <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>. If the same agent just created a table without RLS, fix that first: <a href="/supabase-rls-ai-agents/">Supabase RLS for AI agents</a>.</p>
+
+<aside class="kitnote" aria-label="Shortcut"><p><strong>Shortcut:</strong> grab the free <a href="#news-h">Starter AGENTS.md</a> (40 lines, works in Cursor, Claude Code, Codex and Windsurf), or skip the setup with <a href="#get">One-File Agent Rules ($9)</a>.</p></aside>
+
+<h2>What /success is for</h2>
+<p><code>success_url</code> is a browser redirect after Checkout. You can append <code>{CHECKOUT_SESSION_ID}</code> and retrieve the session to render a receipt. That is display. It is not entitlement.</p>
+<ul>
+<li><strong>The URL is not a secret.</strong> A user who knows <code>/thanks</code> or <code>/success?session_id=cs_test_…</code> can hit it without paying, unless you re-fetch the session <em>and</em> check <code>payment_status</code> on the server. Agents skip that check.</li>
+<li><strong>The buyer may never arrive.</strong> Tabs close. Mobile browsers drop the redirect. Stripe documents this drop-off explicitly.</li>
+<li><strong>Hosted Checkout can wait up to 10 seconds</strong> for your <code>checkout.session.completed</code> handler before redirecting. That is a hint: Stripe expects the webhook to finish first.</li>
+</ul>
+<p>Rule the agent must follow: the success page reads status. The webhook writes it.</p>
+
+<h2>Verify the event, then look at it</h2>
+<p>Without verification, anyone who can POST to your route can grant access. <a href="https://docs.stripe.com/webhooks" target="_blank" rel="noopener noreferrer">Stripe’s webhook docs</a> require the raw body, the <code>Stripe-Signature</code> header, and the endpoint secret. Official libraries expose this as <code>constructEvent</code>. If verification fails, return 400 and do nothing else.</p>
+<div class="snip"><div class="bar"><span>app/api/stripe/webhook/route.ts</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>import Stripe from &quot;stripe&quot;;
+import { headers } from &quot;next/headers&quot;;
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export async function POST(req: Request) {
+  const rawBody = await req.text(); // raw bytes, not req.json()
+  const signature = (await headers()).get(&quot;stripe-signature&quot;);
+  if (!signature) return new Response(&quot;missing signature&quot;, { status: 400 });
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      rawBody,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch {
+    return new Response(&quot;invalid signature&quot;, { status: 400 });
+  }
+
+  if (
+    event.type === &quot;checkout.session.completed&quot; ||
+    event.type === &quot;checkout.session.async_payment_succeeded&quot;
+  ) {
+    const session = event.data.object as Stripe.Checkout.Session;
+    await fulfillCheckout(session.id);
+  }
+
+  return new Response(&quot;ok&quot;, { status: 200 });
+}
+</pre></div>
+<p>Three details agents get wrong:</p>
+<ul>
+<li><strong>Raw body.</strong> <code>JSON.parse</code> then re-stringify changes whitespace and the signature fails, or worse, you skip verify because parse already “worked”.</li>
+<li><strong>Per-endpoint secret.</strong> Test and live secrets differ. Multiple endpoints have different <code>whsec_</code> values. Read the secret for <em>this</em> URL from env, not a hardcoded test value.</li>
+<li><strong>Return 2xx after you accept the event.</strong> A 500 makes Stripe retry. Do heavy work after you have recorded the event id, or queue it, but do not fail the HTTP response because your email provider timed out if you already granted access.</li>
+</ul>
+
+<h2>Handle duplicate events</h2>
+<p>Stripe retries. Your own replay script may run twice. The same Checkout Session can also produce two different events (<code>checkout.session.completed</code> and later <code>checkout.session.async_payment_succeeded</code> for delayed methods). Dedup on <code>event.id</code> <em>and</em> on the business object.</p>
+<div class="snip"><div class="bar"><span>lib/fulfill-checkout.ts</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>export async function fulfillCheckout(sessionId: string) {
+  // 1. If this session is already fulfilled, return.
+  // 2. Mark it processing (unique on sessionId) so a concurrent retry exits.
+  // 3. Retrieve the session from the API with line_items expanded.
+  // 4. If payment_status is not paid / no_payment_required, return.
+  // 5. Grant the entitlement once.
+  // 6. Mark the session fulfilled.
+}
+
+export async function recordStripeEvent(eventId: string): Promise&lt;boolean&gt; {
+  // Insert event.id into a unique table.
+  // Return false if the insert conflicts (already seen).
+  return true;
+}
+</pre></div>
+<p>In the route, call <code>recordStripeEvent(event.id)</code> first. If it returns false, respond 200 and stop. Then call <code>fulfillCheckout</code>, which must itself be safe to run twice for the same <code>session.id</code>. Stripe’s <a href="https://docs.stripe.com/events/manage-webhook-endpoints" target="_blank" rel="noopener noreferrer">endpoint ops guide</a> spells out “processing / processed” marks so two overlapping retries cannot both grant.</p>
+<p>Do not use <code>event.created</code> as an idempotency key. Distinct events can share a timestamp, and Stripe does not promise delivery order.</p>
+
+<h2>Which events grant access</h2>
+<ul>
+<li><strong><code>checkout.session.completed</code></strong> — the session finished. For card payments that is usually paid. For ACH and other delayed methods the session can complete while payment is still processing.</li>
+<li><strong><code>checkout.session.async_payment_succeeded</code></strong> — the delayed payment actually landed. Handle both, and let <code>fulfillCheckout</code> no-op the second time.</li>
+<li><strong>Retrieve, don’t trust the snapshot alone</strong> if you need line items or a later status. Expand <code>line_items</code> on retrieve, then check <code>payment_status</code>.</li>
+</ul>
+<p>Subscriptions have their own objects (<code>invoice.paid</code>, <code>customer.subscription.updated</code>). Same rules: verify, then idempotent write. Do not chain “I already saw invoice.created so invoice.paid must be next.”</p>
+
+<h2>The Cursor / AGENTS.md rule</h2>
+<p>Scope it to the Stripe routes so it loads when those files are in context.</p>
+<div class="snip"><div class="bar"><span>.cursor/rules/40-stripe.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+description: Stripe Checkout and webhooks
+globs: app/api/stripe/**,lib/stripe/**
+alwaysApply: false
+---
+- Never grant paid access, roles, or downloads from success_url or /success.
+- Verify every webhook with constructEvent(rawBody, Stripe-Signature, endpoint secret).
+- Fulfill from checkout.session.completed and checkout.session.async_payment_succeeded.
+- Dedup on event.id; fulfill at most once per Checkout Session id.
+- success_url is for display. Retrieve the session there if you render a receipt, but do not write entitlements.
+</pre></div>
+<p>Add a test the agent cannot skip: POST a signed fixture (Stripe CLI <code>stripe trigger checkout.session.completed</code>, or a recorded payload plus its signature) and assert the user is marked paid. POST the same event again and assert the grant count stays one. POST an unsigned body and assert 400 and no write. Put those cases in the definition of done.</p>
+
+<h2>Local wiring agents forget</h2>
+<p>Use the Stripe CLI to forward events to localhost and to print the matching <code>whsec_</code>. That secret is not the live Dashboard secret. Put both in env, never in source. Keep <code>STRIPE_SECRET_KEY</code> and <code>STRIPE_WEBHOOK_SECRET</code> off any <code>NEXT_PUBLIC_</code> prefix. If the app also talks to Supabase, the webhook handler uses the service-role key on the server; that path bypasses RLS, so keep it to “mark this user paid” and nothing else.</p>
+
+<h2 id="faq">FAQ</h2>
+<div class="faq">
+<details><summary>Can I grant paid access on the Stripe success URL?</summary><p>No. <code>success_url</code> is a browser redirect anyone can visit, and paying customers may close the tab before they reach it. Fulfill from a verified webhook, then use <code>/success</code> only to show status.</p></details>
+<details><summary>How do I verify a Stripe webhook?</summary><p>Read the raw request body and the <code>Stripe-Signature</code> header, then call the official <code>constructEvent</code> helper with your endpoint secret. Return 400 if verification fails. Do not <code>JSON.parse</code> the body first.</p></details>
+<details><summary>Why do Stripe webhooks fire twice?</summary><p>Stripe retries deliveries and may send the same event more than once. Store processed event IDs and return 200 without doing the work again. Also key fulfillment on the Checkout Session ID so <code>checkout.session.completed</code> and <code>async_payment_succeeded</code> cannot double-grant.</p></details>
+<details><summary>Which events should grant access?</summary><p>For Checkout, handle <code>checkout.session.completed</code> and <code>checkout.session.async_payment_succeeded</code>. Retrieve the session, check <code>payment_status</code>, then fulfill once per session. Delayed methods such as ACH are not paid on completed alone.</p></details>
+<details><summary>Should the success page retrieve the Checkout Session?</summary><p>You can retrieve it to render a receipt, but do not write entitlements there. Customers may never land on the page. Stripe’s fulfillment docs treat the webhook as the source of truth.</p></details>
+</div>
+
+<div class="ctabox" id="get">
+  <h2>Want the whole drawer?</h2>
+  <p>One-File Agent Rules ($9) is one universal <code>AGENTS.md</code> with a plan gate and a Next.js + Supabase module that includes the webhook rule. The Vibe Starter Rules Pack ($19) adds a fill-in <code>AGENTS.md</code> + <code>CLAUDE.md</code>, 8 scoped Cursor rules (auth, RLS, Stripe webhooks, env, tests, UI), 12 prompts and launch checklists.</p>
+  <div class="cta">
+    <a class="btn" href="https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_stripe-webhooks-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=stripe-webhooks-ai-agents&utm_content=drw-00" target="_blank" rel="noopener noreferrer">Buy One-File Agent Rules · $9</a>
+    <a class="btn ghost" href="https://buy.stripe.com/cNi4gy7kEfjJgWN7Zk7kc00?client_reference_id=drw-01_stripe-webhooks-ai-agents&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=stripe-webhooks-ai-agents&utm_content=drw-01" target="_blank" rel="noopener noreferrer">Buy Vibe Starter · $19</a>
+  </div>
+  <p class="fine starter-line">Or <a href="#news-h">get the free Starter AGENTS.md</a> by email. One-time purchase, instant download. Packs are written against documented conventions; we have not benchmarked them against a reference project.</p>
+  <p class="fine mono">Launch week: 30% off any kit with code <kbd>LAUNCH</kbd> at Stripe checkout, through Oct 28, 2026. 14-day refund.</p>
+</div>
+
+<nav class="related" aria-labelledby="rel-h">
+  <h2 id="rel-h">Related guides</h2>
+  <ul>
+    <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
+    <li><a href="/supabase-rls-ai-agents/">Supabase RLS for AI agents</a></li>
+    <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
+    <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
+    <li><a href="/claude-code-hooks-examples/">Claude Code hooks examples</a></li>
+    <li><a href="/cursor-rules-for-python/">Cursor rules for Python</a></li>
+  </ul>
+</nav>
+</main>
+
+<section class="wrap news" aria-labelledby="news-h"><div class="news-in"><div><p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p><h2 id="news-h">Get the free Starter AGENTS.md</h2><p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests before saying "done". We email it to you instantly, plus a short note when a new pack ships. Unsubscribe anytime.</p></div>
+<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)}).then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\'re already on the list. Check your inbox (and spam) for AGENTS.md.':'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()}).catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})">
+<label class="sr" for="news-e">Email</label><input id="news-e" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email"><input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><input type="hidden" name="source" value="stripe-webhooks-ai-agents"><button class="btn" type="submit">Email me the file</button><p class="news-m mono" role="status"></p></form></div></section>
+<footer class="wrap foot mono">
+  <span>© 2026 AgentKit Drawer</span>
+  <a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a>
+  <a href="/">Home</a>
+  <a href="/#guides">Free guides</a>
+  <a href="/guides/">Guides</a> <a href="/about/">About</a> <a href="/contact/">Contact</a>
+  <a href="/press/">Press</a>
+  <a href="/refund/">Refunds</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+
+<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>
+</footer>
+<script src="/links.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f03cc499ace64ce3b05ec4f4dab95786"}'></script>
+</body>
+</html>

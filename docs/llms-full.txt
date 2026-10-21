@@ -26,6 +26,10 @@ Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: enter your email i
 - [Claude Code subagents, hooks and slash commands](https://agentkitdrawer.com/claude-code-subagents-hooks-guide/)
 - [AGENTS.md and Cursor rules for FastAPI](https://agentkitdrawer.com/fastapi-agents-md-cursor-rules/)
 - [Cursor rules for Python](https://agentkitdrawer.com/cursor-rules-for-python/)
+- [Stop AI agents creating Supabase tables without RLS](https://agentkitdrawer.com/supabase-rls-ai-agents/)
+- [Don't grant Stripe access on /success: verify webhooks](https://agentkitdrawer.com/stripe-webhooks-ai-agents/)
+- [Blocking calls in FastAPI async def: what AI agents miss](https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/)
+- [Claude Code Stop hook that runs tests (exit 2 blocks)](https://agentkitdrawer.com/claude-code-stop-hook-tests/)
 
 ## Free files
 - [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security

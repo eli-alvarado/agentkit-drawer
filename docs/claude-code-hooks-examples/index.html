@@ -141,7 +141,7 @@ if ! npm test --silent &gt;/tmp/claude-stop-tests.log 2&gt;&amp;1; then
   exit 2
 fi
 exit 0</pre></div>
-<p>Register it under <code>"Stop"</code> with no matcher (Stop doesn't support one).</p>
+<p>Register it under <code>"Stop"</code> with no matcher (Stop doesn't support one). For the full tests-gate version (loop guard, dirty-tree skip, pytest/npm wiring), see <a href="/claude-code-stop-hook-tests/">A Stop hook that runs tests</a>.</p>
 <h2>7. Log every Bash command</h2>
 <p>An audit trail in one line. <code>PostToolUse</code> on <code>Bash</code> appends what ran to a file in your home directory.</p>
 <div class="snip"><div class="bar"><span>~/.claude/settings.json</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
@@ -185,6 +185,7 @@ exit 0</pre></div>
 <nav class="related" aria-labelledby="rel-h">
   <h2 id="rel-h">Related guides</h2>
   <ul>
+    <li><a href="/claude-code-stop-hook-tests/">Stop hook that runs tests</a></li>
     <li><a href="/claude-code-subagents-hooks-guide/">Claude Code subagents, hooks and slash commands</a></li>
     <li><a href="/claude-code-claude-md-template/">CLAUDE.md examples and template</a></li>
     <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>

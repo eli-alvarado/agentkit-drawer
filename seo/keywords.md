@@ -12,3 +12,9 @@ Score = buying intent / winnability / fit (1-3).
 | claude.md examples / claude.md example files | info→pack | /claude-code-claude-md-template/ | 2/2/3 | idea | 2026-10-20 |
 | cursor rules for react / flutter | info | new guides | 2/2/2 | idea | 2026-10-20 |
 | cursor rules nextjs typescript / shadcn | info→pack (DRW-01) | /cursor-rules-nextjs-supabase/ | 2/2/3 | idea | 2026-10-20 |
+
+## 2026-10-21
+| Keyword | Page | Status |
+|---|---|---|
+| claude code hooks examples | /claude-code-hooks-examples/ | new page |
+| claude.md examples | /claude-code-claude-md-template/#examples | extended existing page |

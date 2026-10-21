@@ -1,23 +1,70 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CLAUDE.md template for Claude Code (2026): copy-paste</title><meta name="description" content="A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet."><meta name="color-scheme" content="light dark">
+<title>CLAUDE.md examples and template for Claude Code (2026)</title><meta name="description" content="Real CLAUDE.md examples for Claude Code: project, ~/.claude user file, CLAUDE.local.md, @imports and .claude/rules, plus a copy-paste template."><meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://agentkitdrawer.com/claude-code-claude-md-template/">
-<meta property="og:type" content="article"><meta property="og:title" content="CLAUDE.md template for Claude Code (2026): copy-paste"><meta property="og:description" content="A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md.">
+<meta property="og:type" content="article"><meta property="og:title" content="CLAUDE.md examples and template for Claude Code (2026)"><meta property="og:description" content="Real CLAUDE.md examples for Claude Code: project, ~/.claude user file, CLAUDE.local.md, @imports and .claude/rules, plus a copy-paste template.">
 <meta property="og:url" content="https://agentkitdrawer.com/claude-code-claude-md-template/"><meta property="og:image" content="https://agentkitdrawer.com/og.png"><meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="/style.css"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#15130f"><meta name="twitter:title" content="CLAUDE.md template for Claude Code (2026): copy-paste"><meta name="twitter:description" content="A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md."><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "CLAUDE.md template for Claude Code", "item": "https://agentkitdrawer.com/claude-code-claude-md-template/"}]}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "A CLAUDE.md template for Claude Code", "description": "A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md.", "url": "https://agentkitdrawer.com/claude-code-claude-md-template/", "mainEntityOfPage": "https://agentkitdrawer.com/claude-code-claude-md-template/", "datePublished": "2026-10-14", "dateModified": "2026-10-17", "image": "https://agentkitdrawer.com/og.png", "author": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/"}, "publisher": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/", "logo": {"@type": "ImageObject", "url": "https://agentkitdrawer.com/icon-512.png"}}}</script>
+<link rel="stylesheet" href="/style.css"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#15130f"><meta name="twitter:title" content="CLAUDE.md examples and template for Claude Code (2026)"><meta name="twitter:description" content="Real CLAUDE.md examples for Claude Code: project, ~/.claude user file, CLAUDE.local.md, @imports and .claude/rules, plus a copy-paste template."><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agentkitdrawer.com/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://agentkitdrawer.com/guides/"}, {"@type": "ListItem", "position": 3, "name": "CLAUDE.md template for Claude Code", "item": "https://agentkitdrawer.com/claude-code-claude-md-template/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "CLAUDE.md examples and a template for Claude Code", "description": "A copy-paste CLAUDE.md template for Claude Code: project facts, commands, hard rules and a plan-first workflow, plus a free guardrails snippet that also works in AGENTS.md.", "url": "https://agentkitdrawer.com/claude-code-claude-md-template/", "mainEntityOfPage": "https://agentkitdrawer.com/claude-code-claude-md-template/", "datePublished": "2026-10-14", "dateModified": "2026-10-17", "image": "https://agentkitdrawer.com/og.png", "author": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/"}, "publisher": {"@type": "Organization", "name": "AgentKit Drawer", "url": "https://agentkitdrawer.com/", "logo": {"@type": "ImageObject", "url": "https://agentkitdrawer.com/icon-512.png"}}}</script>
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
 <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
 <main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / CLAUDE.md template for Claude Code</p>
-<h1>A CLAUDE.md template for Claude Code</h1>
+<h1>CLAUDE.md examples and a template for Claude Code</h1>
 <p>Claude Code reads <code>CLAUDE.md</code> from your repo root at the start of every session. A good one is short, specific and boring. A bad one is a 600-line wish list the agent skims and ignores.</p>
 <h2>What belongs in CLAUDE.md</h2>
 <ul><li><strong>Project facts:</strong> stack, package manager, where things live.</li>
 <li><strong>Exact commands:</strong> how to dev, test, lint and typecheck. Agents guess these wrong constantly.</li>
 <li><strong>Hard rules:</strong> the 5 to 10 things that must never happen (disable RLS, commit secrets, edit generated files).</li>
 <li><strong>Workflow:</strong> plan first, small diffs, run the tests before saying "done".</li></ul>
+<h2 id="examples">CLAUDE.md examples</h2>
+<p>Claude Code loads several memory files, and each has a different job. These examples follow Anthropic's <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener noreferrer">memory docs</a> (checked October 21, 2026), which suggest keeping each CLAUDE.md under 200 lines and writing concrete, checkable instructions. Run <code>/init</code> to generate a starting file and <code>/context</code> to see which files loaded.</p>
+<h3>Example 1: project CLAUDE.md (commit it)</h3>
+<p>Lives at <code>./CLAUDE.md</code> or <code>./.claude/CLAUDE.md</code> and is shared with your team.</p>
+<div class="snip"><div class="bar"><span>CLAUDE.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># Acme web app
+
+## Commands
+- Install: pnpm install
+- Dev: pnpm dev
+- Test: pnpm test (run before committing)
+- Lint: pnpm lint
+
+## Code style
+- TypeScript strict. No `any`.
+- Use 2-space indentation.
+- Server code in src/server/, never import it from src/components/.
+
+## Rules
+- Never edit .env files or commit secrets.
+- Ask before adding a dependency.
+- Plan first for changes touching more than 3 files.</pre></div>
+<h3>Example 2: user CLAUDE.md for all your projects</h3>
+<p><code>~/.claude/CLAUDE.md</code> holds personal preferences that apply everywhere.</p>
+<div class="snip"><div class="bar"><span>~/.claude/CLAUDE.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># My preferences
+- Explain the plan in 3 bullets before editing.
+- Prefer small commits with conventional commit messages.
+- Do not run git push. I push myself.</pre></div>
+<h3>Example 3: CLAUDE.local.md for just you</h3>
+<p><code>./CLAUDE.local.md</code> is for project notes you don't share. Add it to <code>.gitignore</code>.</p>
+<div class="snip"><div class="bar"><span>CLAUDE.local.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>- My local API runs on http://localhost:8787
+- Test account: use the seed user from scripts/seed.ts</pre></div>
+<h3>Example 4: imports keep the file short</h3>
+<p>Pull other files in with <code>@path</code>. Paths are relative to the file containing the import, and imports can nest up to four hops.</p>
+<div class="snip"><div class="bar"><span>CLAUDE.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>See @README.md for the project overview and @package.json for scripts.
+
+# Git workflow
+@docs/git-instructions.md</pre></div>
+<h3>Example 5: path-scoped rules in .claude/rules/</h3>
+<p>Markdown files in <code>.claude/rules/</code> with <code>paths:</code> frontmatter load only when Claude works on matching files.</p>
+<div class="snip"><div class="bar"><span>.claude/rules/api.md</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
+paths:
+  - "src/api/**/*.ts"
+---
+# API rules
+- Validate every request body with zod.
+- Return errors as { error: string } with a proper status code.</pre></div>
+<p>CLAUDE.md is context, not enforcement: Claude can still skip a line. For a rule that must hold every time, such as never editing <code>.env</code>, use a hook. See <a href="/claude-code-hooks-examples/">Claude Code hooks examples</a>.</p>
 <h2>Share rules with Cursor and Codex</h2>
 <p>Keep the shared rules in <code>AGENTS.md</code> and make <code>CLAUDE.md</code> import it with a single <code>@AGENTS.md</code> line, then add only Claude-specific notes below. One source of truth, every tool.</p>
 <h2>Free template: copy it</h2>
@@ -40,6 +87,7 @@
 <li><a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a></li>
 <li><a href="/windsurf-rules/">Windsurf rules setup</a></li>
 <li><a href="/agents-md-godot/">AGENTS.md for Godot 4</a></li>
+<li><a href="/claude-code-hooks-examples/">Claude Code hooks examples</a></li>
 <li><a href="/claude-code-subagents-hooks-guide/">Claude Code subagents, hooks and slash commands</a></li>
 <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>
 </ul></nav>

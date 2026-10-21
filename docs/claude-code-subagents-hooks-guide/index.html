@@ -51,7 +51,7 @@
       "name": "What does exit code 2 mean in a Claude Code hook?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 allows. Other codes are non-blocking errors shown to you."
+        "text": "Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 means no objection: the normal permission flow still applies. Other codes are non-blocking errors shown to you."
       }
     },
     {
@@ -102,6 +102,7 @@
 <li><strong>PostToolUse on Edit|Write:</strong> run your formatter on the edited file. Never block here.</li>
 <li><strong>Stop:</strong> run tests when code changed; exit 2 keeps Claude working. Check <code>stop_hook_active</code> to avoid loops.</li></ul>
 <p>Hooks run with your user's permissions. Read every script before enabling it and keep them in version control. Pair them with <code>permissions.deny</code> entries in the same file for a second layer.</p>
+<p>Want more? See <a href="/claude-code-hooks-examples/">7 copy-paste Claude Code hooks examples</a>: auto-format, protect .env, notifications, context after /compact and more.</p>
 <h2>Slash commands: <code>.claude/commands/*.md</code></h2>
 <p>Each file becomes <code>/filename</code>. Use <code>$ARGUMENTS</code> for what you type after the command, and frontmatter such as <code>description</code>, <code>argument-hint</code> and <code>allowed-tools</code>. Good commands chain your subagents: <code>/feature</code> = plan → implement → test-writer → tests → code-reviewer → summary.</p>
 <h2>Free snippet: copy it</h2>
@@ -132,7 +133,7 @@ exit 0
 <div class="faq">
 <details><summary>Where do Claude Code subagents live?</summary><p>Project subagents go in <code>.claude/agents/</code> as Markdown files with YAML frontmatter (name, description, optional tools). Personal ones go in <code>~/.claude/agents/</code>. Use <code>/agents</code> to manage them.</p></details>
 <details><summary>How do I block dangerous commands in Claude Code?</summary><p>Add a PreToolUse hook with matcher <code>Bash</code> in <code>.claude/settings.json</code>. The script reads the tool call JSON from stdin and exits with code 2 to block it; its stderr is shown to Claude. Add matching <code>permissions.deny</code> rules as a second layer.</p></details>
-<details><summary>What does exit code 2 mean in a Claude Code hook?</summary><p>Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 allows. Other codes are non-blocking errors shown to you.</p></details>
+<details><summary>What does exit code 2 mean in a Claude Code hook?</summary><p>Exit 2 blocks the action (for PreToolUse) or tells Claude to keep working (for Stop), and stderr is fed back to Claude. Exit 0 means no objection: the normal permission flow still applies. Other codes are non-blocking errors shown to you.</p></details>
 <details><summary>How do I make Claude Code run tests before it finishes?</summary><p>Use a Stop hook that runs your test command when code changed and exits 2 on failure. Check the <code>stop_hook_active</code> field in the input and exit 0 when it is true, so the hook cannot loop forever.</p></details>
 <details><summary>Do subagents see the main conversation?</summary><p>No. Each subagent starts with a fresh context window and only gets the task you hand it, so include file paths and the goal in the delegation.</p></details>
 </div>
@@ -151,6 +152,7 @@ exit 0
 <nav class="related" aria-labelledby="rel-h">
   <h2 id="rel-h">Related guides</h2>
   <ul>
+    <li><a href="/claude-code-hooks-examples/">Claude Code hooks examples</a></li>
     <li><a href="/claude-code-claude-md-template/">CLAUDE.md template for Claude Code</a></li>
     <li><a href="/agents-md-vs-claude-md-vs-cursor-rules/">AGENTS.md vs CLAUDE.md vs Cursor rules</a></li>
     <li><a href="/fastapi-agents-md-cursor-rules/">AGENTS.md + Cursor rules for FastAPI</a></li>

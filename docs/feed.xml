@@ -5,9 +5,177 @@
   <link rel="self" type="application/atom+xml" href="https://agentkitdrawer.com/feed.xml"/>
   <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/guides/"/>
   <id>https://agentkitdrawer.com/feed.xml</id>
-  <updated>2026-10-21T17:00:00-05:00</updated>
+  <updated>2026-10-21T22:00:00-05:00</updated>
   <author><name>AgentKit Drawer</name><uri>https://agentkitdrawer.com/</uri></author>
   <icon>https://agentkitdrawer.com/icon-192.png</icon>
+  <entry>
+    <title>Free directory of agent kits and MCP setups</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/"/>
+    <id>https://agentkitdrawer.com/directory/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>Hand-picked agent kits, Cursor rules, CLAUDE.md templates, Claude Code plugins and MCP setups. Twenty entries, each with a verified URL. No invented stats.</summary>
+  </entry>
+  <entry>
+    <title>AGENTS.md open format: a README for coding agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/agents-md/"/>
+    <id>https://agentkitdrawer.com/directory/agents-md/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>What the AGENTS.md format is, who should write one, and how a one-file AgentKit pack differs from the empty convention.</summary>
+  </entry>
+  <entry>
+    <title>awesome-cursorrules: community Cursor .mdc files</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/awesome-cursorrules/"/>
+    <id>https://agentkitdrawer.com/directory/awesome-cursorrules/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>PatrickJS&#x27;s public Cursor rules collection: what the .mdc dump is good for, where quality slips, and how it differs from a scoped Next.js pack.</summary>
+  </entry>
+  <entry>
+    <title>Cursor project rules docs: .mdc frontmatter explained</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/cursor-rules-docs/"/>
+    <id>https://agentkitdrawer.com/directory/cursor-rules-docs/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>Official Cursor documentation for .cursor/rules: alwaysApply, globs, and why a plain .md file is ignored. Not a kit, still the source of truth.</summary>
+  </entry>
+  <entry>
+    <title>awesome-claude-code: curated Claude Code resources</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/awesome-claude-code/"/>
+    <id>https://agentkitdrawer.com/directory/awesome-claude-code/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>hesreallyhim&#x27;s curated Claude Code list: skills, hooks, CLAUDE.md links and official docs. Useful for discovery, not a drop-in kit.</summary>
+  </entry>
+  <entry>
+    <title>Claude Code Templates: npx agents, hooks and MCP</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/claude-code-templates/"/>
+    <id>https://agentkitdrawer.com/directory/claude-code-templates/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>davila7&#x27;s Claude Code Templates (aitmpl.com): a large installable catalog. Handy for browsing, easy to over-install.</summary>
+  </entry>
+  <entry>
+    <title>Superpowers: Claude Code skills for TDD and plans</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/superpowers/"/>
+    <id>https://agentkitdrawer.com/directory/superpowers/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>obra/superpowers is a MIT-licensed Claude Code plugin for brainstorming, plans, TDD and review. Strong discipline, heavy for a spike.</summary>
+  </entry>
+  <entry>
+    <title>Anthropic Agent Skills: official SKILL.md examples</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/anthropic-skills/"/>
+    <id>https://agentkitdrawer.com/directory/anthropic-skills/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>anthropics/skills is the official Agent Skills repo: a template, examples, and document skills that are source-available, not all Apache 2.0.</summary>
+  </entry>
+  <entry>
+    <title>Claude plugins official: Anthropic&#x27;s marketplace repo</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/claude-plugins-official/"/>
+    <id>https://agentkitdrawer.com/directory/claude-plugins-official/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>anthropics/claude-plugins-official lists internal and partner plugins. Anthropic says it cannot verify third-party MCP inside them.</summary>
+  </entry>
+  <entry>
+    <title>wshobson/agents: multi-harness plugins and skills</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/wshobson-agents/"/>
+    <id>https://agentkitdrawer.com/directory/wshobson-agents/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>A MIT marketplace of plugins, agents and skills that install into Claude Code, Cursor, Codex and other harnesses. Broad, easy to over-enable.</summary>
+  </entry>
+  <entry>
+    <title>BMad Method: agile skills for AI coding agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/bmad-method/"/>
+    <id>https://agentkitdrawer.com/directory/bmad-method/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>bmad-code-org/BMAD-METHOD turns planning and delivery into named skills for Claude Code and Cursor. Powerful, currently split across v6 and preview v7.</summary>
+  </entry>
+  <entry>
+    <title>houshuang Claude Code plugins: session-tested hooks</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/houshuang-claude-code/"/>
+    <id>https://agentkitdrawer.com/directory/houshuang-claude-code/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>houshuang/awesome-claude-code is a plugin marketplace of hooks, skills and commands the author actually used. Some items are already superseded.</summary>
+  </entry>
+  <entry>
+    <title>Context7 MCP: current docs for coding agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/context7/"/>
+    <id>https://agentkitdrawer.com/directory/context7/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>Upstash Context7 fetches version-specific library docs for agents via MCP or a CLI skill. It does not write your project rules.</summary>
+  </entry>
+  <entry>
+    <title>Playwright MCP: accessibility-tree browser tools</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/playwright-mcp/"/>
+    <id>https://agentkitdrawer.com/directory/playwright-mcp/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>Microsoft&#x27;s official Playwright MCP gives agents structured browser tools. The README also steers coding agents toward CLI + skills for token cost.</summary>
+  </entry>
+  <entry>
+    <title>GitHub MCP Server: official issues, PRs and Actions</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/github-mcp-server/"/>
+    <id>https://agentkitdrawer.com/directory/github-mcp-server/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>github/github-mcp-server is GitHub&#x27;s official MCP. Hosted or local, OAuth or PAT. Use read-only unless the agent should open PRs.</summary>
+  </entry>
+  <entry>
+    <title>Stripe MCP: official API tools for coding agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/stripe-mcp/"/>
+    <id>https://agentkitdrawer.com/directory/stripe-mcp/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>Stripe&#x27;s hosted MCP at mcp.stripe.com. OAuth or Agent-tagged keys. Useful for API truth; it will not fix a webhook that trusts /success.</summary>
+  </entry>
+  <entry>
+    <title>Supabase MCP: official project tools for agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/supabase-mcp/"/>
+    <id>https://agentkitdrawer.com/directory/supabase-mcp/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.</summary>
+  </entry>
+  <entry>
+    <title>awesome-mcp-servers: community MCP server index</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/awesome-mcp-servers/"/>
+    <id>https://agentkitdrawer.com/directory/awesome-mcp-servers/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>punkpeye/awesome-mcp-servers is a MIT list of MCP servers. Use it to discover official endpoints, then verify the repo you install.</summary>
+  </entry>
+  <entry>
+    <title>Spec Kit: spec-driven process for coding agents</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/spec-kit/"/>
+    <id>https://agentkitdrawer.com/directory/spec-kit/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>github/spec-kit installs spec, plan and implement workflows into many coding agents. Process tooling, not a stack rules pack.</summary>
+  </entry>
+  <entry>
+    <title>FastMCP: Python framework for MCP servers</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/fastmcp/"/>
+    <id>https://agentkitdrawer.com/directory/fastmcp/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>jlowin/fastmcp, now PrefectHQ/fastmcp: decorate a Python function and get an MCP server. For builders, not a CLAUDE.md pack.</summary>
+  </entry>
+  <entry>
+    <title>MCP reference servers: official educational examples</title>
+    <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/directory/mcp-reference-servers/"/>
+    <id>https://agentkitdrawer.com/directory/mcp-reference-servers/</id>
+    <published>2026-10-21T22:00:00-05:00</published>
+    <updated>2026-10-21T22:00:00-05:00</updated>
+    <summary>modelcontextprotocol/servers now holds a small set of reference MCP servers. The README says they are educational, not production-ready.</summary>
+  </entry>
   <entry>
     <title>Stop AI agents creating Supabase tables without RLS</title>
     <link rel="alternate" type="text/html" href="https://agentkitdrawer.com/supabase-rls-ai-agents/"/>

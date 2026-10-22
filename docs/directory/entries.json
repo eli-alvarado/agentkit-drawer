@@ -1,0 +1,771 @@
+{
+  "updated": "2026-10-21",
+  "indexMetaDescription": "Hand-picked agent kits, Cursor rules, CLAUDE.md templates, Claude Code plugins and MCP setups. Twenty entries, each with a verified URL. No invented stats.",
+  "indexLede": "A free, curated list of agent kits, Cursor rules, CLAUDE.md and AGENTS.md templates, Claude Code skills or plugins, and MCP setups from other people. We wrote an honest page for each one. We are not the authors, and we do not invent popularity numbers.",
+  "entries": [
+    {
+      "slug": "agents-md",
+      "name": "AGENTS.md",
+      "heading": "AGENTS.md, the open format coding agents already look for",
+      "title": "AGENTS.md open format: a README for coding agents",
+      "metaDescription": "What the AGENTS.md format is, who should write one, and how a one-file AgentKit pack differs from the empty convention.",
+      "url": "https://agents.md/",
+      "creator": "Agentic AI Foundation / community",
+      "license": "Open Markdown format; no required fields or schema",
+      "tools": [
+        "cursor",
+        "claude-code",
+        "codex",
+        "windsurf"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-00",
+      "card": "A short, open convention: put project instructions in AGENTS.md so Cursor, Codex, Claude Code and other tools have one place to read.",
+      "lede": "AGENTS.md is not a product and not a rules pack. It is a name and a habit: keep agent instructions in a plain Markdown file at the repo root so humans and tools know where to look.",
+      "what": [
+        "The site at agents.md describes a simple open format for guiding coding agents. There is no schema, no required heading, and no installer. You write ordinary Markdown: setup commands, how to test, the never-do list, and anything a new teammate would otherwise have to ask in Slack.",
+        "The point of a separate file is that README.md stays for people. AGENTS.md holds the extra, sometimes fussy context that agents need and that clutters a human quick-start. Nested files in a monorepo let a package refine the root file. The closest file wins when instructions conflict; a direct chat prompt still beats the file.",
+        "Stewardship now sits with the Agentic AI Foundation under the Linux Foundation. The page lists tools that already look for the filename, including Codex, Cursor, Amp, Jules and Factory. That list will keep moving. The format itself stays boring on purpose."
+      ],
+      "who": [
+        "Anyone who wants one instruction file that several coding agents can share. If you bounce between Cursor, Claude Code and Codex, a root AGENTS.md is the cheapest way to stop repeating yourself in three proprietary files.",
+        "It is also the right starting point when you do not yet know which tool will stick. You can add a thin CLAUDE.md or .cursor/rules later. You should not start with a 400-line wish list copied from a random gist."
+      ],
+      "take": [
+        "The strength is the lack of ceremony. You can write a useful AGENTS.md in twenty minutes and commit it today. Tools that already search for the name will pick it up without a plugin.",
+        "The limit is that a format does not write the rules. An empty or vague file does nothing. Agents still skip lines, invent commands, and disable safety checks unless you name the commands and the never-dos in concrete language. The site will not tell you what to put in a Next.js or FastAPI repo.",
+        "Treat AGENTS.md as the shared source of truth, then add tool-specific files only when a tool needs extra shape. That is the same advice we give in our comparison guide, and it still holds."
+      ],
+      "compare": [
+        "AgentKit Drawer sells filled-in files, not the format. One-File Agent Rules is a short AGENTS.md with a plan gate, verify-before-done, eight slash-style commands and optional stack modules. If you already know how you want the agent to work, write your own file from agents.md and stop there.",
+        "If you want a starting file that already encodes those workflow rules, the $9 pack is the closer match. The stack packs go further: scoped Cursor rules, Claude Code hooks, checklists. None of them replace the open format. They sit on top of it."
+      ]
+    },
+    {
+      "slug": "awesome-cursorrules",
+      "name": "awesome-cursorrules",
+      "heading": "awesome-cursorrules: a large public pile of Cursor .mdc files",
+      "title": "awesome-cursorrules: community Cursor .mdc files",
+      "metaDescription": "PatrickJS's public Cursor rules collection: what the .mdc dump is good for, where quality slips, and how it differs from a scoped Next.js pack.",
+      "url": "https://github.com/PatrickJS/awesome-cursorrules",
+      "creator": "PatrickJS and contributors",
+      "license": "CC0-1.0",
+      "tools": [
+        "cursor"
+      ],
+      "stacks": [
+        "nextjs",
+        "python",
+        "any"
+      ],
+      "relatedPack": "drw-01",
+      "card": "A CC0 GitHub collection of Cursor project rules as .mdc files, covering many stacks. Copy one into .cursor/rules and edit it before you trust it.",
+      "lede": "awesome-cursorrules is the collection most people find first when they search for Cursor rules. It is a library, not a single opinionated kit.",
+      "what": [
+        "The repository collects community Cursor rules, mostly as <code>.mdc</code> files meant for <code>.cursor/rules/</code>. There is a large <code>rules/</code> tree and a smaller <code>rules-new/</code> set. Entries range from Next.js and FastAPI to Cypress, Flutter, clean-code slogans and one-off product prompts.",
+        "You pick a file that looks close to your stack, copy it into your repo, and keep the YAML frontmatter Cursor needs (<code>description</code>, <code>globs</code>, <code>alwaysApply</code>). The project documents the shift away from a single root <code>.cursorrules</code> file toward scoped project rules.",
+        "Because the license is CC0, reuse is easy. That also means there is no central quality bar. Files are contributed at different times, for different Cursor versions, and they are not a supported product."
+      ],
+      "who": [
+        "Cursor users who want examples before writing their own rules. If you have never seen a glob-scoped <code>.mdc</code> file, reading three or four from this repo is useful.",
+        "It is a poor fit if you expected a maintained pack for one stack. There is no installer, no test suite, and no promise that the Next.js file matches the App Router version you are on."
+      ],
+      "take": [
+        "The breadth is the reason this repo stays useful. You can see how other people phrase a FastAPI rule or a testing rule and steal the shape, not the whole file.",
+        "The limit is quality drift. Some files still read like Next.js 14 blog posts. Some are generic \"write clean code\" lists that waste context. A few are marketing prompts for a specific SaaS. Always read the file, cut it down, and pin versions that match your repo.",
+        "We would not drop an entire folder from this collection into a production app. One or two scoped files, edited, is the honest use."
+      ],
+      "compare": [
+        "Our Vibe Starter pack is the opposite shape: few files, one stack (Next.js + Supabase + Stripe), and rules aimed at mistakes we keep seeing, like RLS-off migrations and trusting the Stripe redirect. awesome-cursorrules will not teach those.",
+        "If you only need a Next.js style file and you will edit it, start with their <code>nextjs.mdc</code> and our free RLS snippet. If you want the auth, webhook and launch-checklist set, that is the paid pack, not this repo."
+      ]
+    },
+    {
+      "slug": "cursor-rules-docs",
+      "name": "Cursor project rules",
+      "heading": "Cursor's own rules docs: how .mdc files actually attach",
+      "title": "Cursor project rules docs: .mdc frontmatter explained",
+      "metaDescription": "Official Cursor documentation for .cursor/rules: alwaysApply, globs, and why a plain .md file is ignored. Not a kit, still the source of truth.",
+      "url": "https://cursor.com/docs/rules",
+      "creator": "Cursor",
+      "license": "Vendor documentation (not a software license)",
+      "tools": [
+        "cursor"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-00",
+      "card": "Official Cursor documentation for project rules in .cursor/rules. Explains .mdc frontmatter, globs, and when a rule is ignored.",
+      "lede": "Before you copy a community rules pack, read the page that defines the format. Cursor's rules docs are short and they settle arguments that GitHub comments get wrong.",
+      "what": [
+        "The docs explain that project rules live in <code>.cursor/rules</code> as <code>.mdc</code> files and are version-controlled. A plain <code>.md</code> file in that folder is ignored because it has no frontmatter. If you want a simple always-on Markdown file, Cursor points you at AGENTS.md instead.",
+        "Frontmatter controls attachment. <code>alwaysApply: true</code> injects the rule every chat. A <code>globs</code> list attaches when a matching file is in context. A <code>description</code> without globs lets the agent pull the rule when it thinks it is relevant. Omit both and the rule is manual: you <code>@</code>-mention it.",
+        "You can create a rule with <code>/create-rule</code> in Agent or from Customize → Rules. Nested folders under <code>.cursor/rules</code> are for organizing files, not for scoping. Subprojects can have their own <code>.cursor/rules</code> directory."
+      ],
+      "who": [
+        "Anyone writing or reviewing Cursor rules. If you maintain a pack, this page is the spec you should match. If you only use Claude Code, you can skip it.",
+        "It is also the page to send a teammate who pasted a 200-line <code>.md</code> into <code>.cursor/rules</code> and wondered why nothing happened."
+      ],
+      "take": [
+        "The strength is that it is first-party and current enough to trust on mechanics. Community posts still recommend a root <code>.cursorrules</code> file; this page is clearer about project rules and AGENTS.md.",
+        "The limit is the obvious one: it will not give you stack rules. There is no RLS example, no FastAPI ownership check, no Godot scene-tree warning. You still have to write the content or copy it from somewhere you trust.",
+        "We treat this as required reading, not as a kit. Our own <code>.mdc</code> files follow the frontmatter described here."
+      ],
+      "compare": [
+        "One-File Agent Rules is an AGENTS.md, which Cursor will read if you put it at the repo root. The stack packs add scoped <code>.mdc</code> files that use the globs and descriptions this page defines.",
+        "If you are choosing between \"learn the format\" and \"buy a pack,\" read this page first. Then decide whether you want to write the Next.js or FastAPI content yourself."
+      ]
+    },
+    {
+      "slug": "awesome-claude-code",
+      "name": "awesome-claude-code",
+      "heading": "awesome-claude-code: a hand-picked index, not an installer",
+      "title": "awesome-claude-code: curated Claude Code resources",
+      "metaDescription": "hesreallyhim's curated Claude Code list: skills, hooks, CLAUDE.md links and official docs. Useful for discovery, not a drop-in kit.",
+      "url": "https://github.com/hesreallyhim/awesome-claude-code",
+      "creator": "hesreallyhim and contributors",
+      "license": "License not clearly declared on the GitHub repo",
+      "tools": [
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "A curated list of Claude Code skills, hooks, CLAUDE.md examples and official docs. Follow the links; it does not install a kit for you.",
+      "lede": "This is the Awesome-list style index for Claude Code: commentary plus outbound links, including Anthropic's own skills repo and a long tail of community projects.",
+      "what": [
+        "The README groups official documentation, skills, hooks, commands, agents, CLAUDE.md examples and related tooling. Entries are annotated. Some point at Anthropic; many point at personal repos that may move or go stale.",
+        "It is a discovery surface. You do not clone this repository and get a working Claude Code setup. You read a section, open a link, and decide whether that project is still alive.",
+        "The maintainer is explicit about taste. That is useful. It is also one person's filter, so absence is not a verdict and inclusion is not a security review."
+      ],
+      "who": [
+        "People already using Claude Code who want to see what else exists beyond the official docs. If you are setting up your first CLAUDE.md, start with Anthropic's memory page or our short template, then come back here.",
+        "Skip it if you need a single folder you can copy into <code>.claude/</code> tonight. This list will send you to ten other repositories."
+      ],
+      "take": [
+        "As an index it is one of the better ones we found: it separates official material from community work and it does not pretend to be a product.",
+        "The limits are the usual Awesome-list limits. Links rot. Quality varies. A few entries are blog posts. GitHub does not show a clear SPDX license on the repo, so treat reuse of the list text as something to check.",
+        "Use it to find two or three projects, then evaluate those projects on their own. Do not install everything it mentions."
+      ],
+      "compare": [
+        "Our Claude Code Kit is a small, opinionated setup: CLAUDE.md, six subagents, slash commands and hooks that block dangerous Bash and protect secrets. It is not an index.",
+        "If you are still exploring the ecosystem, this list is the right tab. If you want a finite set of files for one repo, use the kit or write the files from our free hooks guide."
+      ]
+    },
+    {
+      "slug": "claude-code-templates",
+      "name": "Claude Code Templates",
+      "heading": "Claude Code Templates: an npx catalog of agents, hooks and MCP",
+      "title": "Claude Code Templates: npx agents, hooks and MCP",
+      "metaDescription": "davila7's Claude Code Templates (aitmpl.com): a large installable catalog. Handy for browsing, easy to over-install.",
+      "url": "https://github.com/davila7/claude-code-templates",
+      "creator": "davila7",
+      "license": "MIT",
+      "tools": [
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "A MIT-licensed CLI and site (aitmpl.com) that installs Claude Code agents, commands, hooks, settings and MCP configs from a large catalog.",
+      "lede": "Claude Code Templates is the opposite of a single CLAUDE.md: a browsable catalog you install with <code>npx claude-code-templates@latest</code>.",
+      "what": [
+        "The project ships agents, custom commands, settings, hooks, MCP integrations and skills. The README shows one-liners that pull a frontend-developer agent, a test generator, a GitHub MCP, or a pre-commit hook. There is also an interactive browser and extra commands for analytics and a conversation monitor.",
+        "The companion site aitmpl.com is the human interface for the same catalog. Both the GitHub repo and the site resolved when we checked them.",
+        "Because installation is a command, it is easy to add several components to a project you have not read. Each component is someone else's prompt and, for MCP entries, someone else's network access."
+      ],
+      "who": [
+        "Claude Code users who want to try a specialist agent or a hook without writing the YAML themselves. Useful for demos, spike projects and for seeing how other people structure a command file.",
+        "Less useful as the long-term source of truth for a production app. You still need project facts, real commands and a never-do list that match <em>your</em> repo."
+      ],
+      "take": [
+        "The installer is the strength. A lot of Claude Code material is copy-paste from screenshots; this project treats components as packages.",
+        "The limit is volume and trust. A catalog this wide will include stale MCP ids, overlapping agents and prompts that fight your CLAUDE.md. Read the component before you install it. Do not pass <code>--yes</code> on a repo that can touch production.",
+        "We have not audited the catalog. MIT on the repo is not a review of every agent it can install."
+      ],
+      "compare": [
+        "The Claude Code Kit is a closed set we wrote and can describe line by line. Templates is a storefront. If you want least-privilege subagents and four specific hooks, buy or copy a small kit. If you want to browse fifty agents, use the catalog and then delete most of them.",
+        "The two can coexist: keep a short CLAUDE.md you own, and install one command you actually understand."
+      ]
+    },
+    {
+      "slug": "superpowers",
+      "name": "Superpowers",
+      "heading": "Superpowers: a skills plugin that argues for process first",
+      "title": "Superpowers: Claude Code skills for TDD and plans",
+      "metaDescription": "obra/superpowers is a MIT-licensed Claude Code plugin for brainstorming, plans, TDD and review. Strong discipline, heavy for a spike.",
+      "url": "https://github.com/obra/superpowers",
+      "creator": "Jesse Vincent (obra)",
+      "license": "MIT",
+      "tools": [
+        "claude-code",
+        "cursor"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "A MIT-licensed skills framework that makes the agent brainstorm, write a plan, test first and review before it calls the work done.",
+      "lede": "Superpowers is a plugin, not a stack pack. Installed, it tries to change how the agent works on <em>any</em> repo: questions first, tests first, evidence before \"done.\"",
+      "what": [
+        "The Claude Code install path is the official marketplace (<code>/plugin install superpowers@claude-plugins-official</code>) or the Superpowers marketplace. Other harnesses have their own install notes in the README.",
+        "Skills cover brainstorming, git worktrees, writing plans, subagent-driven development, test-driven development, code review and finishing a branch. The README presents these as a workflow, not a menu of optional tips. The agent is supposed to check for a relevant skill before it starts a task.",
+        "That is a methodology in plugin form. It does not ship Next.js RLS rules or a FastAPI Alembic checklist. It ships behavior."
+      ],
+      "who": [
+        "Teams that already believe in TDD and written plans and want the agent to share those habits. Also solo developers who keep watching Claude skip the test run.",
+        "A bad fit for a three-hour prototype, a design jam, or a repo with no test runner. The plugin will spend your time on process you may not want yet."
+      ],
+      "take": [
+        "The honest strength is that it attacks a real failure mode: agents that start editing before they know the task, then declare victory without running anything. Forcing a plan and a failing test is a legitimate fix.",
+        "The honest limit is friction. Brainstorming and design docs are token-heavy. TDD on a brownfield module can stall. Skills that activate \"before any creative work\" will annoy you if you asked for a one-line rename.",
+        "We use some of these ideas in our own guides (plan first, verify before done). We would not install the whole plugin on every client repo without talking about it first."
+      ],
+      "compare": [
+        "Our Claude Code Kit is smaller and stack-shaped: subagents with least privilege, hooks that block <code>rm -rf</code> and <code>.env</code> reads, a Stop hook that can run tests. Superpowers is more ambitious about process and less specific about your framework.",
+        "If you want methodology, start with Superpowers and keep a short CLAUDE.md for project facts. If you want files that name your commands and your never-dos, start with the kit. They overlap on \"don't say done without tests,\" and that overlap is fine."
+      ]
+    },
+    {
+      "slug": "anthropic-skills",
+      "name": "Anthropic Agent Skills",
+      "heading": "Anthropic's skills repo: SKILL.md examples and a template",
+      "title": "Anthropic Agent Skills: official SKILL.md examples",
+      "metaDescription": "anthropics/skills is the official Agent Skills repo: a template, examples, and document skills that are source-available, not all Apache 2.0.",
+      "url": "https://github.com/anthropics/skills",
+      "creator": "Anthropic",
+      "license": "Mixed: many examples Apache 2.0; document skills are source-available, not OSS",
+      "tools": [
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "Official Agent Skills repository: SKILL.md format, a template, example skills, and the document skills Claude uses for pdf/docx/xlsx/pptx.",
+      "lede": "If you are going to write a Claude Code skill, this is the repo that defines the folder shape. It is a teaching set, and Anthropic says so.",
+      "what": [
+        "A skill is a folder with a <code>SKILL.md</code> file: YAML frontmatter (<code>name</code>, <code>description</code>) plus instructions Claude loads when the task matches. The repo has a template, a spec pointer, and example sets for creative work, technical tasks, enterprise comms and documents.",
+        "You can add it as a Claude Code marketplace (<code>/plugin marketplace add anthropics/skills</code>) and install <code>document-skills</code> or <code>example-skills</code>. The same examples appear for paid Claude.ai plans. The API can upload custom skills.",
+        "The README's disclaimer matters: implementations in the product may differ, and the skills are for demonstration. The docx/pdf/pptx/xlsx skills are source-available reference for production document code, not Apache 2.0."
+      ],
+      "who": [
+        "People authoring skills or plugins who need a correct <code>SKILL.md</code>. Also anyone who wants to see how Anthropic splits a large capability (PDF) into a skill folder instead of a giant CLAUDE.md.",
+        "Not a substitute for project memory. A skill that generates an MCP server will not tell Claude how <em>your</em> FastAPI app runs tests."
+      ],
+      "take": [
+        "First-party examples are the right place to learn the format. The template is small. The document skills are the rare look at a skill that ships in the product.",
+        "The limit is purpose. Many examples are not software-engineering workflows. The repo will not give you a code-reviewer subagent or a hook that blocks force-push. Mixing Apache 2.0 examples with source-available document skills also means you should read the license in the folder you copy.",
+        "The Agent Skills standard is documented separately at agentskills.io; this repo is Anthropic's implementation and samples."
+      ],
+      "compare": [
+        "Our Claude Code Kit ships CLAUDE.md, subagents and hooks, not a gallery of SKILL.md files. If you want to add one custom skill later, copy Anthropic's template and keep the kit's memory file short.",
+        "Do not paste document-creation skills into a web-app repo and expect better RLS. Different jobs."
+      ]
+    },
+    {
+      "slug": "claude-plugins-official",
+      "name": "Claude plugins official",
+      "heading": "Anthropic's official Claude Code plugin directory",
+      "title": "Claude plugins official: Anthropic's marketplace repo",
+      "metaDescription": "anthropics/claude-plugins-official lists internal and partner plugins. Anthropic says it cannot verify third-party MCP inside them.",
+      "url": "https://github.com/anthropics/claude-plugins-official",
+      "creator": "Anthropic",
+      "license": "Apache-2.0",
+      "tools": [
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "The official Claude Code plugin directory: Anthropic-maintained plugins plus partner listings. Install with /plugin install name@claude-plugins-official.",
+      "lede": "This repository is the marketplace Claude Code already knows. Superpowers and other well-known plugins show up here. That does not make every plugin safe.",
+      "what": [
+        "The repo splits <code>/plugins</code> (Anthropic-maintained) and <code>/external_plugins</code> (partners and community). Install with <code>/plugin install {name}@claude-plugins-official</code> or from Discover. Plugin names are immutable slugs; renaming breaks existing installs unless a <code>renames</code> map is added.",
+        "A plugin can include commands, agents, skills, and an optional <code>.mcp.json</code>. Skill-bundle entries can list <code>SKILL.md</code> folders without a full <code>plugin.json</code>.",
+        "The README warning is unusually plain: Anthropic does not control what MCP servers or other software a plugin includes and cannot verify that plugins will work or will not change. Trust is still your job."
+      ],
+      "who": [
+        "Claude Code users who want the supported install path instead of copying files by hand. Also plugin authors who need the official layout and the submission form for external plugins.",
+        "If you do not use Claude Code, this repo does nothing for you."
+      ],
+      "take": [
+        "Having a first-party directory is better than random gists. Internal plugins have a reference implementation. External plugins at least passed a listing bar.",
+        "The limit is the warning they wrote themselves. A marketplace install can still pull an MCP server that writes to GitHub or Stripe. Review the plugin homepage and the MCP config before you enable it on a repo with secrets.",
+        "We list this because it is the real distribution channel, not because we endorse every plugin in it."
+      ],
+      "compare": [
+        "AgentKit Drawer is not a Claude Code plugin and is not listed here. The Claude Code Kit is a zip of files you copy: CLAUDE.md, <code>.claude/agents</code>, hooks. No marketplace, no surprise MCP.",
+        "Use the official directory to install Superpowers or a partner MCP. Use our kit when you want a known, small permission surface you can read in one sitting."
+      ]
+    },
+    {
+      "slug": "wshobson-agents",
+      "name": "wshobson/agents",
+      "heading": "wshobson/agents: one marketplace aimed at several coding tools",
+      "title": "wshobson/agents: multi-harness plugins and skills",
+      "metaDescription": "A MIT marketplace of plugins, agents and skills that install into Claude Code, Cursor, Codex and other harnesses. Broad, easy to over-enable.",
+      "url": "https://github.com/wshobson/agents",
+      "creator": "wshobson",
+      "license": "MIT",
+      "tools": [
+        "claude-code",
+        "cursor",
+        "codex"
+      ],
+      "stacks": [
+        "python",
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "A MIT plugin marketplace that targets Claude Code, Cursor, Codex, Copilot and more from one Markdown source. Install only the plugin you will read.",
+      "lede": "Most collections pick one tool. This one tries to be a shared source that each harness installs differently: marketplace for Claude Code and Cursor, generated artifacts for Copilot, OpenCode and others.",
+      "what": [
+        "The README describes a large catalog of plugins built from shared Markdown, plus agents, skills and commands. Claude Code setup is <code>/plugin marketplace add wshobson/agents</code> then install a named plugin such as <code>python-development@claude-code-workflows</code>. Other tools have <code>make install-*</code> routes.",
+        "Coverage includes Python and JavaScript development, review, testing, infrastructure and security. There is a capability matrix because not every harness supports hooks or MCP the same way.",
+        "The size is the product. You are not adopting one workflow; you are opening a store."
+      ],
+      "who": [
+        "Teams that already standardized on several coding agents and want the same specialist prompts in each. Also Python folks who want a FastAPI-oriented plugin without writing the agent file.",
+        "Skip it if you are still writing your first AGENTS.md. A 90-plugin catalog will hide the ten lines you actually need."
+      ],
+      "take": [
+        "Multi-harness packaging is the interesting idea. If you live in Claude Code on Monday and Codex on Tuesday, a shared source beats maintaining two trees.",
+        "The limit is cognitive load and surprise behavior. Generated adapters can drift from the Markdown. Plugins may register hooks or MCP you did not notice. Install one plugin, read what landed on disk, then decide.",
+        "We did not count the catalog ourselves for this page and we will not quote the README's totals as if we audited them."
+      ],
+      "compare": [
+        "Our Claude Code Kit and Python/FastAPI kit are small and stack-specific. wshobson/agents is a distribution channel. If you want ownership checks and Alembic rules for one API, the FastAPI kit is narrower on purpose.",
+        "A reasonable mix: their python-development plugin for extra agents, plus a short AGENTS.md you wrote (or ours) so the repo still has a source of truth when the plugin is off."
+      ]
+    },
+    {
+      "slug": "bmad-method",
+      "name": "BMad Method",
+      "heading": "BMad Method: agile skills that try to hold context across a project",
+      "title": "BMad Method: agile skills for AI coding agents",
+      "metaDescription": "bmad-code-org/BMAD-METHOD turns planning and delivery into named skills for Claude Code and Cursor. Powerful, currently split across v6 and preview v7.",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD",
+      "creator": "BMad Code",
+      "license": "README states MIT",
+      "tools": [
+        "claude-code",
+        "cursor",
+        "codex"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-00",
+      "card": "An open method that installs named skills (plan, build, clarify) into coding agents. Stable v6 via npx; v7 is a preview with a moving skill set.",
+      "lede": "BMad is a process you install, not a CLAUDE.md. It wants decisions written down so the next agent session is not guessing why the last one built a second auth system.",
+      "what": [
+        "The method adds named skills to tools such as Claude Code and Cursor. Some skills are for thinking: clarify, research, argue, write the brief. Others are for building: <code>bmad-build</code> takes a change and works it. Docs live at docs.bmad-method.org.",
+        "Two lines exist as of our check. Stable v6.12 installs with <code>npx bmad-method install</code> and is described as frozen aside from bug fixes. V7 is preview alpha on the default branch: <code>npx skills add bmad-code-org/BMAD-METHOD --skill '*'</code>, plus Claude Code and Codex marketplaces under <code>bmad-code-org/bmad-plugins</code>. The README says v7 skills and docs change often.",
+        "Setup writes project files (v7 mentions <code>_bmad/</code> and <code>_bmad-output</code>). This is a bigger footprint than a single rules file."
+      ],
+      "who": [
+        "People who want an agentic SDLC: briefs, plans, architecture notes, then implementation. Teams that lose context between chats are the intended user.",
+        "Too much ceremony for a weekend jam or a one-file script. If v7's moving pieces would break your week, the README tells you to stay on v6.12."
+      ],
+      "take": [
+        "The useful idea is that coding quality dies when the plan lives only in a chat transcript. Forcing artifacts is a real answer to that.",
+        "The limit is weight and churn. Preview v7 can break setups. The method will not know your Stripe webhook rules or your Godot InputMap policy. You still need project-specific never-dos.",
+        "GitHub's SPDX field was empty when we looked; the project README marks MIT. Check the license file in the branch you install."
+      ],
+      "compare": [
+        "One-File Agent Rules is a light workflow inside one AGENTS.md. BMad is a method with its own CLI and output folder. If you only need \"plan before you touch auth,\" the $9 file is enough.",
+        "We would not sell BMad as a competitor to a Next.js RLS pack. They solve different layers. Use BMad for the project story; use a stack pack for the framework landmines."
+      ]
+    },
+    {
+      "slug": "houshuang-claude-code",
+      "name": "houshuang/awesome-claude-code",
+      "heading": "A small Claude Code marketplace built from real sessions",
+      "title": "houshuang Claude Code plugins: session-tested hooks",
+      "metaDescription": "houshuang/awesome-claude-code is a plugin marketplace of hooks, skills and commands the author actually used. Some items are already superseded.",
+      "url": "https://github.com/houshuang/awesome-claude-code",
+      "creator": "houshuang",
+      "license": "License not clearly declared on the GitHub repo",
+      "tools": [
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-04",
+      "card": "A compact Claude Code marketplace: install one hook or skill at a time. The README marks items that Claude Code now does natively.",
+      "lede": "Unlike a giant Awesome list, this repo is itself a plugin marketplace. Each hook, skill, command and agent installs on its own.",
+      "what": [
+        "Inside Claude Code: <code>/plugin marketplace add houshuang/awesome-claude-code</code> then <code>/plugin install pr-walkthrough@awesome-claude-code</code> (or another name). Components are namespaced. You can also copy folders into <code>~/.claude/skills</code> or <code>.claude/commands</code>.",
+        "The README lists a finite set: hooks that block commits to main and lint after edits, skills for PR walkthroughs and Playwright, commands like <code>/commit</code> and <code>/catchup</code>, plus a few agents. Several rows are marked superseded because Claude Code grew a native equivalent.",
+        "That \"superseded, not deleted\" habit is the interesting editorial choice. The catalog is allowed to shrink in usefulness as the product catches up."
+      ],
+      "who": [
+        "Claude Code users who want one hook they have read, not a 90-plugin marketplace. The prevent-main-commit and post-edit-lint hooks are the obvious first installs.",
+        "If you need a full CLAUDE.md plus subagent suite, this is only a supplement."
+      ],
+      "take": [
+        "Small and honest beats large and stale. Marking superseded items is more trustworthy than silently leaving dead commands in a list.",
+        "Limits: no clear GitHub license when we checked, so copy/paste legal status is fuzzy. Namespacing makes installed commands longer. A few skills are frontend- or PR-documentation flavored, not backend-safety flavored.",
+        "We have not run the author's session count and we will not repeat it as a metric. The value is the finite list and the superseded labels, not a usage brag."
+      ],
+      "compare": [
+        "Our hooks guide and Claude Code Kit cover secret protection, <code>rm -rf</code>, and tests on Stop. This marketplace covers commit hygiene and a handful of workflow skills. Overlap is small.",
+        "Install their prevent-main-commit hook next to our settings.json hooks if both match how you work. Do not install both code-reviewer agents and then wonder which one ran."
+      ]
+    },
+    {
+      "slug": "context7",
+      "name": "Context7",
+      "heading": "Context7: pull current library docs into the agent, not the training cutoff",
+      "title": "Context7 MCP: current docs for coding agents",
+      "metaDescription": "Upstash Context7 fetches version-specific library docs for agents via MCP or a CLI skill. It does not write your project rules.",
+      "url": "https://github.com/upstash/context7",
+      "creator": "Upstash",
+      "license": "MIT",
+      "tools": [
+        "mcp",
+        "cursor",
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": null,
+      "card": "An MIT MCP (and CLI skill) that fetches current, version-specific documentation so agents stop inventing last year's API.",
+      "lede": "Context7 is a documentation tool for agents. It does not know your repo. It knows how to pull library docs that are newer than the model's memory.",
+      "what": [
+        "The README's pitch is the usual failure: the model writes a Next.js API that was renamed, or a Supabase client call from an old major. Context7 resolves a library and returns current examples into the session.",
+        "You can run it as MCP (<code>https://mcp.context7.com/mcp</code> or a local server) or as a CLI-backed skill that shells out to <code>ctx7</code>. The skill path is aimed at agents that prefer commands over large MCP tool schemas.",
+        "It is a hosted product with a public repo. An API key is recommended for the hosted MCP. That is a vendor relationship, not just a file you copy."
+      ],
+      "who": [
+        "Anyone whose agent keeps hallucinating framework APIs. Especially useful on fast-moving stacks: Next.js, Supabase, Stripe, Playwright.",
+        "Not useful as a substitute for AGENTS.md. Current docs will not tell the agent to plan first or to leave RLS enabled."
+      ],
+      "take": [
+        "This is one of the few MCP servers that pays rent on a typical coding session. Wrong APIs waste more time than missing GitHub issue tools.",
+        "Limits: you are sending library questions to someone else's service. Docs can still be incomplete. The agent can ignore the fetched snippet. Context7 will not stop a bad architectural choice; it only refreshes the reference material.",
+        "We are not affiliated with Upstash. The repo is MIT; the hosted service has its own terms."
+      ],
+      "compare": [
+        "None of our packs fetch live docs. They freeze rules that docs will never mention: do not disable RLS to unblock a query, do not grant entitlements on <code>/success</code>. Use Context7 beside a rules file, not instead of one.",
+        "No pack CTA here on purpose. This is infrastructure. Buy a kit if you need the never-do list; add Context7 if your model is behind the framework."
+      ]
+    },
+    {
+      "slug": "playwright-mcp",
+      "name": "Playwright MCP",
+      "heading": "Playwright MCP: let the agent drive a browser through the accessibility tree",
+      "title": "Playwright MCP: accessibility-tree browser tools",
+      "metaDescription": "Microsoft's official Playwright MCP gives agents structured browser tools. The README also steers coding agents toward CLI + skills for token cost.",
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "creator": "Microsoft",
+      "license": "Apache-2.0",
+      "tools": [
+        "mcp",
+        "cursor",
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": null,
+      "card": "Official Playwright MCP server. Agents get accessibility snapshots instead of screenshots. Coding agents may prefer the newer CLI + skills path.",
+      "lede": "This is Microsoft's MCP server for Playwright. It is a real browser tool, and the README is unusually honest about when you should not use MCP at all.",
+      "what": [
+        "The server lets an MCP client launch Playwright and operate pages via the accessibility tree: navigate, click, type, inspect. No vision model required. Typical install is <code>npx @playwright/mcp@latest</code> in the client's MCP config.",
+        "The same README now compares MCP to Playwright's CLI + skills. For coding agents, CLI calls can be cheaper because they avoid dumping large tool schemas and verbose snapshots into context. MCP still fits long, stateful browser loops.",
+        "Requirements are ordinary: Node 18+, any MCP client (Cursor, Claude Desktop, VS Code, Windsurf, and others listed in the repo)."
+      ],
+      "who": [
+        "People writing or repairing end-to-end tests, or agents that must click a real UI. Also useful for \"does this page actually render\" checks after a frontend change.",
+        "If you only want the agent to edit code and run <code>npx playwright test</code>, you may not need this server. A skill or a documented command in AGENTS.md can be enough."
+      ],
+      "take": [
+        "First-party Playwright, Apache 2.0, and a design that avoids screenshot-only agents. That combination is why this server shows up in every MCP list.",
+        "Limits: it can change the world (it drives a browser). It is not a rules pack. Token cost is real if you leave it connected all day. Microsoft themselves suggest CLI + skills for many coding sessions.",
+        "We are not quoting download counts. The repo is the source; pin a version in production instead of <code>@latest</code> if you care about reproducibility."
+      ],
+      "compare": [
+        "AgentKit Drawer does not ship a browser MCP. Our kits tell the agent when to run tests and what \"done\" means. Playwright MCP is how the agent <em>becomes</em> the test runner.",
+        "No related-pack button: none of the drawers are a Playwright setup. Put the test command in AGENTS.md, and add this server only if the agent must operate the UI itself."
+      ]
+    },
+    {
+      "slug": "github-mcp-server",
+      "name": "GitHub MCP Server",
+      "heading": "GitHub's official MCP: issues, PRs and Actions, with a read-only switch",
+      "title": "GitHub MCP Server: official issues, PRs and Actions",
+      "metaDescription": "github/github-mcp-server is GitHub's official MCP. Hosted or local, OAuth or PAT. Use read-only unless the agent should open PRs.",
+      "url": "https://github.com/github/github-mcp-server",
+      "creator": "GitHub",
+      "license": "MIT",
+      "tools": [
+        "mcp",
+        "cursor",
+        "claude-code"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": null,
+      "card": "Official GitHub MCP, MIT licensed. Hosted at the Copilot MCP endpoint or run locally. Enable write toolsets only if you mean it.",
+      "lede": "If the agent should open a PR or read an Actions log without a brittle <code>gh</code> scrape, this is the first-party server. It is also an easy way to let an agent rewrite a repository you did not intend to hand over.",
+      "what": [
+        "The server talks to GitHub: repositories, issues, pull requests, Actions, code search and security features, grouped into toolsets. You can run a local binary or use the hosted remote at GitHub's Copilot MCP URL, with OAuth or a personal access token.",
+        "A read-only mode drops write tools. That is the setting we would start with. Full write access means the agent can comment, label, open PRs or otherwise mutate the org, subject to the token's scopes.",
+        "This is not the archived community GitHub server in modelcontextprotocol/servers. GitHub maintains this one."
+      ],
+      "who": [
+        "Teams whose coding agent already lives in GitHub PRs. Useful for \"summarize the failing workflow\" and \"draft a PR from this branch\" if you accept the write path.",
+        "Skip it on a machine that also has a broad PAT in the environment and no human approval on tools. The failure mode is an agent that \"helps\" by commenting on twenty issues."
+      ],
+      "take": [
+        "Official and MIT is the right default for GitHub access. Toolsets and read-only are the controls that matter.",
+        "Limits: hosted MCP still means GitHub sees those tool calls. A PAT with repo scope is a credential; treat the MCP config like you treat <code>.env</code>. The server will not teach the agent your review standards.",
+        "We have no affiliation with GitHub beyond using the product."
+      ],
+      "compare": [
+        "Our kits never open PRs for you. They tell the agent how to write the diff. GitHub MCP is a platform connector.",
+        "No pack CTA. If you want review behavior, look at the Agent Builder pack's PR-reviewer prompt or the Claude Code code-reviewer subagent, and keep this server read-only until you need a write."
+      ]
+    },
+    {
+      "slug": "stripe-mcp",
+      "name": "Stripe MCP",
+      "heading": "Stripe MCP: search the API, then read or write with an agent key",
+      "title": "Stripe MCP: official API tools for coding agents",
+      "metaDescription": "Stripe's hosted MCP at mcp.stripe.com. OAuth or Agent-tagged keys. Useful for API truth; it will not fix a webhook that trusts /success.",
+      "url": "https://docs.stripe.com/mcp",
+      "creator": "Stripe",
+      "license": "Stripe product documentation (not an OSS license)",
+      "tools": [
+        "mcp",
+        "cursor",
+        "claude-code"
+      ],
+      "stacks": [
+        "stripe"
+      ],
+      "relatedPack": "drw-01",
+      "card": "Official hosted Stripe MCP. Agents search API methods, read or write, and search docs. Refunds ask for confirmation. Migrate off full-access keys.",
+      "lede": "Stripe's MCP server is a hosted API surface for agents, not a webhook tutorial. The docs page is the setup source; there is no community fork you should prefer.",
+      "what": [
+        "The server lives at <code>https://mcp.stripe.com</code>. Cursor, Claude Code, Codex and other clients get a short JSON snippet. Stripe also has <code>stripe agent setup</code> via the CLI to install the MCP plus skills for supported agents.",
+        "Tools are grouped on purpose: search API methods, get details, read, write, plus docs search, analytics and a few Treasury/Atlas extras. That search-then-execute shape keeps the tool list from matching the entire Stripe API one-to-one.",
+        "Auth is OAuth for interactive clients, or an Agent-tagged API key for autonomous ones. Stripe documents a migration: full-access secret keys and untagged restricted keys stop working. Confirm the date on the docs page when you set this up. Refunds and some money movement require human confirmation."
+      ],
+      "who": [
+        "People building or debugging Stripe integrations with an agent in the loop. Also support-style agents that need to look up a customer in a sandbox.",
+        "Do not point a write-enabled Stripe MCP at live mode on a laptop you use for casual chat. Sandbox first."
+      ],
+      "take": [
+        "The tool design is better than a naïve \"one tool per endpoint\" wrapper. Confirmation on refunds is the right default.",
+        "Limits: this will not fix application code that grants access on the success redirect. The agent can still call the wrong API well. Hosted MCP means Stripe sees the prompts' tool traffic. This is a vendor product, not a GitHub kit.",
+        "We sell Stripe webhook rules. We do not run Stripe's MCP for you."
+      ],
+      "compare": [
+        "Vibe Starter's Stripe rule is about <em>your</em> app: create Checkout server-side, verify webhooks on the raw body, grant entitlements only after <code>constructEvent</code>. Stripe MCP is about calling Stripe. You can use both.",
+        "If your agent keeps writing <code>/success</code> fulfillment, the pack (or our free webhook guide) is the fix. If your agent keeps inventing API shapes, the MCP is the fix."
+      ]
+    },
+    {
+      "slug": "supabase-mcp",
+      "name": "Supabase MCP",
+      "heading": "Supabase MCP: let the agent see the project, preferably read-only",
+      "title": "Supabase MCP: official project tools for agents",
+      "metaDescription": "supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.",
+      "url": "https://github.com/supabase/mcp",
+      "creator": "Supabase",
+      "license": "Apache-2.0",
+      "tools": [
+        "mcp",
+        "cursor",
+        "claude-code"
+      ],
+      "stacks": [
+        "supabase",
+        "nextjs"
+      ],
+      "relatedPack": "drw-06",
+      "card": "Official Supabase MCP (Apache 2.0). Hosted at mcp.supabase.com. Scope it with project_ref and read_only unless you want the agent altering tables.",
+      "lede": "Supabase's MCP server gives an assistant project context: tables, config, logs, SQL. That is powerful and, on a production project, easy to regret.",
+      "what": [
+        "The hosted endpoint is <code>https://mcp.supabase.com/mcp</code>. Clients use HTTP MCP and OAuth. You can generate a project-scoped URL in the dashboard. Docs also describe <code>http://localhost:54321/mcp</code> for the local CLI, with fewer tools and no OAuth.",
+        "Query parameters matter. <code>project_ref</code> pins one project. <code>read_only=true</code> runs SQL as a read-only role. Self-hosted Supabase has a more limited MCP.",
+        "The repo and the docs page both resolved. The docs walk through security practices; read those before you paste the JSON into Cursor."
+      ],
+      "who": [
+        "Next.js + Supabase teams whose agent keeps guessing the schema. A read-only connection is a reasonable default during feature work.",
+        "Not for a shared workshop laptop pointed at prod. Not a replacement for typed clients or for migrations you review."
+      ],
+      "take": [
+        "First-party, Apache 2.0, and a real read-only switch. Those three are why this belongs in a short directory.",
+        "Limits: any LLM connected to a database is a prompt-injection and data-exfil surface. The agent can still emit a migration that creates a table with RLS off; the MCP will not stop that unless you block writes. Local and self-hosted feature sets lag the hosted server.",
+        "We have no partnership with Supabase. Check their security page, not just this summary, before you enable writes."
+      ],
+      "compare": [
+        "Our Supabase + Next.js Agent Kit and the free RLS rule live in the repo: enable RLS in the same migration, per-command policies, never disable RLS to \"make it work.\" The MCP can show the agent the current schema; the kit tries to stop the next bad migration.",
+        "Use read-only MCP for inspection. Use the kit (or the free <code>.mdc</code>) for the files the agent edits. Writes through MCP are a separate decision."
+      ]
+    },
+    {
+      "slug": "awesome-mcp-servers",
+      "name": "awesome-mcp-servers",
+      "heading": "awesome-mcp-servers: the community index, not a server you run",
+      "title": "awesome-mcp-servers: community MCP server index",
+      "metaDescription": "punkpeye/awesome-mcp-servers is a MIT list of MCP servers. Use it to discover official endpoints, then verify the repo you install.",
+      "url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "creator": "punkpeye and contributors",
+      "license": "MIT",
+      "tools": [
+        "mcp"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": null,
+      "card": "A MIT Awesome list of MCP servers. Start here to find official GitHub, Stripe or browser servers, then open the real repo before you install.",
+      "lede": "This repository is a list. It will not start an MCP process. It is still the map most people use when they ask \"is there a server for X?\"",
+      "what": [
+        "The README catalogs servers by category with links out. The project homepage points at a hosted browser (glama.ai/mcp/servers). Entries appear, move and go stale the way all Awesome lists do.",
+        "The official MCP GitHub org now tells people to use the MCP Registry for published servers and keeps only reference implementations in modelcontextprotocol/servers. This list remains the broader, messier community view.",
+        "MIT covers the list text, not the licenses of the servers it links to."
+      ],
+      "who": [
+        "Someone shopping for a connector: browser, docs, issue tracker, database. Also useful when a blog post names a server and you want the upstream link.",
+        "Do not clone it as a dependency. Do not install a server from a list row without opening the source repo and checking auth."
+      ],
+      "take": [
+        "As a phone book it still works. Official servers for GitHub, Stripe, Playwright and Context7 are easier to find when you already know the name.",
+        "The limit is the format. Lists accumulate abandoned servers, duplicate unofficial wrappers and rows that never mention write access. A star sort (on any mirror) is not a security review. We will not quote star counts.",
+        "Prefer vendor docs once you know the product. Use this list only for discovery, then pin the server version you actually run."
+      ],
+      "compare": [
+        "We are a rules shop, not an MCP index. This directory page exists so you can find the index without us pretending we reviewed every server on it.",
+        "No pack CTA. If you came here looking for agent instructions, go back to AGENTS.md or a stack pack. If you came here looking for a connector, follow a link and read that server's README."
+      ]
+    },
+    {
+      "slug": "spec-kit",
+      "name": "Spec Kit",
+      "heading": "Spec Kit: GitHub's toolkit for spec-driven agent work",
+      "title": "Spec Kit: spec-driven process for coding agents",
+      "metaDescription": "github/spec-kit installs spec, plan and implement workflows into many coding agents. Process tooling, not a stack rules pack.",
+      "url": "https://github.com/github/spec-kit",
+      "creator": "GitHub",
+      "license": "MIT",
+      "tools": [
+        "cursor",
+        "claude-code",
+        "codex"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": "drw-00",
+      "card": "GitHub's MIT toolkit for spec-driven development and related processes. The specify CLI drops /speckit commands or skills into your agent.",
+      "lede": "Spec Kit is a process installer. It gives an agent a spec, a plan and a place to record outcomes, then wires that process into Cursor, Claude Code, Copilot, Codex and a long list of other tools.",
+      "what": [
+        "You install the CLI with <code>uv tool install specify-cli</code> (Python 3.11+ and uv) and run <code>specify init</code> with an integration key for your agent. That writes skills or commands such as <code>/speckit-*</code> into the tool's directory.",
+        "Built-in processes include spec-driven development, plus extensions for bug fixing and idea assessment. The project also documents presets, workflows, catalogs and air-gapped installs. Community catalog entries are not audits; the README says to review source before you run it.",
+        "This is GitHub-published and MIT licensed. It is not \"GitHub Copilot only.\" The integrations table is long and will change."
+      ],
+      "who": [
+        "Teams that want the agent to write a spec before code, especially on greenfield work or on a change that will outlive one chat. Also orgs that want a repeatable process across several coding tools.",
+        "Heavy for a typo fix. If your problem is \"the agent disabled RLS,\" a glob-scoped rule is faster than a spec ritual."
+      ],
+      "take": [
+        "Shipping a real CLI with agent integrations is more serious than a blog-post methodology. The split between SDD, bugfix and assessment is clearer than most \"just use agents\" kits.",
+        "Limits: you inherit Spec Kit's vocabulary and file layout. Agents can still produce a beautiful spec and wrong code. Catalog installs are a supply chain. The tool will not encode your Stripe or Godot conventions.",
+        "We did not run every integration. Check the docs for your agent before you promise it to a team."
+      ],
+      "compare": [
+        "One-File Agent Rules is a single AGENTS.md with a plan gate. Spec Kit is a process framework with a CLI. If you only need \"stop and show a plan when the task is large,\" the $9 file is lighter.",
+        "Use Spec Kit when the artifact (the spec) is the point. Use a stack pack when the landmine is the point. They can sit in the same repo if you keep AGENTS.md short and let Spec Kit own the spec files."
+      ]
+    },
+    {
+      "slug": "fastmcp",
+      "name": "FastMCP",
+      "heading": "FastMCP: the Python (and TypeScript) way to build an MCP server",
+      "title": "FastMCP: Python framework for MCP servers",
+      "metaDescription": "jlowin/fastmcp, now PrefectHQ/fastmcp: decorate a Python function and get an MCP server. For builders, not a CLAUDE.md pack.",
+      "url": "https://github.com/jlowin/fastmcp",
+      "creator": "Jeremiah Lowin / Prefect",
+      "license": "Apache-2.0",
+      "tools": [
+        "mcp"
+      ],
+      "stacks": [
+        "python"
+      ],
+      "relatedPack": "drw-05",
+      "card": "Apache-licensed MCP framework. FastMCP 1.0 landed in the official Python SDK; this repo is the actively maintained standalone project.",
+      "lede": "FastMCP is how a lot of Python MCP servers get written: decorate a function, run the module, the schema shows up. The well-known GitHub URL redirects to PrefectHQ/fastmcp.",
+      "what": [
+        "You declare tools, resources and prompts in Python. The framework handles schema generation, validation, transports and a client that can talk to other servers. There is a TypeScript counterpart under <code>@prefecthq/fastmcp-ts</code>.",
+        "FastMCP 1.0 was incorporated into the official MCP Python SDK. The standalone project continues and is the one this page links. The README's adoption claims are theirs; we are not repeating download figures.",
+        "This is a library for people building MCP, not a server you add to Cursor to get Stripe or GitHub."
+      ],
+      "who": [
+        "Python developers exposing internal tools to Claude, Cursor or any MCP client. Also useful if you want a typed client to someone else's server.",
+        "If you only need to <em>consume</em> Stripe or Supabase, use those official servers. You do not need FastMCP for that."
+      ],
+      "take": [
+        "For Python, this is the default framework in practice. The decorator API is the reason people reach for it instead of the lower-level SDK.",
+        "Limits: an MCP server is production software. Auth, authorization, prompt injection via tool results, and least privilege are on you. FastMCP will not write your AGENTS.md or your pytest layout.",
+        "Pin a version. \"The fast way\" still ships breaking changes like any active project. Read the changelog before you upgrade a server that already has clients in the wild."
+      ],
+      "compare": [
+        "Our Python/FastAPI kit is about the API you ship to users: ownership checks, Alembic, Pydantic v2, no blocking I/O in <code>async def</code>. FastMCP is about the API you ship to an agent.",
+        "If you are building an MCP server <em>inside</em> a FastAPI shop, use both: the kit for the HTTP service, FastMCP for the agent surface. Different processes, different threat models."
+      ]
+    },
+    {
+      "slug": "mcp-reference-servers",
+      "name": "MCP reference servers",
+      "heading": "Official MCP reference servers: examples, not production connectors",
+      "title": "MCP reference servers: official educational examples",
+      "metaDescription": "modelcontextprotocol/servers now holds a small set of reference MCP servers. The README says they are educational, not production-ready.",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "creator": "MCP steering group",
+      "license": "License not clearly declared on the GitHub repo (NOASSERTION)",
+      "tools": [
+        "mcp"
+      ],
+      "stacks": [
+        "any"
+      ],
+      "relatedPack": null,
+      "card": "The official repo of MCP reference servers (Fetch, Filesystem, Memory, and a few others). Learn from them; do not treat them as vendor products.",
+      "lede": "This used to be mistaken for \"the\" MCP app store. The README now says the opposite: a handful of reference servers, plus a pointer to the MCP Registry for published ones.",
+      "what": [
+        "Active reference servers include Everything (a test kitchen), Fetch, Filesystem, Git, Memory, Sequential Thinking and Time. They exist to show SDK usage and protocol features. TypeScript servers can be run with <code>npx</code>.",
+        "Older popular servers (GitHub, Slack, Postgres, Puppeteer and others) were archived to modelcontextprotocol/servers-archived. Some have official replacements elsewhere. If a 2025 blog post tells you to npx the old GitHub server, check this README before you do.",
+        "The maintainers warn that these examples are not production-ready and that you must apply your own threat model. Filesystem access in particular is a sharp edge."
+      ],
+      "who": [
+        "People learning to build or debug MCP. Also useful when you need a tiny Fetch or Time server in a test harness.",
+        "Not the place to get a supported GitHub or Slack integration. Those belong to the vendors now."
+      ],
+      "take": [
+        "The editorial cleanup is the useful part. The protocol org is no longer pretending to maintain every connector. Reference servers plus a registry is the healthier split.",
+        "Limits: GitHub showed no clear SPDX license when we checked. Some examples are still copied into production because they are easy. Filesystem and Git servers can mutate a machine. Sequential Thinking is a prompting toy, not a database.",
+        "Read the warning box in the README. It is there because people skipped it."
+      ],
+      "compare": [
+        "No AgentKit pack is an MCP server. Our Agent Builder pack is system prompts and evals for agents you host, which is a different layer than giving Claude a Fetch tool.",
+        "No pack CTA. If you are here to learn MCP, stay in this repo and the SDKs. If you are here to stop an agent breaking your app, go to a stack pack or a free guide."
+      ]
+    }
+  ]
+}

@@ -45,7 +45,7 @@ PACKS = {
         "name": "Vibe Starter Rules Pack",
         "price": "$19",
         "url": "https://buy.stripe.com/cNi4gy7kEfjJgWN7Zk7kc00",
-        "anchor": "/#drw-01",
+        "anchor": "/packs/#drw-01",
         "blurb": "AGENTS.md, CLAUDE.md, 8 scoped Cursor rules and launch checklists for Next.js App Router + Supabase + Stripe, including webhook and RLS rules community dumps usually skip.",
     },
     "drw-04": {
@@ -53,7 +53,7 @@ PACKS = {
         "name": "Claude Code Kit",
         "price": "$24",
         "url": "https://buy.stripe.com/5kQ3cuawQ6Ndayp0wS7kc04",
-        "anchor": "/#drw-04",
+        "anchor": "/packs/#drw-04",
         "blurb": "A small Claude Code setup: CLAUDE.md, 6 least-privilege subagents, 10 slash commands, settings.json permissions and 4 hooks. Stack-specific, not a marketplace.",
     },
     "drw-05": {
@@ -61,7 +61,7 @@ PACKS = {
         "name": "Python/FastAPI Backend Kit",
         "price": "$19",
         "url": "https://buy.stripe.com/28EdR88oI0oPeOF6Vg7kc05",
-        "anchor": "/#drw-05",
+        "anchor": "/packs/#drw-05",
         "blurb": "AGENTS.md, CLAUDE.md and scoped Cursor rules for FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic + pytest: ownership checks, migrations and testing.",
     },
     "drw-06": {
@@ -155,7 +155,7 @@ def guide_li(entry: dict) -> str:
 
 FOLLOW = """<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>"""
 
-NAV = '<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>'
+NAV = '<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/packs/">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>'
 FOOT = f'<footer class="wrap foot mono"><span>© 2026 AgentKit Drawer</span><a href="mailto:agentkitdrawer@agentmail.to">agentkitdrawer@agentmail.to</a><a href="/">Home</a> <a href="/guides/">Guides</a> <a href="/directory/">Directory</a> <a href="/about/">About</a> <a href="/contact/">Contact</a> <a href="/press/">Press</a> <a href="/refund/">Refunds</a> <a href="/privacy/">Privacy</a> <a href="/terms/">Terms</a>\n\n{FOLLOW}\n</footer>'
 SCRIPTS = '<script src="/links.js" defer></script><script defer src=\'https://static.cloudflareinsights.com/beacon.min.js\' data-cf-beacon=\'{"token": "f03cc499ace64ce3b05ec4f4dab95786"}\'></script>'
 

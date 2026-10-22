@@ -12,3 +12,4 @@
 - Extended /claude-code-claude-md-template/ with a "CLAUDE.md examples" section (target: "claude.md examples"); retitled "CLAUDE.md examples and template for Claude Code (2026)". Verified against code.claude.com/docs/en/memory.
 - Fixed subagents guide: "Exit 0 allows" was inaccurate (exit 0 = no decision, normal permission flow applies), body + FAQ JSON-LD.
 - Wired sitemap, llms.txt, feed.xml. No price, claim or checkout changes.
+- 2026-10-21 (Woody, PR #26 review): /directory/ launch with 20 entries. Checked: 5-word shingle overlap max Jaccard 0.078, 330+ unique shingles per page, unique titles (≤58 chars) and metas (≤152), self-canonicals, one H1, BreadcrumbList+TechArticle JSON-LD, all 20 outbound URLs 200 with rel=noopener, no ratings/star counts, prices match homepage. Added contextual links: 17 entries → closest guide, 4 guides → matching entry.

@@ -74,6 +74,85 @@ PACKS = {
     },
 }
 
+# Directory entry -> closest free guide (contextual internal link).
+RELATED_GUIDE = {
+    "agents-md": [
+        "agents-md-vs-claude-md-vs-cursor-rules",
+        "AGENTS.md vs CLAUDE.md vs .cursor/rules: which file does your AI agent read?"
+    ],
+    "anthropic-skills": [
+        "claude-code-subagents-hooks-guide",
+        "Claude Code subagents and hooks: examples and setup (2026)"
+    ],
+    "awesome-claude-code": [
+        "claude-code-hooks-examples",
+        "Claude Code hooks examples: 7 copy-paste settings.json hooks"
+    ],
+    "awesome-cursorrules": [
+        "cursor-rules-for-python",
+        "Cursor rules for Python: AGENTS.md template"
+    ],
+    "bmad-method": [
+        "codex-agents-md-template",
+        "Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions"
+    ],
+    "claude-code-templates": [
+        "claude-code-claude-md-template",
+        "CLAUDE.md examples and template for Claude Code (2026)"
+    ],
+    "claude-plugins-official": [
+        "claude-code-subagents-hooks-guide",
+        "Claude Code subagents and hooks: examples and setup (2026)"
+    ],
+    "context7": [
+        "cursor-rules-nextjs-supabase",
+        "Cursor rules for Next.js + Supabase (2026): a working .mdc setup"
+    ],
+    "cursor-rules-docs": [
+        "cursor-rules-nextjs-supabase",
+        "Cursor rules for Next.js + Supabase (2026): a working .mdc setup"
+    ],
+    "fastmcp": [
+        "fastapi-agents-md-cursor-rules",
+        "AGENTS.md and Cursor rules for FastAPI (2026)"
+    ],
+    "houshuang-claude-code": [
+        "claude-code-hooks-examples",
+        "Claude Code hooks examples: 7 copy-paste settings.json hooks"
+    ],
+    "playwright-mcp": [
+        "claude-code-stop-hook-tests",
+        "Claude Code Stop hook that runs tests (exit 2 blocks)"
+    ],
+    "spec-kit": [
+        "codex-agents-md-template",
+        "Codex AGENTS.md template (2026): OpenAI Codex CLI agent instructions"
+    ],
+    "stripe-mcp": [
+        "stripe-webhooks-ai-agents",
+        "Don't grant Stripe access on /success: verify webhooks"
+    ],
+    "supabase-mcp": [
+        "supabase-rls-ai-agents",
+        "Stop AI agents creating Supabase tables without RLS"
+    ],
+    "superpowers": [
+        "claude-code-subagents-hooks-guide",
+        "Claude Code subagents and hooks: examples and setup (2026)"
+    ],
+    "wshobson-agents": [
+        "claude-code-subagents-hooks-guide",
+        "Claude Code subagents and hooks: examples and setup (2026)"
+    ]
+}
+
+
+def guide_li(entry: dict) -> str:
+    g = RELATED_GUIDE.get(entry["slug"])
+    if not g:
+        return ""
+    return f'<li>Related guide: <a href="/{g[0]}/">{escape(g[1])}</a></li>\n'
+
 FOLLOW = """<span class="follow">Follow:<a href="https://x.com/agentkitdrawer" aria-label="AgentKit Drawer on X" title="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.3L6.4 22H3.3l7.3-8.3L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20z"/></svg></a><a href="https://bsky.app/profile/agentkitdrawer.bsky.social" aria-label="AgentKit Drawer on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.2 3.3C7.9 5.3 10.9 9.5 12 11.8c1.1-2.3 4.1-6.5 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6.1-.7 7-.9 3.1-4.1 3.9-6.9 3.4 4.9.8 6.2 3.6 3.5 6.4-5.1 5.2-7.3-1.3-7.9-3l-.1-.3-.1.3c-.6 1.7-2.8 8.2-7.9 3-2.7-2.8-1.4-5.6 3.5-6.4-2.8.5-6-.3-6.9-3.4C.4 10.4 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg></a><a href="https://www.youtube.com/@agentkitdrawer" aria-label="AgentKit Drawer on YouTube" title="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a><a href="https://www.tiktok.com/@agentkitdrawer" aria-label="AgentKit Drawer on TikTok" title="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6z"/></svg></a></span>"""
 
 NAV = '<nav aria-label="Main"><a href="/#demo">Demo</a><a href="/#drawers">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav>'
@@ -196,7 +275,7 @@ def write_detail(entry: dict) -> None:
 {paras(entry["compare"])}
 {related_cta(entry)}
 <nav class="related" aria-labelledby="rel-h"><h2 id="rel-h">More in the directory</h2><ul>
-<li><a href="/directory/">All curated kits</a></li>
+{guide_li(entry)}<li><a href="/directory/">All curated kits</a></li>
 <li><a href="/guides/">Free guides</a></li>
 </ul></nav>
 </main>

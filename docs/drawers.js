@@ -1,4 +1,4 @@
-// Open the drawer named in the URL hash (e.g. /#drw-04) and scroll to it.
+// Open the drawer named in the URL hash (e.g. /packs/#drw-04) and scroll to it.
 (function(){
   function go(){
     var id=location.hash.slice(1); if(!/^drw-0\d$/.test(id))return;

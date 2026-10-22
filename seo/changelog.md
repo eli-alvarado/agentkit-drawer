@@ -1,5 +1,9 @@
 # SEO changelog
 
+## 2026-10-22: post-#29 anchor audit (/packs/)
+- Grepped the whole repo (guides, directory pages + scripts/build-directory.py, llms.txt, llms-full.txt, feed, JSON-LD) for links to the removed homepage anchors /#drw-01..05, /#bundle, /#drawers: none left; all point to /packs/#... Only a code comment in drawers.js still said /#drw-04; updated.
+- /packs/ live: 200, self-canonical, unique title ("All AgentKit Drawer packs: AGENTS.md, Cursor rules and Claude Code kits") and meta, listed in sitemap.xml.
+
 ## 2026-10-20: week-one foundations (branch seo/2026-10-20-foundations)
 - Shortened titles on 6 guides (subagents/hooks 91→58, FastAPI 89→45, CLAUDE.md 75→53, game modding, Godot, system prompts) and descriptions on 3 to ~145-157 chars.
 - Added WebSite JSON-LD on home.

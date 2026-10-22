@@ -31,6 +31,29 @@ Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: enter your email i
 - [Blocking calls in FastAPI async def: what AI agents miss](https://agentkitdrawer.com/fastapi-async-blocking-ai-agents/)
 - [Claude Code Stop hook that runs tests (exit 2 blocks)](https://agentkitdrawer.com/claude-code-stop-hook-tests/)
 
+## Directory
+- [Curated directory](https://agentkitdrawer.com/directory/): hand-picked agent kits, Cursor rules, CLAUDE.md/AGENTS.md templates, Claude Code plugins and MCP setups from other creators. No invented stats. Featured slots are coming.
+- [AGENTS.md open format](https://agentkitdrawer.com/directory/agents-md/)
+- [awesome-cursorrules](https://agentkitdrawer.com/directory/awesome-cursorrules/)
+- [Cursor project rules docs](https://agentkitdrawer.com/directory/cursor-rules-docs/)
+- [awesome-claude-code](https://agentkitdrawer.com/directory/awesome-claude-code/)
+- [Claude Code Templates](https://agentkitdrawer.com/directory/claude-code-templates/)
+- [Superpowers](https://agentkitdrawer.com/directory/superpowers/)
+- [Anthropic Agent Skills](https://agentkitdrawer.com/directory/anthropic-skills/)
+- [Claude plugins official](https://agentkitdrawer.com/directory/claude-plugins-official/)
+- [wshobson/agents](https://agentkitdrawer.com/directory/wshobson-agents/)
+- [BMad Method](https://agentkitdrawer.com/directory/bmad-method/)
+- [houshuang/awesome-claude-code](https://agentkitdrawer.com/directory/houshuang-claude-code/)
+- [Context7](https://agentkitdrawer.com/directory/context7/)
+- [Playwright MCP](https://agentkitdrawer.com/directory/playwright-mcp/)
+- [GitHub MCP Server](https://agentkitdrawer.com/directory/github-mcp-server/)
+- [Stripe MCP](https://agentkitdrawer.com/directory/stripe-mcp/)
+- [Supabase MCP](https://agentkitdrawer.com/directory/supabase-mcp/)
+- [awesome-mcp-servers](https://agentkitdrawer.com/directory/awesome-mcp-servers/)
+- [Spec Kit](https://agentkitdrawer.com/directory/spec-kit/)
+- [FastMCP](https://agentkitdrawer.com/directory/fastmcp/)
+- [MCP reference servers](https://agentkitdrawer.com/directory/mcp-reference-servers/)
+
 ## Free files
 - [nextjs-supabase-rls.mdc](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/nextjs-supabase-rls.mdc): Cursor rule enforcing Supabase row-level security
 - [godot-jam-timeline.md](https://github.com/eli-alvarado/agentkit-drawer/blob/main/free/godot-jam-timeline.md): 48-hour Godot jam timeline for agents

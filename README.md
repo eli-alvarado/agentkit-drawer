@@ -10,6 +10,7 @@ Agents without project rules guess: they disable RLS, trust the Stripe redirect,
 - [Building AI agents](#building-ai-agents)
 - [How to install](#how-to-install)
 - [Full packs](#full-packs)
+- [Directory](https://agentkitdrawer.com/directory/): curated third-party agent kits, rules, templates and MCP setups. Data lives in [`docs/directory/entries.json`](docs/directory/entries.json); rebuild pages with `python3 scripts/build-directory.py`.
 
 ## Next.js + Supabase
 - [`free/nextjs-supabase-rls.mdc`](free/nextjs-supabase-rls.mdc): Cursor rule. Every migration enables RLS with per-command policies, uses `(select auth.uid())`, indexes policy columns, and never disables RLS "to make it work". [Guide →](https://agentkitdrawer.com/cursor-rules-nextjs-supabase/)

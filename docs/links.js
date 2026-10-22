@@ -11,13 +11,14 @@
 })();
 // Count Buy clicks per product/page (no cookies): beacon to the dl worker, tallied server-side.
 (function(){
-  try{var u=new URLSearchParams(location.search).get("utm_source");if(u)sessionStorage.setItem("akd_src",u.slice(0,40));}catch(e){}
+  try{var u=new URLSearchParams(location.search).get("utm_source");if(u)sessionStorage.setItem("akd_src",u.slice(0,40));if(new URLSearchParams(location.search).get("qa")==="1")sessionStorage.setItem("akd_qa","1");}catch(e){}
   document.addEventListener("click",function(e){
     var a=e.target&&e.target.closest&&e.target.closest('a[href*="buy.stripe.com/"]');if(!a)return;
     var q=new URL(a.href).searchParams,cr=q.get("client_reference_id")||"",i=cr.indexOf("_");
     var p=i>0?cr.slice(0,i):"",pg=i>0?cr.slice(i+1):"";if(!p)return;
     var src="";try{src=sessionStorage.getItem("akd_src")||"";}catch(e){}
-    var body=JSON.stringify({p:p,pg:pg,src:src});
+    var qa=false;try{qa=new URLSearchParams(location.search).get("qa")==="1"||q.get("qa")==="1"||sessionStorage.getItem("akd_qa")==="1";}catch(e){}
+    var body=JSON.stringify({p:p,pg:pg,src:src,cr:cr,utm:q.get("utm_content")||"",path:location.pathname,qa:qa});
     try{if(!(navigator.sendBeacon&&navigator.sendBeacon("https://dl.agentkitdrawer.com/c",new Blob([body],{type:"text/plain"}))))fetch("https://dl.agentkitdrawer.com/c",{method:"POST",body:body,keepalive:true,mode:"no-cors"});}catch(e){}
   },true);
 })();

@@ -196,8 +196,8 @@ def related_cta(entry: dict) -> str:
     pack = PACKS[pack_id]
     slug = entry["slug"]
     buy = (
-        f'{pack["url"]}?client_reference_id={pack_id}_{slug}'
-        f"&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=directory-{slug}&utm_content={pack_id}"
+        f'{pack["url"]}?client_reference_id={pack_id}_directory-{slug}'
+        f"&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=directory-{slug}&utm_content=directory-{slug}"
     )
     return (
         f'<div class="ctabox"><h2>Related AgentKit pack</h2>'

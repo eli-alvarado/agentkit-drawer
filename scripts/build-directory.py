@@ -209,6 +209,30 @@ def related_cta(entry: dict) -> str:
     )
 
 
+def starter_box(source: str) -> str:
+    """Email-gated free Starter AGENTS.md (same worker form as the homepage #free section)."""
+    fid = "dir-e"
+    js = (
+        "event.preventDefault();var f=this,m=f.querySelector('.news-m');fetch(f.action,{method:'POST',body:new FormData(f)})"
+        ".then(function(r){return r.json()}).then(function(d){m.textContent=d.ok?(d.sent===false?'You\\'re already on the list. Check your inbox (and spam) for AGENTS.md.'"
+        ":'Sent! Check your inbox for AGENTS.md (and spam, just in case).'):'That email looks off. Try again?';if(d.ok)f.reset()})"
+        ".catch(function(){m.textContent='Something broke. Email agentkitdrawer@agentmail.to instead.'})"
+    )
+    return (
+        '<section id="free" class="wrap news" aria-labelledby="news-h"><div class="news-in"><div>'
+        '<p class="mono news-k">FREE · 1 FILE · WORKS IN EVERY AGENT</p>'
+        '<h2 id="news-h">Try the free Starter AGENTS.md first</h2>'
+        '<p>A 40-line rules file that makes Cursor, Claude Code, Codex and Windsurf plan first, keep diffs small and run your tests '
+        'before saying "done". It works alongside anything in this directory. We email it to you instantly.</p></div>\n'
+        f'<form class="news-f" action="https://dl.agentkitdrawer.com/subscribe" method="post" onsubmit="{js}">\n'
+        f'<label class="sr" for="{fid}">Email</label><input id="{fid}" type="email" name="email" required placeholder="you@studio.dev" autocomplete="email">'
+        '<input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">'
+        f'<input type="hidden" name="source" value="{escape(source)}"><button class="btn" type="submit">Email me the file</button>'
+        '<p class="mono consent" style="flex-basis:100%;font-size:12px;margin:0">We email the file, one follow-up and a note when a new pack ships. '
+        'Unsubscribe anytime. <a href="/privacy/">Privacy</a></p><p class="news-m mono" role="status"></p></form></div></section>'
+    )
+
+
 def tag_pills(entry: dict) -> str:
     bits = [f'<span class="tag mono">{escape(TOOL_LABELS.get(t, t).upper())}</span>' for t in entry["tools"]]
     bits += [f'<span class="tag mono">{escape(STACK_LABELS.get(s, s).upper())}</span>' for s in entry["stacks"]]
@@ -279,6 +303,7 @@ def write_detail(entry: dict) -> None:
 <li><a href="/guides/">Free guides</a></li>
 </ul></nav>
 </main>
+{starter_box('directory-' + slug)}
 {FOOT}
 {SCRIPTS}</body></html>
 """
@@ -321,6 +346,7 @@ def write_index(data: dict) -> None:
 <p>{data["indexLede"]}</p>
 <p>This first cut is {len(entries)} hand-picked entries. We checked that each outbound URL resolves. We do not invent star counts, download numbers or rankings. Featured slots are coming later; nothing here is paid placement.</p>
 <p><a class="btn" href="mailto:hello@agentkitdrawer.com?subject=Directory%20submission">Submit a kit</a></p>
+<p class="kitnote"><strong>New to agent rules?</strong> Start with our <a href="#free">free Starter AGENTS.md</a> (one file, emailed instantly), then add a kit from this list.</p>
 </main>
 <section class="wrap guides dir-index" aria-label="Directory filters and listings">
   <div class="dir-filters" role="group" aria-label="Filter by tool">
@@ -337,6 +363,7 @@ def write_index(data: dict) -> None:
   </div>
   <p class="dir-empty" id="dir-empty" hidden>No entries match those filters. Clear a filter or <a href="mailto:hello@agentkitdrawer.com?subject=Directory%20submission">submit a kit</a>.</p>
 </section>
+{starter_box('directory')}
 {FOOT}
 <script src="/directory.js" defer></script>
 {SCRIPTS}</body></html>

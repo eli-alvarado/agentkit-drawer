@@ -33,3 +33,16 @@
     });
   });
 })();
+// After a successful free Starter signup, show the next step (the $9 full file) under the form.
+(function(){
+  document.querySelectorAll(".news-f .news-m").forEach(function(m){
+    var f=m.parentNode;
+    new MutationObserver(function(){
+      var t=m.textContent||"";if(!/^(Sent!|You're already)/.test(t)||f.querySelector(".news-up"))return;
+      var p=document.createElement("p");p.className="news-up mono";
+      p.appendChild(document.createTextNode("Next step: the full file adds stack modules (Next.js + Supabase, FastAPI, Node, Godot), /plan /review /ship commands and a self-review gate. "));
+      var a=document.createElement("a");a.href="/#one-file";a.textContent="See One-File Agent Rules ($9)";p.appendChild(a);
+      f.appendChild(p);
+    }).observe(m,{childList:true,characterData:true,subtree:true});
+  });
+})();

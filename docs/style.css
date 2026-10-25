@@ -240,3 +240,4 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
   .pg8 .pcell:nth-child(2n){border-right:2px solid var(--ink)}
   .pg8 .pcell:nth-child(1),.price-grid.pg8 .pcell.all{grid-column:1/-1;border-right:0}
 }
+.news-up{flex-basis:100%;margin:0;font-size:13px;padding:10px 12px;border:2px dashed var(--ink);color:var(--ink)}.news-up a{font-weight:700}

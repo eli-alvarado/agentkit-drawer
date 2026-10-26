@@ -21,8 +21,311 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"AgentKit Drawer","url":"https://agentkitdrawer.com/","inLanguage":"en"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"AgentKit Drawer","url":"https://agentkitdrawer.com","email":"agentkitdrawer@agentmail.to","sameAs":["https://x.com/agentkitdrawer","https://bsky.app/profile/agentkitdrawer.bsky.social","https://www.youtube.com/@agentkitdrawer","https://www.tiktok.com/@agentkitdrawer"]}</script>
-<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="style.css">
+<link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin><style data-inline="fonts/fonts.css">/* Archivo and JetBrains Mono, SIL Open Font License 1.1. Self-hosted. */
+/* latin-ext */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url(/fonts/Archivo-400-900-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url(/fonts/Archivo-400-900-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/JetBrainsMono-400-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/JetBrainsMono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/JetBrainsMono-400-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/JetBrainsMono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style data-inline="style.css">:root{--sh:#15130f;
+  --paper:#efeadf;--paper2:#e4ddcd;--ink:#15130f;--mut:#5d574b;--line:#15130f;
+  --acc:#ff5a1f;--acc-text:#a8380a;--acc-ink:#15130f;--ok:#1f7a3a;--bad:#c2261a;--warn:#9a6400;
+  --term:#14120f;--term-fg:#e9e3d6;--steel:#d6cfbf;
+  --display:"Archivo",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#12110e;--paper2:#1b1915;--ink:#ece6d8;--mut:#a39b8a;--line:#3a352c;
+  --acc:#ff6a33;--acc-text:#ff6a33;--sh:#000;--term:#0a0907;--steel:#2f2b24;--ok:#5fd27f;--bad:#ff6b5e;--warn:#e7b04a;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--display);font-stretch:100%;-webkit-font-smoothing:antialiased}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:24px;padding-right:24px}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;background:var(--acc);padding:8px 12px;z-index:9}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding-top:22px;padding-bottom:22px;border-bottom:2px solid var(--line)}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800;font-stretch:115%;text-decoration:none;letter-spacing:-.01em}
+.logo-box{display:grid;gap:2px;width:22px;padding:2px;border:2px solid var(--ink)}
+.logo-box i{height:4px;background:var(--ink)}.logo-box i:nth-child(2){background:var(--acc)}
+nav{display:flex;gap:22px;font-family:var(--mono);font-size:14px}
+nav a{text-decoration:none}nav a:hover{text-decoration:underline}
+
+.hero{padding-top:72px;padding-bottom:56px;display:grid;grid-template-columns:1.6fr 1fr;gap:48px;align-items:center}
+.mini-cab{border:3px solid var(--ink);background:var(--steel);padding:10px;display:grid;gap:10px;position:relative;margin-bottom:18px}
+.md{display:flex;flex-direction:column;gap:4px;align-items:center;padding:18px 14px 26px;background:var(--paper);border:2px solid var(--ink);text-decoration:none;font-weight:900;font-stretch:80%;font-size:1.05rem;position:relative;transition:transform .25s cubic-bezier(.3,1.4,.5,1),box-shadow .25s}
+.md span{font-size:11px;font-weight:600;background:var(--ink);color:var(--paper);padding:2px 6px}
+.md i{position:absolute;bottom:9px;width:56px;height:9px;border:2px solid var(--ink);border-radius:6px;background:var(--paper2)}
+.md:nth-child(2) i{background:var(--acc)}
+.md:hover,.md:nth-child(2){transform:translate(-14px,10px);box-shadow:14px -10px 0 rgba(0,0,0,.18)}
+.mini-cab:hover .md:nth-child(2):not(:hover){transform:none;box-shadow:none}
+.feet{position:absolute;left:14px;right:14px;bottom:-16px;display:flex;justify-content:space-between}.feet b{width:22px;height:14px;background:var(--ink)}
+.eyebrow{font-size:13px;color:var(--mut);margin:0 0 20px;letter-spacing:.02em}
+h1{font-size:clamp(2.6rem,7.4vw,6rem);line-height:.92;margin:0;font-weight:900;font-stretch:72%;letter-spacing:-.02em;text-transform:uppercase}
+.hl{background:linear-gradient(transparent 58%,var(--acc) 58% 92%,transparent 92%)}
+.sub{max-width:620px;font-size:1.15rem;color:var(--mut);margin:28px 0 32px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.promo{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin:24px 0 0;padding:12px 14px;border:2px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--acc);max-width:620px}
+.promo-label{flex-shrink:0;font-size:11px;font-weight:600;background:var(--ink);color:var(--paper);padding:3px 7px;letter-spacing:.04em}
+.promo p{margin:0;color:var(--mut);font-size:15px;line-height:1.45}
+.promo kbd,.promo-fine kbd,.fine kbd{font-family:var(--mono);font-weight:700;font-size:12px;background:var(--ink);color:var(--paper);padding:1px 6px}
+.promo-fine{margin:0 0 22px;font-size:13px;color:var(--mut)}
+.promo-fine b{color:var(--ink);font-weight:700}
+.ctabox .cta{margin-top:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--acc-ink);font-weight:800;font-stretch:110%;padding:14px 22px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--sh);text-decoration:none;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sh)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--sh)}
+.btn.ghost{background:transparent;color:var(--ink)}
+
+section{padding:48px 0}
+#demo{padding-bottom:88px}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-transform:uppercase;letter-spacing:-.01em;margin:0 0 12px;display:flex;align-items:baseline;gap:14px;line-height:1.02}
+.num{font-size:14px;font-weight:600;color:var(--acc-text);border:2px solid currentColor;padding:2px 6px;letter-spacing:0}
+.lede{color:var(--mut);margin:0 0 28px}
+
+.demo-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.toggle{display:inline-flex;border:2px solid var(--ink)}
+.toggle button{font:600 14px var(--mono);padding:10px 14px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+.toggle button[aria-checked=true]{background:var(--ink);color:var(--paper)}
+.term{background:var(--term);color:var(--term-fg);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--acc)}
+.term[data-mode=on]{box-shadow:8px 8px 0 var(--ok)}
+.term-bar{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid #2c2822;font-size:13px;color:#a39b8a}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:#3a352c}
+#term{margin:0;padding:18px 20px;min-height:330px;font-size:14.5px;line-height:1.75;white-space:pre-wrap}
+.ln{display:block;animation:in .18s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(3px)}}
+.ln.p{color:#fff;font-weight:600}.ln.d{color:#b9b1a1}.ln.w{color:#f0b24a}.ln.e{color:#ff6b5e}.ln.k{color:#6fdc8c}
+
+.cabinet{border:2px solid var(--ink);background:var(--steel);padding:10px;display:grid;gap:10px}
+.drawer{background:var(--paper);border:2px solid var(--ink)}
+.drawer summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:6px 20px;padding:20px 22px;position:relative}
+.drawer summary::-webkit-details-marker{display:none}
+.label{font-size:12px;font-weight:600;background:var(--ink);color:var(--paper);padding:3px 7px}
+.dname{font-size:clamp(1.25rem,2.6vw,1.8rem);font-weight:900;font-stretch:85%;text-transform:uppercase;line-height:1}
+.stack{grid-column:2;grid-row:2;font-size:13px;color:var(--mut)}
+.price{grid-column:3;grid-row:1/3;font-size:1.8rem;font-weight:900;font-stretch:80%}
+.handle{grid-column:4;grid-row:1/3;width:64px;height:14px;border:2px solid var(--ink);border-radius:8px;background:var(--paper2);transition:transform .2s}
+.drawer summary:hover .handle{transform:translateX(-4px)}
+.drawer[open] .handle{background:var(--acc)}
+.drawer[open] summary{border-bottom:2px dashed var(--line)}
+.drawer-body{display:grid;grid-template-columns:1fr 1.25fr;gap:24px;padding:24px 22px 26px;align-items:start}
+.contents{margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:10px}
+.contents li{padding-left:22px;position:relative}.contents li::before{content:"▪";position:absolute;left:0;color:var(--acc)}
+.file{margin:0;grid-row:1/3;grid-column:2;border:2px solid var(--ink);background:var(--term);color:var(--term-fg);min-width:0}
+.file figcaption{font-size:12px;padding:8px 12px;border-bottom:1px solid #2c2822;color:#a39b8a}
+.file pre{margin:0;padding:14px;font-size:12.5px;line-height:1.6;overflow-x:auto}
+.file .k{color:#8fc1ff}.file .c{color:#7d7566}.file .hlt{color:#ffd166}
+.buy{justify-self:start}
+.todo{display:block;font-size:11px;color:var(--mut);margin-top:-12px}
+
+.price-grid{display:grid;grid-template-columns:repeat(6,1fr) 1.6fr;border:2px solid var(--ink)}
+.pcell{padding:22px;min-height:150px;display:flex;flex-direction:column;gap:4px;border-right:2px solid var(--ink)}
+.pcell:last-child{border-right:0}
+.pcell .mono{font-size:12px;color:var(--mut)}
+.pcell b{font-size:2.6rem;font-weight:900;font-stretch:75%;line-height:1}
+.pcell.all{background:var(--ink);color:var(--paper)}
+.pcell.all .mono{color:var(--acc)}
+.pcell.all .btn{margin-top:12px;align-self:start;box-shadow:4px 4px 0 var(--acc);border-color:var(--acc)}
+.pcell.all .todo{margin-top:6px}
+.fine{font-size:13px;color:var(--mut);margin-top:14px}
+
+.steps{list-style:none;padding:0;margin:0;border:2px solid var(--ink)}
+.steps li{display:flex;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line);font-size:15px;overflow-wrap:anywhere}
+.steps li:last-child{border-bottom:0}
+.steps span{color:var(--acc-text);font-weight:600;flex-shrink:0}
+
+.faq details{border-top:2px solid var(--line);padding:4px 0}
+.faq details:last-child{border-bottom:2px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:800;font-stretch:95%;font-size:1.15rem;padding:16px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);color:var(--acc);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{margin:0 0 18px;color:var(--mut);max-width:720px}
+
+.foot{display:flex;gap:24px;flex-wrap:wrap;padding-top:28px;padding-bottom:40px;border-top:2px solid var(--line);font-size:13px;color:var(--mut)}
+
+@media (max-width:820px){
+  section{padding:48px 0}#demo{padding-bottom:64px}
+  .pcell b{font-size:2.2rem}
+  .hero{grid-template-columns:1fr}.mini-cab{display:none}
+  .file pre{white-space:pre-wrap;overflow-wrap:anywhere}
+  .top{flex-wrap:wrap;row-gap:10px}
+  .top nav{gap:16px;font-size:13px}
+  .top nav a:nth-child(1),.top nav a:nth-child(5),.top nav a:nth-child(6){display:none}
+  .hero{padding-top:44px}
+  .drawer summary{grid-template-columns:1fr auto;padding:16px}
+  .label{justify-self:start}
+  .dname{grid-column:1/-1}.stack{grid-column:1;grid-row:3}
+  .price{grid-column:2;grid-row:3;font-size:1.5rem}
+  .handle{position:absolute;right:16px;top:18px;width:44px;height:12px}
+  .drawer-body{grid-template-columns:1fr;padding:18px 16px}
+  .file{grid-row:auto;grid-column:auto}
+  .price-grid{grid-template-columns:1fr 1fr}
+  .pcell:nth-child(2n){border-right:0}
+  .pcell{border-bottom:2px solid var(--ink)}
+  .pcell.all{grid-column:1/-1;border-bottom:0}
+  .pcell:nth-child(3){grid-column:1/-1;border-right:0}.pcell:nth-child(5){border-right:0}
+  #term{font-size:13px;min-height:360px;padding:14px}
+  .term{box-shadow:5px 5px 0 var(--acc)}
+}
+/* article pages */
+.article{max-width:760px;padding-top:56px;padding-bottom:40px}
+.article h1{font-size:clamp(2.2rem,5.6vw,4rem)}
+.article h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-top:44px}
+.article p,.article li{color:var(--mut)}.article strong{color:var(--ink)}
+.snip{border:2px solid var(--ink);background:var(--term);color:var(--term-fg);margin:20px 0}
+.snip .bar{display:flex;justify-content:space-between;align-items:center;font:12px var(--mono);padding:8px 12px;border-bottom:1px solid #2c2822;color:#a39b8a}
+.snip button{font:600 12px var(--mono);background:var(--acc);color:#15130f;border:0;padding:5px 10px;cursor:pointer}
+.snip pre{margin:0;padding:16px;font:13px/1.6 var(--mono);overflow-x:auto;white-space:pre-wrap}
+.ctabox{border:2px solid var(--ink);padding:24px;margin:44px 0;background:var(--paper2)}
+.ctabox h2{margin-top:0}
+.crumb{font:13px var(--mono);color:var(--mut)}
+
+.news{margin-top:48px}.news-in{border:3px solid var(--ink);background:var(--paper2);padding:22px;display:grid;gap:16px;grid-template-columns:1fr 1fr;align-items:center}
+.news h2{margin:0 0 4px;font-stretch:80%}.news p{margin:0;color:var(--mut)}
+.news-f{display:flex;flex-wrap:wrap;gap:8px}.news-f input[type=email]{flex:1 1 200px;min-width:0;padding:12px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:inherit}
+.news-f input[type=email]:focus{outline:3px solid var(--acc);outline-offset:1px}.news-m{flex-basis:100%;min-height:1.2em;font-size:13px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:700px){.news-in{grid-template-columns:1fr}}
+
+/* free guides hub */
+.guides .more{margin-top:20px}
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gcard{display:flex;flex-direction:column;gap:6px;padding:18px 18px 20px;border:2px solid var(--ink);background:var(--paper);text-decoration:none;min-width:0;transition:transform .12s,box-shadow .12s}
+.gcard:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--sh)}
+.gcard .tag{font-size:11px;font-weight:600;color:var(--mut);letter-spacing:.02em}
+.gcard b{font-size:1.05rem;font-weight:800;font-stretch:90%;line-height:1.25;color:var(--ink)}
+.gcard .blurb{font-size:14px;color:var(--mut);line-height:1.45}
+.gcard.new{border-color:var(--acc);box-shadow:3px 3px 0 var(--acc)}
+@media (max-width:820px){.guide-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.guide-grid{grid-template-columns:1fr}}
+
+/* article extras */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:24px 0;border:2px solid var(--line)}
+.article .table-wrap{border:0;margin:24px 0}
+.article table{width:100%;min-width:520px;border-collapse:collapse;margin:0;font-size:14px}
+.article th,.article td{border:2px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.article th{background:var(--paper2);font-weight:800;font-stretch:95%;color:var(--ink)}
+.article td{color:var(--mut)}
+.article td strong{color:var(--ink)}
+.related{margin:40px 0 0;padding-top:22px;border-top:2px solid var(--line)}
+.related h2{margin-top:0}
+.related ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.related a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+@media (min-width:761px) and (max-width:1100px){.price-grid{grid-template-columns:repeat(3,1fr)}.price-grid .pcell.all{grid-column:1/-1;border-top:2px solid var(--ink)}.pcell:nth-child(3n){border-right:0}}
+.foot .follow{display:inline-flex;align-items:center;gap:.6rem}
+.foot .follow a{display:inline-flex;line-height:0}
+.foot .follow svg{width:16px;height:16px;display:block}
+.trust{margin:14px 0 0;font-size:13px;color:var(--mut)}.trust a{color:inherit}
+.pick{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;font-size:14px}
+.pick span{font-size:12px;color:var(--mut);margin-right:2px}
+.pick a{padding:4px 10px;border:2px solid var(--ink);text-decoration:none;color:var(--ink);font-weight:700;background:var(--paper)}
+.pick a:hover,.pick a:focus-visible{background:var(--ink);color:var(--paper)}
+.mini-cab .md{padding:12px 14px 22px}
+.drawer{scroll-margin-top:16px}
+.news-k{font-size:12px;letter-spacing:.08em;margin:0 0 6px!important;color:var(--acc)!important}
+.free-line{font-size:13px;margin:10px 0 0}.free-line a{color:inherit}
+.onefile{margin-top:48px}.upgrade{margin:14px 0 0;font-size:13px}.upgrade a{color:inherit}
+.pcell.first{outline:3px solid var(--acc);outline-offset:-3px}
+.kitnote{border-left:4px solid var(--ink);background:var(--paper2);padding:12px 16px;margin:28px 0}.kitnote p{margin:0}
+
+/* directory */
+.dir-tags{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
+.dir-tags .tag{border:2px solid var(--line);padding:2px 8px;font-size:11px;letter-spacing:.03em}
+.dir-meta{font-size:13px;color:var(--mut);margin:0 0 20px}
+.dir-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.dir-filter-label{font-size:12px;color:var(--mut);margin-right:4px}
+.dir-filters button{font:600 13px var(--mono);padding:7px 10px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer}
+.dir-filters button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.dir-count{font-size:13px;color:var(--mut);margin:8px 0 16px}
+.dir-empty{margin:20px 0;color:var(--mut)}
+.dir-index{padding-top:12px}
+#dir-grid .gcard[hidden]{display:none}
+
+/* Copyable install command (hero) */
+.cmdline{display:flex;align-items:stretch;gap:0;max-width:100%;margin:0 0 6px;border:2px solid var(--ink)}
+.cmdline code{flex:1;min-width:0;font-family:var(--mono);font-size:13px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.cmdline .copy{flex:none;border:0;border-left:2px solid var(--ink);background:var(--ink);color:var(--paper);font-size:13px;font-weight:700;padding:0 14px;cursor:pointer}
+.cmdline .copy:hover,.cmdline .copy:focus-visible{background:var(--acc);color:var(--ink)}
+.hero-copy{min-width:0}
+/* Short laptop screens (1366x768, 1280x720): keep the free Starter form above the fold */
+@media (min-width:821px) and (max-height:920px){.hero{padding-top:40px}.hero h1{font-size:clamp(2.6rem,min(7.4vw,10vh),6rem)}.hero .eyebrow{margin-bottom:14px}.hero .sub{margin:20px 0 22px}}
+/* Pricing grids sized to their cell count: home has 3 cells, /packs/ has 8 (DRW-00..06 + cabinet) */
+@media (min-width:821px){
+  .price-grid.pg3{grid-template-columns:repeat(3,1fr)}
+  .price-grid.pg8{grid-template-columns:repeat(4,1fr)}
+  .pg8 .pcell{border-right:2px solid var(--ink);border-bottom:0}
+  .pg8 .pcell:nth-child(4n){border-right:0}
+  .pg8 .pcell:nth-child(-n+4){border-bottom:2px solid var(--ink)}
+  .price-grid.pg8 .pcell.all{grid-column:auto;border-top:0}
+}
+@media (max-width:820px){
+  .pg3 .pcell:last-child{border-bottom:0}
+  .pg8 .pcell:nth-child(n){grid-column:auto;border-right:0}
+  .pg8 .pcell:nth-child(2n){border-right:2px solid var(--ink)}
+  .pg8 .pcell:nth-child(1),.price-grid.pg8 .pcell.all{grid-column:1/-1;border-right:0}
+}
+.news-up{flex-basis:100%;margin:0;font-size:13px;padding:10px 12px;border:2px dashed var(--ink);color:var(--ink)}.news-up a{font-weight:700}
+.launch-buy{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;margin:18px 0 26px}.launch-buy .fine{margin:0;flex:1 1 260px}
+.news-dl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;flex-basis:100%;margin:0 0 6px}.news-dl .mono{font-size:12px;color:var(--mut)}.news-opt{flex-basis:100%;margin:4px 0 0;font-weight:700}
+.news-f [hidden]{display:none!important}
+</style>
 <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Product", "name": "One-File Agent Rules", "sku": "DRW-00", "description": "One universal AGENTS.md for Cursor, Claude Code, Codex, Windsurf and Copilot: plan gate, verify-before-done, 8 built-in commands, self-review gate and stack modules for Next.js + Supabase, FastAPI, Node, React and Godot.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/#one-file", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "9.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Vibe Starter Rules Pack", "sku": "DRW-01", "description": "Rules for AI coding agents (Cursor, Claude Code, Codex) on Next.js App Router + Supabase + Stripe: AGENTS.md, CLAUDE.md, 8 scoped .cursor/rules (auth, RLS, Stripe webhooks, env/secrets, tests, UI), 12 slash-command prompts, 2 launch checklists.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#drw-01", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "19.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/cNi4gy7kEfjJgWN7Zk7kc00?client_reference_id=drw-01_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Game Jam Agent Kit", "sku": "DRW-02", "description": "AGENTS.md and rules for Godot 4 (GDScript) and Phaser game jams: scope control, InputMap-only input, @export feel numbers, jam timeline, prompts for prototyping and polish.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#drw-02", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "24.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/aFa5kCgVe0oPgWNfrM7kc01?client_reference_id=drw-02_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Agent Builder Prompt Pack", "sku": "DRW-03", "description": "10 production system-prompt templates for AI agents (PR reviewer, support triage, researcher, SQL analyst, docs Q&A and more), guardrail snippets, and 100 eval cases with a runner for any OpenAI-compatible API.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#drw-03", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "29.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/6oU3cueN68VleOFdjE7kc02?client_reference_id=drw-03_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "The Whole Cabinet", "sku": "BUNDLE", "description": "DRW-01 to DRW-03 (all 3 original packs) plus 12 months of updates. Saves $23.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#bundle", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "49.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/9B628q6gAgnNfSJdjE7kc03?client_reference_id=bundle_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Claude Code Kit", "sku": "DRW-04", "description": "Claude Code setup: CLAUDE.md, 6 subagents (planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer), 10 slash commands, settings.json permissions and 4 safety hooks.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#drw-04", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "24.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/5kQ3cuawQ6Ndayp0wS7kc04?client_reference_id=drw-04_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Python/FastAPI Backend Kit", "sku": "DRW-05", "description": "AGENTS.md, CLAUDE.md, 8 scoped Cursor rules and 10 prompts for FastAPI + SQLAlchemy 2 + Pydantic v2 + Alembic + pytest: security, migrations and testing rules.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/packs/#drw-05", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "19.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/28EdR88oI0oPeOF6Vg7kc05?client_reference_id=drw-05_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}, {"@context": "https://schema.org", "@type": "Product", "name": "Supabase + Next.js Agent Kit", "sku": "DRW-06", "description": "AGENTS.md, CLAUDE.md, 8 scoped Cursor rules, 10 prompts and a Claude Code RLS migration hook for Next.js App Router + Supabase: @supabase/ssr auth, RLS in every migration, typed queries, server-only secret key, Edge Functions and Stripe webhooks.", "brand": {"@type": "Brand", "name": "AgentKit Drawer"}, "url": "https://agentkitdrawer.com/supabase-nextjs-agent-kit/", "image": "https://agentkitdrawer.com/og.png", "offers": {"@type": "Offer", "price": "19.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://buy.stripe.com/bJeaEWcEYb3tcGx93o7kc07?client_reference_id=drw-06_home&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=home&utm_content=home", "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "US", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14, "returnFees": "https://schema.org/FreeReturn", "refundType": "https://schema.org/FullRefund", "merchantReturnLink": "https://agentkitdrawer.com/refund/"}, "seller": {"@type": "Organization", "name": "AgentKit Drawer"}}}]</script>
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#15130f"><meta name="twitter:title" content="AgentKit Drawer: rules your AI coding agent actually follows"><meta name="twitter:description" content="Drop-in AGENTS.md, Cursor rules and prompts for Next.js + Supabase, FastAPI, Claude Code, Godot jams and agent builders. From $9."></head>
 <body>

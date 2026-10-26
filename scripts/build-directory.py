@@ -189,6 +189,28 @@ def head(title: str, desc: str, canonical: str, og_type: str = "website") -> str
 {HEAD_ASSETS}<meta name="twitter:title" content="{t}"><meta name="twitter:description" content="{d}">"""
 
 
+# LAUNCH sprint (expires Wed Oct 28, 2026, 6:20 PM CT = 23:20 UTC). links.js hides [data-launch-end] after the deadline;
+# remove LAUNCH_BUY_ON / the markers once the promo is over (see scripts/launch-cleanup.md).
+LAUNCH_BUY_ON = True
+LAUNCH_END_UTC = "2026-10-28T23:20:00Z"
+
+
+def launch_buy(page: str) -> str:
+    if not LAUNCH_BUY_ON:
+        return ""
+    pack = PACKS["drw-06"]
+    href = (
+        f'{pack["url"]}?prefilled_promo_code=LAUNCH&client_reference_id=drw-06_launch-{page}'
+        f"&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=launch&utm_content=launch-{page}"
+    )
+    return (
+        f'<!-- LAUNCH-BUY:START --><p class="launch-buy" data-launch-end="{LAUNCH_END_UTC}">'
+        f'<a class="btn" href="{escape(href)}" target="_blank" rel="noopener noreferrer">DRW-06 $19, LAUNCH code ends Wed</a> '
+        f'<span class="fine mono">Supabase + Next.js Agent Kit. LAUNCH (30% off) pre-filled at Stripe checkout until Wed Oct 28, 6:20 PM CT. '
+        f'<a href="/supabase-nextjs-agent-kit/">What\'s inside</a></span></p><!-- LAUNCH-BUY:END -->'
+    )
+
+
 def related_cta(entry: dict) -> str:
     pack_id = entry.get("relatedPack")
     if not pack_id:
@@ -288,6 +310,7 @@ def write_detail(entry: dict) -> None:
 {tag_pills(entry)}
 <p class="dir-meta mono">By {escape(entry["creator"])} · License: {escape(license_note)}</p>
 <p>{entry["lede"]}</p>
+{launch_buy("directory-" + slug)}
 <p><a class="btn" href="{escape(entry["url"])}" target="_blank" rel="noopener">Open {escape(entry["name"])}</a></p>
 <h2>What it does</h2>
 {paras(entry["what"])}
@@ -391,6 +414,7 @@ def write_index(data: dict) -> None:
   </div>
   <p class="dir-empty" id="dir-empty" hidden>No entries match those filters. Clear a filter or <a href="mailto:hello@agentkitdrawer.com?subject=Directory%20submission">submit a kit</a>.</p>
 </section>
+<div class="wrap">{launch_buy("directory")}</div>
 {starter_box('directory')}
 {FOOT}
 <script src="/directory.js" defer></script>

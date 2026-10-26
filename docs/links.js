@@ -46,3 +46,33 @@
     }).observe(m,{childList:true,characterData:true,subtree:true});
   });
 })();
+// LAUNCH sprint: hide promo-only buy buttons once the code expires (Wed Oct 28, 2026, 6:20 PM CT).
+(function(){
+  document.querySelectorAll("[data-launch-end]").forEach(function(el){
+    var t=Date.parse(el.getAttribute("data-launch-end"));if(t&&Date.now()>=t)el.remove();
+  });
+})();
+// Free Starter is ungated: direct download first, email opt-in offered after (optional).
+(function(){
+  document.querySelectorAll("form.news-f").forEach(function(f){
+    if(f.querySelector(".news-dl"))return;
+    var sec=f.closest("section")||f.parentNode;sec.querySelectorAll("p").forEach(function(p){if(p.closest("form"))return;p.childNodes.forEach(function(t){if(t.nodeType===3)t.nodeValue=t.nodeValue.replace(/We email it to you instantly[^.]*\./,"Download it in one click, no email needed.");});});
+    var s=f.querySelector('input[name="source"]'),src=(s&&s.value)||"unknown",u="";
+    try{u=sessionStorage.getItem("akd_src")||"";}catch(e){}
+    var qa="";try{if(sessionStorage.getItem("akd_qa")==="1")qa="&qa=1";}catch(e){}
+    var box=document.createElement("div");box.className="news-dl";
+    var a=document.createElement("a");a.className="btn";a.textContent="Download AGENTS.md (free)";
+    a.href="https://dl.agentkitdrawer.com/starter/free?src="+encodeURIComponent(src)+(u?"&utm_source="+encodeURIComponent(u):"")+qa;
+    a.setAttribute("download","AGENTS.md");
+    var n=document.createElement("span");n.className="mono";n.textContent="No email needed.";
+    box.appendChild(a);box.appendChild(n);f.insertBefore(box,f.firstChild);
+    var rest=[].slice.call(f.children).filter(function(c){return c!==box&&!c.classList.contains("news-m");});
+    rest.forEach(function(c){c.hidden=true;});
+    var btn=f.querySelector('button[type="submit"]');if(btn)btn.textContent="Send me tips + new packs";
+    a.addEventListener("click",function(){
+      if(s&&!/-afterdl$/.test(s.value))s.value=(s.value+"-afterdl").slice(0,60);
+      n.textContent="Downloading. Want the setup tips and a note when a new pack ships? Optional:";
+      rest.forEach(function(c){if(!c.classList.contains("hp"))c.hidden=false;});
+    });
+  });
+})();

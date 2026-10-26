@@ -334,8 +334,36 @@ def write_index(data: dict) -> None:
         f'<button type="button" data-dim="stack" data-filter="{escape(s)}" aria-pressed="false">{escape(STACK_LABELS.get(s, s))}</button>'
         for s in stacks
     ]
+    # CollectionPage + ItemList + BreadcrumbList so search engines see the index as a list of entries.
+    collection = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Free directory of agent kits and MCP setups",
+        "description": data["indexMetaDescription"],
+        "url": canonical,
+        "isPartOf": {"@type": "WebSite", "name": "AgentKit Drawer", "url": f"{SITE}/"},
+        "publisher": {"@type": "Organization", "name": "AgentKit Drawer", "url": f"{SITE}/"},
+        "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": len(entries),
+            "itemListElement": [
+                {"@type": "ListItem", "position": i, "name": e["name"], "url": f"{SITE}/directory/{e['slug']}/"}
+                for i, e in enumerate(entries, 1)
+            ],
+        },
+    }
+    index_crumbs = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": "Directory", "item": canonical},
+        ],
+    }
     html = f"""{head("Free directory of agent kits and MCP setups | AgentKit Drawer", data["indexMetaDescription"], canonical)}
 <link rel="alternate" type="application/atom+xml" title="AgentKit Drawer guides" href="/feed.xml">
+<script type="application/ld+json">{json.dumps(index_crumbs, separators=(",", ":"))}</script>
+<script type="application/ld+json">{json.dumps(collection, separators=(",", ":"))}</script>
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>

@@ -18,3 +18,9 @@
 - Wired sitemap, llms.txt, feed.xml. No price, claim or checkout changes.
 - 2026-10-21 (Woody, PR #26 review): /directory/ launch with 20 entries. Checked: 5-word shingle overlap max Jaccard 0.078, 330+ unique shingles per page, unique titles (≤58 chars) and metas (≤152), self-canonicals, one H1, BreadcrumbList+TechArticle JSON-LD, all 20 outbound URLs 200 with rel=noopener, no ratings/star counts, prices match homepage. Added contextual links: 17 entries → closest guide, 4 guides → matching entry.
 - 2026-10-26 (Luca, daily ops): added CollectionPage + ItemList + BreadcrumbList JSON-LD to /directory/ (20 entries, generated in scripts/build-directory.py) and /guides/ (16 guides). Head-only change; no title, meta description, canonical, URL or sitemap changes.
+
+## 2026-10-26: home + /packs/ LCP, shorter titles, Godot FAQ
+- Home and /packs/: inlined fonts.css and style.css (marked `<style data-inline=…>`) to remove two render-blocking requests; audit LCP was 2.3 s (PSI mobile) / 2.6 s (local LH), LCP element the hero text. After editing style.css or fonts.css run `python3 scripts/inline-critical-css.py`.
+- Titles shortened: /agents-md-vs-claude-md-vs-cursor-rules/ 76→58, /supabase-nextjs-agent-kit/ 71→56, /packs/ 71→64 (no price text touched).
+- /agents-md-godot/: 5-question FAQ (visible + FAQPage JSON-LD) citing Godot docs (VCS, upgrading to 4, TSCN) and Claude Code memory docs; dateModified 2026-10-26.
+- sitemap lastmod bumped for the 5 changed pages.

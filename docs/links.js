@@ -33,16 +33,20 @@
     });
   });
 })();
-// After a successful free Starter signup, show the next step (the $9 full file) under the form.
+// After a free Starter download or signup, show the next step (the $9 full file) under the form, once.
+function akdNextStep(f){
+  if(!f||f.querySelector(".news-up"))return;
+  var p=document.createElement("p");p.className="news-up mono";
+  p.appendChild(document.createTextNode("Next step: the full file adds stack modules (Next.js + Supabase, FastAPI, Node, Godot), /plan /review /ship commands and a self-review gate. "));
+  var a=document.createElement("a");a.href="/#one-file";a.textContent="See One-File Agent Rules ($9)";p.appendChild(a);
+  f.appendChild(p);
+}
 (function(){
   document.querySelectorAll(".news-f .news-m").forEach(function(m){
     var f=m.parentNode;
     new MutationObserver(function(){
-      var t=m.textContent||"";if(!/^(Sent!|You're already)/.test(t)||f.querySelector(".news-up"))return;
-      var p=document.createElement("p");p.className="news-up mono";
-      p.appendChild(document.createTextNode("Next step: the full file adds stack modules (Next.js + Supabase, FastAPI, Node, Godot), /plan /review /ship commands and a self-review gate. "));
-      var a=document.createElement("a");a.href="/#one-file";a.textContent="See One-File Agent Rules ($9)";p.appendChild(a);
-      f.appendChild(p);
+      var t=m.textContent||"";if(!/^(Sent!|You're already)/.test(t))return;
+      akdNextStep(f);
     }).observe(m,{childList:true,characterData:true,subtree:true});
   });
 })();
@@ -73,6 +77,7 @@
       if(s&&!/-afterdl$/.test(s.value))s.value=(s.value+"-afterdl").slice(0,60);
       n.textContent="Downloading. Want the setup tips and a note when a new pack ships? Optional:";
       rest.forEach(function(c){if(!c.classList.contains("hp"))c.hidden=false;});
+      akdNextStep(f);
     });
   });
 })();

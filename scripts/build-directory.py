@@ -191,7 +191,7 @@ def head(title: str, desc: str, canonical: str, og_type: str = "website") -> str
 
 # LAUNCH sprint (expires Wed Oct 28, 2026, 6:20 PM CT = 23:20 UTC). links.js hides [data-launch-end] after the deadline;
 # remove LAUNCH_BUY_ON / the markers once the promo is over (see scripts/launch-cleanup.md).
-LAUNCH_BUY_ON = True
+LAUNCH_BUY_ON = False
 LAUNCH_END_UTC = "2026-10-28T23:20:00Z"
 
 

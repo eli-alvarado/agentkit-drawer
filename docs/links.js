@@ -33,13 +33,23 @@
     });
   });
 })();
-// After a free Starter download or signup, show the next step (the $9 full file) under the form, once.
+// After a free Starter download or signup, show the next step under the form, once.
+// On a page with a kit box (guides, directory entries), point to that page's kit (its primary button); elsewhere the $9 full file.
 function akdNextStep(f){
   if(!f||f.querySelector(".news-up"))return;
   var p=document.createElement("p");p.className="news-up mono";
-  p.appendChild(document.createTextNode("Next step: the full file adds stack modules (Next.js + Supabase, FastAPI, Node, Godot), /plan /review /ship commands and a self-review gate. "));
-  var a=document.createElement("a");a.href="/#one-file";a.textContent="See One-File Agent Rules ($9)";p.appendChild(a);
-  f.appendChild(p);
+  var a=document.createElement("a");
+  var box=document.querySelector("main .ctabox"),b=box&&box.querySelector(".cta a.btn:not(.ghost)");
+  var m=b&&(b.textContent||"").trim().match(/^(?:Buy|See) (.+?) \u00b7 (\$\d+)$/);
+  if(m){
+    if(!box.id)box.id="kit";
+    p.appendChild(document.createTextNode("Next step for this page: "+m[1]+" ("+m[2]+"). "));
+    a.href="#"+box.id;a.textContent="See what's in it";
+  }else{
+    p.appendChild(document.createTextNode("Next step: the full file adds stack modules (Next.js + Supabase, FastAPI, Node, Godot), /plan /review /ship commands and a self-review gate. "));
+    a.href="/#one-file";a.textContent="See One-File Agent Rules ($9)";
+  }
+  p.appendChild(a);f.appendChild(p);
 }
 (function(){
   document.querySelectorAll(".news-f .news-m").forEach(function(m){

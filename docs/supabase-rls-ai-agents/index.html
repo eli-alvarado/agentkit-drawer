@@ -166,23 +166,42 @@ create policy "invoices_delete_own"
 <h2>Prove it with a database test</h2>
 <p>A rule without a test is a comment. Supabase can run pgTAP files with <code>supabase test db</code>. Ask the agent for a case that inserts as user A and fails to read as user B.</p>
 <div class="snip"><div class="bar"><span>supabase/tests/invoices_rls.test.sql</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>begin;
-select plan(2);
+select plan(6);
 
--- user A can read their row; user B cannot.
--- Use supabase test helpers / auth.uid() stubs your project already has.
-select ok(
-  (select count(*) from public.invoices) &gt;= 0,
-  &#x27;suite loads; replace with two auth.uid() cases&#x27;
-);
-select ok(
-  true,
-  &#x27;other-user select returns 0 rows under authenticated&#x27;
-);
+-- Two users and one invoice owned by user A (seeded as the test superuser, so RLS does not apply).
+insert into auth.users (id) values
+  (&#x27;00000000-0000-0000-0000-00000000000a&#x27;),
+  (&#x27;00000000-0000-0000-0000-00000000000b&#x27;);
+insert into public.invoices (owner_id, amount_cents)
+  values (&#x27;00000000-0000-0000-0000-00000000000a&#x27;, 1000);
+
+-- Act as user A.
+set local role authenticated;
+set local request.jwt.claims = &#x27;{&quot;sub&quot;:&quot;00000000-0000-0000-0000-00000000000a&quot;,&quot;role&quot;:&quot;authenticated&quot;}&#x27;;
+select is((select count(*) from public.invoices)::int, 1, &#x27;owner sees their invoice&#x27;);
+
+-- Act as user B.
+set local request.jwt.claims = &#x27;{&quot;sub&quot;:&quot;00000000-0000-0000-0000-00000000000b&quot;,&quot;role&quot;:&quot;authenticated&quot;}&#x27;;
+select is((select count(*) from public.invoices)::int, 0, &#x27;other user sees 0 rows&#x27;);
+select throws_ok(
+  $$insert into public.invoices (owner_id, amount_cents) values (&#x27;00000000-0000-0000-0000-00000000000a&#x27;, 1)$$,
+  &#x27;42501&#x27;, null, &#x27;other user cannot insert a row for the owner&#x27;);
+update public.invoices set amount_cents = 0;
+delete from public.invoices;
+
+-- Back to user A: B&#x27;s update and delete touched nothing.
+set local request.jwt.claims = &#x27;{&quot;sub&quot;:&quot;00000000-0000-0000-0000-00000000000a&quot;,&quot;role&quot;:&quot;authenticated&quot;}&#x27;;
+select is((select amount_cents from public.invoices), 1000, &#x27;other user cannot update the owner&#x27;&#x27;s row&#x27;);
+select is((select count(*) from public.invoices)::int, 1, &#x27;other user cannot delete the owner&#x27;&#x27;s row&#x27;);
+
+-- Signed-out (anon) has no grant at all.
+set local role anon;
+select throws_ok(&#x27;select * from public.invoices&#x27;, &#x27;42501&#x27;, null, &#x27;anon has no access&#x27;);
 
 select * from finish();
 rollback;
 </pre></div>
-<p>Replace the stubs with your project’s auth helpers. The point of the rule is: no new table without an other-user case. If you do not want to teach the agent pgTAP, require a failing-then-passing integration test that uses two sessions instead.</p>
+<p>Run it with <code>supabase test db</code>. It switches to the <code>authenticated</code> role and sets <code>request.jwt.claims</code>, which is what <code>auth.uid()</code> reads, so no extra helpers are needed. Drop the <code>enable row level security</code> line from the migration and tests 2–5 fail. The point of the rule is: no new table without an other-user case. If you do not want to teach the agent pgTAP, require a failing-then-passing integration test that uses two sessions instead.</p>
 
 <h2>AGENTS.md lines that actually get followed</h2>
 <p>Keep the always-on file short. The migration glob rule above does the path-scoped work. These four lines belong in the shared <code>AGENTS.md</code>:</p>

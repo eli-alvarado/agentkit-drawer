@@ -2,7 +2,7 @@
   --paper:#efeadf;--paper2:#e4ddcd;--ink:#15130f;--mut:#5d574b;--line:#15130f;
   --acc:#ff5a1f;--acc-text:#a8380a;--acc-ink:#15130f;--ok:#1f7a3a;--bad:#c2261a;--warn:#9a6400;
   --term:#14120f;--term-fg:#e9e3d6;--steel:#d6cfbf;
-  --display:"Archivo",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --display:"Archivo","Archivo Fallback","Archivo Fallback Roboto",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root{
   --paper:#12110e;--paper2:#1b1915;--ink:#ece6d8;--mut:#a39b8a;--line:#3a352c;

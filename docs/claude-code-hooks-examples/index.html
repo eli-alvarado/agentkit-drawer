@@ -86,16 +86,33 @@ exit 0</pre></div>
   }
 }</pre></div>
 <p>This pattern also matches <code>.env.example</code>. If you want Claude to edit that, check for it first and <code>exit 0</code>.</p>
+<p>This hook only sees the Edit and Write tools. A shell command like <code>echo KEY=x &gt;&gt; .env</code> or <code>sed -i ... .env</code> runs through Bash and never reaches it. To cover that, add this line to the <code>patterns</code> list in hook 3. It blocks any Bash command that names a <code>.env</code> file, including reads like <code>cat .env</code>:</p><div class="snip"><div class="bar"><span>add to patterns in block-dangerous-bash.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>  '(^|[^[:alnum:]_.-])\.env([^[:alnum:]_-]|$)'</pre></div>
 <h2>3. Block rm -rf and force-push in Bash</h2>
 <p>Same idea on the <code>Bash</code> tool, reading <code>tool_input.command</code>. The <code>if</code> field (permission-rule syntax) can narrow a hook to specific commands, for example <code>"if": "Bash(git *)"</code>, so the script only spawns for git.</p>
 <div class="snip"><div class="bar"><span>.claude/hooks/block-dangerous-bash.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/bin/bash
-# PreToolUse, matcher Bash
+# PreToolUse, matcher Bash. Exit 2 = block; stderr goes to Claude.
 CMD=$(jq -r '.tool_input.command // empty')
-if echo "$CMD" | grep -qE 'rm -rf (/|~|\*|\.)|git push (-f|--force)|git reset --hard'; then
-  echo "Blocked: destructive command. Explain why it is needed and ask the human to run it." &gt;&amp;2
-  exit 2
-fi
+CMD=${CMD//$'\\\n'/ }      # join "\" line continuations
+B='(^|[^[:alnum:]_-])'      # start of a word
+A='([^;&amp;|]*[[:space:]])?'   # other args in the same command
+E='([[:space:]]|$)'         # end of a flag
+G='([[:space:]]+-[^[:space:]]+([[:space:]]+[^-[:space:]][^[:space:]]*)?)*'  # git options (-C dir)
+patterns=(
+  # rm with recursive + force in any order: -rf, -fr, -Rf, -r -f, --recursive --force
+  "${B}rm[[:space:]]${A}(-[a-zA-Z]*([rR][a-zA-Z]*f|f[a-zA-Z]*[rR])[a-zA-Z]*|(-[a-zA-Z]*[rR][a-zA-Z]*|--recursive)[[:space:]]${A}(-[a-zA-Z]*f[a-zA-Z]*|--force)|(-[a-zA-Z]*f[a-zA-Z]*|--force)[[:space:]]${A}(-[a-zA-Z]*[rR][a-zA-Z]*|--recursive))${E}"
+  # force push anywhere after push: -f, --force, --force-with-lease, +refspec
+  "${B}git${G}[[:space:]]+push[[:space:]]${A}(-[a-zA-Z]*f[a-zA-Z]*|--force[^[:space:]]*|\+[^[:space:]]+)${E}"
+  # hard reset
+  "${B}git${G}[[:space:]]+reset[[:space:]]${A}--hard${E}"
+)
+for p in "${patterns[@]}"; do
+  if printf '%s\n' "$CMD" | grep -qE -- "$p"; then
+    echo "Blocked: destructive command. Explain why it is needed and ask the human to run it." &gt;&amp;2
+    exit 2
+  fi
+done
 exit 0</pre></div>
+<p>It blocks recursive forced <code>rm</code> in any spelling (<code>-rf</code>, <code>-fr</code>, <code>-Rf</code>, <code>-r -f</code>, <code>--recursive --force</code>) on any path, force-push anywhere in the command (<code>-f</code>, <code>--force</code>, <code>--force-with-lease</code>, <code>+branch</code>), and <code>git reset --hard</code>. <code>git push origin main</code>, <code>rm -r build</code>, <code>rm -f a.txt</code> and <code>git reset --soft</code> still run. It also blocks those strings inside quotes, such as a commit message. Thanks to the reader who reported the bypasses in <a href="https://github.com/eli-alvarado/agentkit-drawer/issues/44">issue #44</a>.</p>
 <p>The docs call the <code>if</code> filter best-effort and recommend the permission system for a hard allow or deny, so pair this with <code>permissions.deny</code> rules. The full version we ship for free is on the <a href="/claude-code-subagents-hooks-guide/">subagents and hooks guide</a>.</p>
 <h2>4. Desktop notification when Claude needs you</h2>
 <p><code>Notification</code> fires when Claude is waiting for input or permission. An empty matcher fires on every notification type. This one goes in <code>~/.claude/settings.json</code> so it works in every project (macOS shown; use <code>notify-send</code> on Linux).</p>

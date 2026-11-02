@@ -148,6 +148,44 @@ fi
 if printf &#x27;%s\n&#x27; &quot;$cmd&quot; | grep -qE -- &quot;${B}git${G}[[:space:]]+push[[:space:]][^&amp;;|]*[[:space:]:+](refs/heads/)?(main|master)${E}&quot;; then
   echo &quot;Blocked: pushing to main/master. Push a branch and open a PR.&quot; &gt;&amp;2; exit 2
 fi
+# Writes to secret files through Bash (v1.0.4). protect-files.sh only sees Edit/Write,
+# so also catch &gt; / &gt;&gt; redirects, tee, sed -i, perl -i, cp/mv/install/ln/rsync, truncate, dd of=.
+# Case-insensitive; .env.example/.sample/.template stay writable; plain reads (cat .env.example) pass.
+secret() {
+  local b=${1##*/}
+  case &quot;$b&quot; in
+    .env.example|.env.sample|.env.template) return 1 ;;
+    .env|.env.*|.envrc|*.pem|*.key|*.p12|*.pfx|id_rsa*|id_ecdsa*|id_ed25519*|credentials|credentials.json|.netrc|.npmrc|.pypirc|secrets.json|secrets.y*ml) return 0 ;;
+  esac
+  return 1
+}
+lc=$(printf &#x27;%s&#x27; &quot;$cmd&quot; | tr &#x27;[:upper:]&#x27; &#x27;[:lower:]&#x27;)
+low=$(printf &#x27;%s&#x27; &quot;$lc&quot; | tr -d &quot;\&quot;&#x27;\\\\&quot;)
+hit=&quot;&quot;
+# Redirect targets: &gt;file, &gt;&gt; file, &gt;|file, 1&gt;file, &amp;&gt;file.
+while IFS= read -r t; do
+  t=${t#*&gt;}; t=${t#&gt;}; t=${t#|}; t=${t#&quot;${t%%[![:space:]]*}&quot;}; t=$(printf &#x27;%s&#x27; &quot;$t&quot; | tr -d &quot;\&quot;&#x27;\\\\&quot;)
+  [ -n &quot;$t&quot; ] &amp;&amp; secret &quot;$t&quot; &amp;&amp; hit=$t
+done &lt; &lt;(printf &#x27;%s\n&#x27; &quot;$lc&quot; | grep -oE &#x27;&gt;{1,2}\|?[[:space:]]*(&quot;[^&quot;]*&quot;|&#x27;&quot;&#x27;&quot;&#x27;[^&#x27;&quot;&#x27;&quot;&#x27;]*&#x27;&quot;&#x27;&quot;&#x27;|[^[:space:];&amp;|&lt;&gt;()]+)+&#x27;)
+# Writer commands: any argument that is a secret file.
+while IFS= read -r seg; do
+  read -ra w &lt;&lt;&lt;&quot;$seg&quot;
+  i=0
+  while [ $i -lt ${#w[@]} ] &amp;&amp; { [[ ${w[$i]} == *=* &amp;&amp; ${w[$i]} != -* ]] || [[ ${w[$i]} =~ ^(sudo|env|command|exec|nohup|time|xargs)$ ]] || [[ ${w[$i]} == -* &amp;&amp; $i -gt 0 ]]; }; do i=$((i+1)); done
+  c=${w[$i]##*/}
+  case &quot;$c&quot; in
+    tee|cp|mv|install|ln|rsync|truncate|dd) writer=1 ;;
+    sed|gsed) writer=0; for a in &quot;${w[@]:$i}&quot;; do [[ $a =~ ^(-[a-z]*i|--in-place) ]] &amp;&amp; writer=1; done ;;
+    perl) writer=0; for a in &quot;${w[@]:$i}&quot;; do [[ $a =~ ^-[a-z]*i ]] &amp;&amp; writer=1; done ;;
+    *) writer=0 ;;
+  esac
+  [ &quot;$writer&quot; = 1 ] || continue
+  for a in &quot;${w[@]:$((i+1))}&quot;; do a=${a#of=}; [[ $a == -* ]] &amp;&amp; continue; secret &quot;$a&quot; &amp;&amp; hit=$a; done
+done &lt; &lt;(printf &#x27;%s\n&#x27; &quot;$low&quot; | tr &#x27;;&amp;|\n&#x27; &#x27;\n\n\n\n&#x27;)
+if [ -n &quot;$hit&quot; ]; then
+  echo &quot;Blocked by .claude/hooks/block-dangerous-bash.sh: this command writes to &#x27;$hit&#x27;, which may hold secrets. Edit .env.example instead and ask the human to set real values.&quot; &gt;&amp;2
+  exit 2
+fi
 exit 0</pre></div>
 <p>It blocks recursive forced <code>rm</code> in any spelling (<code>-rf</code>, <code>-fr</code>, <code>-Rf</code>, <code>-r -f</code>, <code>--recursive --force</code>), force-push anywhere in the command (<code>-f</code>, <code>--force</code>, <code>--force-with-lease</code>, <code>+branch</code>) and <code>git reset --hard</code>. <code>rm -r build</code>, <code>rm -f a.txt</code> and <code>git reset --soft</code> still run.</p>
 

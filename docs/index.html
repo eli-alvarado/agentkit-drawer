@@ -78,12 +78,39 @@
   src: url(/fonts/JetBrainsMono-400-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Metric-matched fallbacks for Archivo, used until the webfont loads. Without them the browser falls back to
+   system-ui (DejaVu Sans on Linux/Lighthouse is ~13% wider), text rewraps on font swap and /packs/ shifts (CLS 0.24).
+   size-adjust measured against Archivo 400 at font-stretch 100% (body copy): Arial/Liberation Sans 100%, Roboto 101.3%. */
+@font-face {
+  font-family: 'Archivo Fallback';
+  font-weight: 400 600;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans');
+  size-adjust: 100%;
+}
+@font-face {
+  font-family: 'Archivo Fallback';
+  font-weight: 700 900;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
+  size-adjust: 100%;
+}
+@font-face {
+  font-family: 'Archivo Fallback Roboto';
+  font-weight: 400 600;
+  src: local('Roboto'), local('Roboto-Regular');
+  size-adjust: 101.3%;
+}
+@font-face {
+  font-family: 'Archivo Fallback Roboto';
+  font-weight: 700 900;
+  src: local('Roboto Bold'), local('Roboto-Bold');
+  size-adjust: 101.3%;
+}
 </style>
 <style data-inline="style.css">:root{--sh:#15130f;
   --paper:#efeadf;--paper2:#e4ddcd;--ink:#15130f;--mut:#5d574b;--line:#15130f;
   --acc:#ff5a1f;--acc-text:#a8380a;--acc-ink:#15130f;--ok:#1f7a3a;--bad:#c2261a;--warn:#9a6400;
   --term:#14120f;--term-fg:#e9e3d6;--steel:#d6cfbf;
-  --display:"Archivo",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --display:"Archivo","Archivo Fallback","Archivo Fallback Roboto",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root{
   --paper:#12110e;--paper2:#1b1915;--ink:#ece6d8;--mut:#a39b8a;--line:#3a352c;

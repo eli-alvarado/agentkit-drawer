@@ -98,24 +98,29 @@
 <h2>The usual blocking calls</h2>
 <div class="snip"><div class="bar"><span>app/api/slow.py (don't)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>import time
 import requests
+from fastapi import Depends
 from sqlalchemy.orm import Session
+from app.db import get_db  # yields a sync Session
 
 @app.get(&quot;/slow&quot;)
-async def slow(db: Session):
+async def slow(db: Session = Depends(get_db)):
     time.sleep(2)                          # blocks the loop
     r = requests.get(&quot;https://example.com&quot;)  # blocks the loop
-    user = db.query(User).get(1)           # sync ORM, blocks
+    user = db.get(User, 1)                 # sync ORM, blocks
     return {&quot;ok&quot;: r.ok, &quot;user&quot;: user.id}
 </pre></div>
 <p>Replace each one with something that yields, or stop claiming the route is async.</p>
 <div class="snip"><div class="bar"><span>app/api/ok.py</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>import asyncio
 import httpx
+from fastapi import Depends
 from fastapi.concurrency import run_in_threadpool
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
+from app.db import get_async_db, get_db  # see app/db.py below
 
 @app.get(&quot;/ok&quot;)
-async def ok(db: AsyncSession):
+async def ok(db: AsyncSession = Depends(get_async_db)):
     await asyncio.sleep(2)
     async with httpx.AsyncClient() as client:
         r = await client.get(&quot;https://example.com&quot;)
@@ -123,13 +128,33 @@ async def ok(db: AsyncSession):
     return {&quot;ok&quot;: r.is_success, &quot;user&quot;: user.id}
 
 @app.get(&quot;/legacy-sync&quot;)
-def legacy_sync(db: Session):
+def legacy_sync(db: Session = Depends(get_db)):
     # FastAPI runs this def route in a threadpool.
-    return db.query(User).get(1)
+    user = db.get(User, 1)
+    return {&quot;user&quot;: user.id}
 
 @app.get(&quot;/must-stay-async&quot;)
 async def must_stay_async():
     return await run_in_threadpool(legacy_report)
+</pre></div>
+<p>One session per request, opened and closed in a dependency:</p>
+<div class="snip"><div class="bar"><span>app/db.py</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.orm import sessionmaker
+
+async_engine = create_async_engine(&quot;postgresql+asyncpg://app@localhost/app&quot;)
+AsyncSessionLocal = async_sessionmaker(async_engine, expire_on_commit=False)
+
+sync_engine = create_engine(&quot;postgresql+psycopg://app@localhost/app&quot;)
+SessionLocal = sessionmaker(sync_engine)
+
+async def get_async_db():
+    async with AsyncSessionLocal() as session:
+        yield session
+
+def get_db():
+    with SessionLocal() as session:
+        yield session
 </pre></div>
 <p>Use <code>httpx.AsyncClient</code> (or any client whose methods are <code>await</code>-able), <code>asyncio.sleep</code>, and SQLAlchemy 2 <code>AsyncSession</code> with an async driver such as <code>asyncpg</code>. If a library has no async API, either declare the route as <code>def</code> or wrap the call in <code>run_in_threadpool</code>.</p>
 

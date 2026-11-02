@@ -66,12 +66,17 @@
 <div class="snip"><div class="bar"><span>.claude/hooks/protect-files.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/bin/bash
 # PreToolUse, matcher Edit|Write. Exit 2 = block; stderr goes to Claude.
 FILE_PATH=$(jq -r '.tool_input.file_path // empty')
-for pattern in ".env" "package-lock.json" ".git/"; do
-  if [[ "$FILE_PATH" == *"$pattern"* ]]; then
-    echo "Blocked: $FILE_PATH matches protected pattern '$pattern'" &gt;&amp;2
-    exit 2
-  fi
-done
+# Lowercase first: on macOS and Windows .ENV is the same file as .env.
+lower=$(printf '%s' "$FILE_PATH" | tr '[:upper:]' '[:lower:]')
+base=${lower##*/}
+case "$base" in
+  .env.example|.env.sample|.env.template) exit 0 ;;
+  .env|.env.*|.envrc|*.pem|*.key|*.p12|*.pfx|id_rsa*|id_ecdsa*|id_ed25519*|credentials|credentials.json|.netrc|.npmrc|.pypirc|secrets.json|secrets.y*ml|package-lock.json)
+    echo "Blocked: $FILE_PATH is a protected file ($base)" &gt;&amp;2; exit 2 ;;
+esac
+case "/$lower" in
+  */.git/*) echo "Blocked: $FILE_PATH is inside .git/" &gt;&amp;2; exit 2 ;;
+esac
 exit 0</pre></div>
 <p>Run <code>chmod +x .claude/hooks/protect-files.sh</code>, then register it:</p><div class="snip"><div class="bar"><span>.claude/settings.json</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
   "hooks": {

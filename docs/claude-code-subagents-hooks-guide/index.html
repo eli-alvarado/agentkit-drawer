@@ -109,13 +109,29 @@
 <div class="snip"><div class="bar"><span>.claude/hooks/block-dangerous-bash.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/usr/bin/env bash
 # PreToolUse (matcher: Bash). Exit 2 = block; stderr is shown to Claude.
 cmd=$(jq -r &#x27;.tool_input.command // &quot;&quot;&#x27;)
+cmd=${cmd//$&#x27;\\\n&#x27;/ }      # join &quot;\&quot; line continuations
+B=&#x27;(^|[^[:alnum:]_-])&#x27;      # start of a word
+A=&#x27;([^;&amp;|]*[[:space:]])?&#x27;   # other args in the same command
+E=&#x27;([[:space:]]|$)&#x27;         # end of a flag
+G=&#x27;([[:space:]]+-[^[:space:]]+([[:space:]]+[^-[:space:]][^[:space:]]*)?)*&#x27;  # git options (-C dir)
+# rm with recursive + force in any order, force-push in any form, hard reset (v1.0.1)
+patterns=(
+  &quot;${B}rm[[:space:]]${A}(-[a-zA-Z]*([rR][a-zA-Z]*f|f[a-zA-Z]*[rR])[a-zA-Z]*|(-[a-zA-Z]*[rR][a-zA-Z]*|--recursive)[[:space:]]${A}(-[a-zA-Z]*f[a-zA-Z]*|--force)|(-[a-zA-Z]*f[a-zA-Z]*|--force)[[:space:]]${A}(-[a-zA-Z]*[rR][a-zA-Z]*|--recursive))${E}&quot;
+  &quot;${B}git${G}[[:space:]]+push[[:space:]]${A}(-[a-zA-Z]*f[a-zA-Z]*|--force[^[:space:]]*|\+[^[:space:]]+)${E}&quot;
+  &quot;${B}git${G}[[:space:]]+reset[[:space:]]${A}--hard${E}&quot;
+)
+for p in &quot;${patterns[@]}&quot;; do
+  if printf &#x27;%s\n&#x27; &quot;$cmd&quot; | grep -qE -- &quot;$p&quot;; then
+    echo &quot;Blocked by .claude/hooks/block-dangerous-bash.sh: recursive forced rm, force-push or hard reset is destructive. Explain why it&#x27;s needed and ask the human to run it.&quot; &gt;&amp;2
+    exit 2
+  fi
+done
 deny=(
-  &#x27;rm -rf /&#x27; &#x27;rm -rf ~&#x27; &#x27;rm -rf \*&#x27; &#x27;rm -rf \.&#x27; &#x27;git push --force&#x27; &#x27;git push -f&#x27; &#x27;git reset --hard&#x27;
   &#x27;git clean -fd&#x27; &#x27;DROP DATABASE&#x27; &#x27;DROP TABLE&#x27; &#x27;TRUNCATE &#x27; &#x27;supabase db reset&#x27; &#x27;prisma migrate reset&#x27;
   &#x27;alembic downgrade base&#x27; &#x27;chmod -R 777&#x27; &#x27;mkfs&#x27; &#x27;dd if=&#x27; &#x27;:(){&#x27;
 )
 for p in &quot;${deny[@]}&quot;; do
-  if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qiF -- &quot;${p//\\/}&quot;; then
+  if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qiF -- &quot;$p&quot;; then
     echo &quot;Blocked by .claude/hooks/block-dangerous-bash.sh: &#x27;$p&#x27; is destructive. Explain why it&#x27;s needed and ask the human to run it.&quot; &gt;&amp;2
     exit 2
   fi
@@ -128,6 +144,7 @@ if printf &#x27;%s&#x27; &quot;$cmd&quot; | grep -qE &#x27;git push[^&amp;;|]*\b
 fi
 exit 0
 </pre></div>
+<p>It blocks recursive forced <code>rm</code> in any spelling (<code>-rf</code>, <code>-fr</code>, <code>-Rf</code>, <code>-r -f</code>, <code>--recursive --force</code>), force-push anywhere in the command (<code>-f</code>, <code>--force</code>, <code>--force-with-lease</code>, <code>+branch</code>) and <code>git reset --hard</code>. <code>rm -r build</code>, <code>rm -f a.txt</code> and <code>git reset --soft</code> still run.</p>
 
 <h2 id="faq">FAQ</h2>
 <div class="faq">

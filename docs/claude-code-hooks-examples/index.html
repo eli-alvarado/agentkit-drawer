@@ -98,6 +98,9 @@ exit 0</pre></div>
 # PreToolUse, matcher Bash. Exit 2 = block; stderr goes to Claude.
 CMD=$(jq -r '.tool_input.command // empty')
 CMD=${CMD//$'\\\n'/ }      # join "\" line continuations
+# Flag checks read a copy (v1.0.5, thanks marco-ai-agent, issue #44): bash strips quotes,
+# so "--force" is --force to git, and a flag glued to ; &amp;&amp; | still ends there (-f;echo).
+P=$(printf '%s' "${CMD//[\"\']/}" | sed -E 's/[;&amp;|]+/ &amp; /g')
 B='(^|[^[:alnum:]_-])'      # start of a word
 A='([^;&amp;|]*[[:space:]])?'   # other args in the same command
 E='([[:space:]]|$)'         # end of a flag
@@ -111,13 +114,13 @@ patterns=(
   "${B}git${G}[[:space:]]+reset[[:space:]]${A}--hard${E}"
 )
 for p in "${patterns[@]}"; do
-  if printf '%s\n' "$CMD" | grep -qE -- "$p"; then
+  if printf '%s\n' "$P" | grep -qE -- "$p"; then
     echo "Blocked: destructive command. Explain why it is needed and ask the human to run it." &gt;&amp;2
     exit 2
   fi
 done
 exit 0</pre></div>
-<p>It blocks recursive forced <code>rm</code> in any spelling (<code>-rf</code>, <code>-fr</code>, <code>-Rf</code>, <code>-r -f</code>, <code>--recursive --force</code>) on any path, force-push anywhere in the command (<code>-f</code>, <code>--force</code>, <code>--force-with-lease</code>, <code>+branch</code>), and <code>git reset --hard</code>. <code>git push origin main</code>, <code>rm -r build</code>, <code>rm -f a.txt</code> and <code>git reset --soft</code> still run. It also blocks those strings inside quotes, such as a commit message. Thanks to the reader who reported the bypasses in <a href="https://github.com/eli-alvarado/agentkit-drawer/issues/44">issue #44</a>.</p>
+<p>It blocks recursive forced <code>rm</code> in any spelling (<code>-rf</code>, <code>-fr</code>, <code>-Rf</code>, <code>-r -f</code>, <code>--recursive --force</code>) on any path, force-push anywhere in the command (<code>-f</code>, <code>--force</code>, <code>--force-with-lease</code>, <code>+branch</code>), and <code>git reset --hard</code>. <code>git push origin main</code>, <code>rm -r build</code>, <code>rm -f a.txt</code> and <code>git reset --soft</code> still run. It also blocks those strings inside quotes, such as a commit message, and catches quoted flags (<code>"--force"</code>, <code>'-f'</code>) and flags glued to <code>;</code>, <code>&amp;&amp;</code> or <code>|</code> (<code>git push -f;echo ok</code>). Thanks to the readers who reported the bypasses in <a href="https://github.com/eli-alvarado/agentkit-drawer/issues/44" target="_blank" rel="noopener">issue #44</a>, including marco-ai-agent.</p>
 <p>The docs call the <code>if</code> filter best-effort and recommend the permission system for a hard allow or deny, so pair this with <code>permissions.deny</code> rules. The full version we ship for free is on the <a href="/claude-code-subagents-hooks-guide/">subagents and hooks guide</a>.</p>
 <h2>4. Desktop notification when Claude needs you</h2>
 <p><code>Notification</code> fires when Claude is waiting for input or permission. An empty matcher fires on every notification type. This one goes in <code>~/.claude/settings.json</code> so it works in every project (macOS shown; use <code>notify-send</code> on Linux).</p>

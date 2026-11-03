@@ -164,6 +164,9 @@ Subagents live in .claude/agents/*.md (frontmatter: name, description, optional 
 # PreToolUse (matcher: Bash). Exit 2 = block; stderr is shown to Claude.
 cmd=$(jq -r '.tool_input.command // ""')
 cmd=${cmd//$'\\\n'/ }      # join "\" line continuations
+# Flag checks read a copy (v1.0.5, thanks marco-ai-agent, issue #44): bash strips quotes,
+# so "--force" is --force to git, and a flag glued to ; && | still ends there (-f;echo).
+P=$(printf '%s' "${cmd//[\"\']/}" | sed -E 's/[;&|]+/ & /g')
 B='(^|[^[:alnum:]_-])'      # start of a word
 A='([^;&|]*[[:space:]])?'   # other args in the same command
 E='([[:space:]]|$)'         # end of a flag
@@ -175,7 +178,7 @@ patterns=(
   "${B}git${G}[[:space:]]+reset[[:space:]]${A}--hard${E}"
 )
 for p in "${patterns[@]}"; do
-  if printf '%s\n' "$cmd" | grep -qE -- "$p"; then
+  if printf '%s\n' "$P" | grep -qE -- "$p"; then
     echo "Blocked by .claude/hooks/block-dangerous-bash.sh: recursive forced rm, force-push or hard reset is destructive. Explain why it's needed and ask the human to run it." >&2
     exit 2
   fi

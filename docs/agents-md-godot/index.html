@@ -13,6 +13,17 @@
 <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/packs/">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
 <main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / AGENTS.md for Godot 4</p>
 <h1>AGENTS.md for Godot 4</h1>
+<p class="tldr"><strong>Short answer:</strong> Put an <code>AGENTS.md</code> file next to <code>project.godot</code> and Codex, Cursor, Windsurf and Claude Code (via <code>@AGENTS.md</code> in CLAUDE.md) read it before editing your game. For Godot 4 it should pin typed GDScript and Godot 4 class names, keep the agent to the current task, and ban scene-tree restructuring, raw keycodes and <code>get_parent()</code> chains. The minimal version is below; the full template is further down.</p>
+<div class="snip"><div class="bar"><span>AGENTS.md (Godot 4, minimal)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md (Godot 4)
+Engine: Godot 4.x, typed GDScript. Use Godot 4 class names only (CharacterBody2D, not KinematicBody2D).
+- Implement only the current task. Suggest cuts, never additions.
+- List the scenes/scripts you'll touch first. Never restructure the scene tree without asking.
+- Every change leaves the game runnable (F5).
+- Signals up, calls down. No get_parent().get_parent().
+- Input via InputMap actions only, never raw keycodes.
+- Tunables are @export vars; list old -&gt; new values when you change them.
+- Never edit or commit .godot/.
+</pre></div>
 <p>Point an AI agent at a Godot project and it will happily restructure your scene tree, chain <code>get_parent()</code> calls, hardcode keycodes and quietly "improve" your jump feel. In a 48-hour jam, that's how the build is broken at hour 40.</p>
 <h2>What AGENTS.md is</h2>
 <p><code>AGENTS.md</code> is a plain Markdown file at the repo root that coding agents (Codex, Cursor, Windsurf, Aider, Zed, and Claude Code via an import in CLAUDE.md) read before working. For Godot, put it next to <code>project.godot</code>.</p>

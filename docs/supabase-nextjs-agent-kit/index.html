@@ -38,6 +38,14 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / DRW-06 Supabase + Next.js Agent Kit</p>
 <h1>Supabase + Next.js Agent Kit</h1>
+<p class="tldr"><strong>Short answer:</strong> The Supabase + Next.js Agent Kit (DRW-06, $19 one-time) is a set of <code>AGENTS.md</code>, Cursor rules and checks that make AI coding agents build Next.js App Router apps on Supabase safely. It stops the common agent mistakes: tables without RLS, old auth helpers, the secret key in client code, untyped queries and unlocking paid features before a verified Stripe webhook. The free starter rules are below.</p>
+<div class="snip"><div class="bar"><span>AGENTS.md (Supabase + Next.js, free starter)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md (Next.js App Router + Supabase)
+- Every new table: enable row level security and add policies in the same migration.
+- Use @supabase/ssr. Never @supabase/auth-helpers. On the server, trust getUser(), not getSession().
+- The secret / service role key is server-only. Never import it into a client component.
+- Use generated types (supabase gen types). No hand-written row types.
+- Unlock paid features only from a verified Stripe webhook, never the success URL.
+</pre></div>
 <p><strong>DRW-06 · $19 · one-time.</strong> Drop-in instructions so Cursor, Claude Code, Codex and Windsurf build a Next.js App Router app on Supabase the same way, every time. It targets the mistakes agents make most on this stack:</p>
 <ul><li><strong>Tables with no RLS.</strong> A new table ships with no row level security, or with policies but the default grants still in place.</li>
 <li><strong>Old auth helpers:</strong> <code>@supabase/auth-helpers</code>, <code>getSession()</code> trusted on the server, cookies handled by hand.</li>

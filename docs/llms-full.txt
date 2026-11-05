@@ -2,7 +2,7 @@
 
 > Tested rules packs and prompt templates that keep AI coding agents (Cursor, Claude Code, Codex, Windsurf) on track for a specific stack. One-time purchase, instant download, use in unlimited personal and commercial projects, 14-day refund.
 
-Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: enter your email in the form on the homepage or any guide and it is emailed instantly. Free samples are MIT-licensed on GitHub: https://github.com/eli-alvarado/agentkit-drawer
+Support: agentkitdrawer@agentmail.to. Free Starter AGENTS.md: download it in one click, no email needed, at https://dl.agentkitdrawer.com/starter/free?src=llms (or enter your email in the form on the homepage or any guide and it is emailed instantly). Free samples are MIT-licensed on GitHub: https://github.com/eli-alvarado/agentkit-drawer
 
 ## Packs
 - [One-File Agent Rules](https://agentkitdrawer.com/#one-file) (DRW-00, $9): One universal AGENTS.md for Cursor, Claude Code, Codex, Windsurf and Copilot: plan gate, verify-before-done, 8 built-in commands, self-review gate and stack modules for Next.js + Supabase, FastAPI, Node, React and Godot. The easy first purchase.

@@ -248,3 +248,4 @@ h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;font-stretch:80%;text-tran
 /* Below 440px the nav always gets its own row, so header height no longer depends on whether Archivo has loaded.
    Fallback font fit logo+nav on one row at ~410-436px; Archivo wrapped, shifting <main> 30px on font swap (CLS). */
 @media (max-width:440px){.top nav{width:100%}}
+.tldr{font-size:1.05em;margin:0 0 4px}

@@ -39,6 +39,19 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Claude Code hooks examples</p>
 <h1>Claude Code hooks examples: 7 you can copy today</h1>
+<p class="tldr"><strong>Short answer:</strong> Claude Code hooks are shell commands in <code>.claude/settings.json</code> that run at fixed points (PreToolUse, PostToolUse, Stop, etc.), so a guardrail happens every time instead of when the model remembers. Start with one PreToolUse Bash hook that blocks force-pushes and recursive deletes; the minimal block-dangerous-bash example below is the highest-value first hook.</p>
+<div class="snip"><div class="bar"><span>settings.json (PreToolUse: block-dangerous-bash)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-dangerous-bash.sh" }
+        ]
+      }
+    ]
+  }
+}</pre></div>
 <p>Claude Code hooks are shell commands that run at fixed points in a session, so a rule happens every time instead of whenever the model remembers. Below are seven copy-paste examples for <code>settings.json</code>: format on edit, protect secrets, block destructive Bash, notify, restore context after <code>/compact</code>, tests before stop, and a command log.</p>
 <p class="fine">Every example follows the shapes in Anthropic's <a href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener noreferrer">hooks guide</a> and <a href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener noreferrer">hooks reference</a> (checked October 21, 2026). The Bash examples use <code>jq</code>.</p>
 <h2>How a hook works in 30 seconds</h2>

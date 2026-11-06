@@ -12,17 +12,7 @@
 <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/packs/">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
 <main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Cursor rules for Next.js + Supabase</p>
 <h1>Cursor rules for Next.js + Supabase</h1>
-<p>Agents get the same few things wrong in a Next.js + Supabase app, and those mistakes are the expensive ones:</p>
-<ul><li><strong>Creating tables without row-level security</strong>, or switching RLS off "to fix the error".</li>
-<li><strong>Trusting <code>getSession()</code> on the server</strong> instead of <code>getUser()</code>, which re-validates the token.</li>
-<li><strong>Creating Supabase clients all over the place</strong> instead of one server helper and one browser helper with <code>@supabase/ssr</code>.</li>
-<li><strong>Granting paid access from the Stripe success redirect</strong> instead of a verified webhook.</li>
-<li><strong>Prefixing secrets with <code>NEXT_PUBLIC_</code></strong>, which ships them to every browser.</li></ul>
-<h2>How Cursor rules work</h2>
-<p>Put <code>.mdc</code> files in <code>.cursor/rules/</code>. The front matter decides when a rule loads: <code>alwaysApply: true</code> for core rules, or <code>globs</code> so a rule loads only when matching files are in context. Keep each rule small and scoped. One giant rules file gets skimmed and ignored. For Codex, Claude Code and other tools, mirror the core rules in <code>AGENTS.md</code>.</p>
-<h2>A layout that works</h2>
-<p><code>00-core</code> (always on), <code>20-supabase-auth</code> (globs: lib/supabase/**, middleware.ts), <code>30-database-rls</code> (supabase/**), <code>40-stripe</code> (app/api/stripe/**), <code>50-env-secrets</code> (.env*, lib/env.ts). The RLS rule below is the one that saves you the most money.</p>
-<h2>Free snippet: copy it</h2>
+<p class="tldr"><strong>Short answer:</strong> Cursor rules for Next.js + Supabase are small <code>.mdc</code> files in <code>.cursor/rules/</code> that stop AI agents from the expensive mistakes: tables without RLS (or turning RLS off &quot;to fix it&quot;), trusting <code>getSession()</code> on the server instead of <code>getUser()</code>, scattering Supabase clients, unlocking paid access from the Stripe success redirect instead of a verified webhook, and prefixing secrets with <code>NEXT_PUBLIC_</code>. Put a scoped RLS rule on <code>supabase/**</code> first; the free one below is enough to start.</p>
 <div class="snip"><div class="bar"><span>.cursor/rules/30-database-rls.mdc</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>---
 description: Migrations and row-level security
 globs: supabase/**
@@ -34,6 +24,16 @@ alwaysApply: false
 - Never disable RLS to &#x27;make it work&#x27;. If a query fails, fix the policy and explain it.
 - Regenerate types after schema changes with `supabase gen types typescript --local`, writing to the project's existing types file (create its folder first if it doesn't exist).
 </pre></div>
+<p>Agents get the same few things wrong in a Next.js + Supabase app, and those mistakes are the expensive ones:</p>
+<ul><li><strong>Creating tables without row-level security</strong>, or switching RLS off "to fix the error".</li>
+<li><strong>Trusting <code>getSession()</code> on the server</strong> instead of <code>getUser()</code>, which re-validates the token.</li>
+<li><strong>Creating Supabase clients all over the place</strong> instead of one server helper and one browser helper with <code>@supabase/ssr</code>.</li>
+<li><strong>Granting paid access from the Stripe success redirect</strong> instead of a verified webhook.</li>
+<li><strong>Prefixing secrets with <code>NEXT_PUBLIC_</code></strong>, which ships them to every browser.</li></ul>
+<h2>How Cursor rules work</h2>
+<p>Put <code>.mdc</code> files in <code>.cursor/rules/</code>. The front matter decides when a rule loads: <code>alwaysApply: true</code> for core rules, or <code>globs</code> so a rule loads only when matching files are in context. Keep each rule small and scoped. One giant rules file gets skimmed and ignored. For Codex, Claude Code and other tools, mirror the core rules in <code>AGENTS.md</code>.</p>
+<h2>A layout that works</h2>
+<p><code>00-core</code> (always on), <code>20-supabase-auth</code> (globs: lib/supabase/**, middleware.ts), <code>30-database-rls</code> (supabase/**), <code>40-stripe</code> (app/api/stripe/**), <code>50-env-secrets</code> (.env*, lib/env.ts). The RLS rule above is the one that saves you the most money.</p>
 <div class="ctabox" id="drw-06-kit">
   <h2>Building on Next.js + Supabase?</h2>
   <p>The Supabase + Next.js Agent Kit (DRW-06, $19) is the full version of these rules for this stack: AGENTS.md + CLAUDE.md, 8 scoped Cursor rules (<code>@supabase/ssr</code> auth, RLS in every migration, typed queries, secret key, Edge Functions, Stripe webhooks), a Claude Code hook that blocks a new table without RLS, a read-only migration-reviewer subagent and 10 prompts.</p>

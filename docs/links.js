@@ -60,12 +60,6 @@ function akdNextStep(f){
     }).observe(m,{childList:true,characterData:true,subtree:true});
   });
 })();
-// LAUNCH sprint: hide promo-only buy buttons once the code expires (Wed Oct 28, 2026, 6:20 PM CT).
-(function(){
-  document.querySelectorAll("[data-launch-end]").forEach(function(el){
-    var t=Date.parse(el.getAttribute("data-launch-end"));if(t&&Date.now()>=t)el.remove();
-  });
-})();
 // Free Starter is ungated: direct download first, email opt-in offered after (optional).
 (function(){
   document.querySelectorAll("form.news-f").forEach(function(f){

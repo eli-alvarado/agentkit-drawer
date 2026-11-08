@@ -86,6 +86,7 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Codex AGENTS.md template</p>
 <h1>A Codex AGENTS.md template for OpenAI Codex CLI</h1>
+<p class="tldr"><strong>Short answer:</strong> Codex reads <code>AGENTS.md</code> / <code>AGENTS.override.md</code> before it works, discovering global <code>~/.codex/</code> first, then project files from the repo root toward cwd so closer files win. Keep the root file short (combined project instructions cap at about 32&nbsp;KiB) and nest specialist rules; Codex does not read <code>CLAUDE.md</code> or <code>.cursor/rules</code>. The copy-paste template is further down.</p>
 <p>OpenAI Codex reads <code>AGENTS.md</code> before it does any work. That file is the Codex CLI agent instructions for the repo: stack, commands, hard never-dos, and what “done” means. A short, specific file gets followed. A 600-line essay gets skimmed.</p>
 <p>This guide is a Codex <code>AGENTS.md</code> template you can paste today, plus how Codex actually discovers those files, and how that differs from <code>CLAUDE.md</code> and Cursor rules.</p>
 

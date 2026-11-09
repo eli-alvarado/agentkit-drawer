@@ -211,6 +211,119 @@ def launch_buy(page: str) -> str:
     )
 
 
+SNIP_COPY_BTN = (
+    '<button type="button" onclick="navigator.clipboard.writeText('
+    "this.closest('.snip').querySelector('pre').innerText);"
+    "this.textContent='copied'\">copy</button>"
+)
+
+
+def snip_html(label: str, code: str) -> str:
+    return (
+        f'<div class="snip"><div class="bar"><span>{escape(label)}</span>{SNIP_COPY_BTN}</div>'
+        f"<pre>{escape(code)}</pre></div>"
+    )
+
+
+# Extra copy for directory pages that need setup steps beyond the ~300-word summary.
+# Config strings are taken from Supabase MCP docs (fetched 2026-11-09):
+# https://supabase.com/docs/guides/getting-started/mcp
+# https://github.com/supabase/mcp (same README as supabase-community/supabase-mcp)
+
+
+CURSOR_MCP_JSON = """{
+  "mcpServers": {
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp?project_ref=<project-ref>&read_only=true"
+    }
+  }
+}"""
+
+CLAUDE_MCP_ADD = (
+    'claude mcp add --scope project --transport http supabase '
+    '"https://mcp.supabase.com/mcp"'
+)
+
+CLAUDE_MCP_JSON = """{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp"
+    }
+  }
+}"""
+
+
+def detail_intro(entry: dict) -> str:
+    if entry["slug"] != "supabase-mcp":
+        return ""
+    tldr = (
+        '<p class="tldr"><strong>Short answer:</strong> The hosted endpoint is '
+        "<code>https://mcp.supabase.com/mcp</code>. In Cursor, put the JSON below in "
+        "<code>.cursor/mcp.json</code> (or <code>~/.cursor/mcp.json</code> for every project). "
+        "In Claude Code, run <code>claude mcp add --scope project --transport http supabase "
+        '"https://mcp.supabase.com/mcp"</code>. Append '
+        "<code>?project_ref=&lt;project-ref&gt;&amp;read_only=true</code> so SQL runs as a "
+        "read-only Postgres user on one project. You sign in with OAuth; you don't need a "
+        "personal access token.</p>\n"
+    )
+    return tldr + snip_html(".cursor/mcp.json (read-only, one project)", CURSOR_MCP_JSON) + "\n"
+
+
+def detail_extra(entry: dict) -> str:
+    if entry["slug"] != "supabase-mcp":
+        return ""
+    cursor_cli = "agent mcp enable supabase\nagent mcp login supabase\nagent mcp list"
+    return (
+        "<h2>Set up the Supabase MCP server</h2>\n"
+        "<p>The hosted server is at <code>https://mcp.supabase.com/mcp</code>. If you are developing locally with the "
+        "Supabase CLI, use <code>http://localhost:54321/mcp</code> instead (limited tools, no OAuth 2.1). You can also "
+        "generate a project-scoped URL from the MCP connection tab in the Supabase dashboard. Setup below follows "
+        '<a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener noreferrer">Supabase\'s MCP docs</a> '
+        'and the <a href="https://github.com/supabase/mcp" target="_blank" rel="noopener noreferrer">supabase/mcp README</a>.</p>\n'
+        "<p><strong>Cursor.</strong> Add the JSON in the snippet above to <code>.cursor/mcp.json</code> in the repo, or to "
+        "<code>~/.cursor/mcp.json</code> to share it across projects. Cursor IDE and the Cursor CLI (<code>agent</code>) "
+        "read the same file. After you save it, from a terminal:</p>\n"
+        f"{snip_html('Cursor CLI', cursor_cli)}\n"
+        "<p>Some clients prompt you to log in during setup; either path opens a browser so you can sign in to Supabase "
+        "and grant access. Choose the organization that contains the project you want. Then in Cursor go to "
+        "Settings → Cursor Settings → Tools &amp; MCP and check that the server is connected. You may need to restart "
+        "Cursor after authorizing. A quick check: ask it &quot;What tables are there in the database? Use MCP tools.&quot;</p>\n"
+        "<p><strong>Claude Code.</strong> From the project directory:</p>\n"
+        f"{snip_html('Claude Code', CLAUDE_MCP_ADD)}\n"
+        "<p>Or put this in <code>.mcp.json</code>:</p>\n"
+        f"{snip_html('.mcp.json', CLAUDE_MCP_JSON)}\n"
+        "<p>Authenticate in a regular terminal (not the IDE extension): run <code>claude /mcp</code>, select the "
+        "<code>supabase</code> server, then Authenticate.</p>\n"
+        "<p>Query parameters go on the URL. <code>project_ref</code> scopes the server to one project. "
+        "<code>read_only=true</code> runs queries as a read-only Postgres user. <code>features=database,docs</code> "
+        "enables only those tool groups. They combine: "
+        "<code>https://mcp.supabase.com/mcp?project_ref=abc123&amp;read_only=true</code>.</p>\n"
+        "<h2>Guardrails: read-only, project scope, production</h2>\n"
+        "<p>Connecting an LLM to your Supabase projects carries security risks. Supabase's docs ask you to read their "
+        '<a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener noreferrer">security best practices</a> '
+        "before running the server. The controls they document:</p>\n"
+        "<ul>\n"
+        "<li><strong>Read-only mode.</strong> <code>read_only=true</code> executes all queries as a read-only Postgres user. "
+        "Use it for unattended monitoring and diagnostic routines. The Feedback group is disabled in read-only mode.</li>\n"
+        "<li><strong>Project scoping.</strong> <code>project_ref</code> limits access to that project's resources so the "
+        "model cannot see other projects in the account. Account-management tools (list/create/pause projects, "
+        "organizations, legacy cost helpers) are disabled when the connection is project-scoped.</li>\n"
+        "<li><strong>Production data.</strong> Connect to a production project only when the task requires production "
+        "evidence. Use project scoping, read-only mode, restricted feature groups, and the narrowest query that can "
+        "answer the question. Do not include secrets or unrelated personal data in prompts.</li>\n"
+        "<li><strong>Not for customers.</strong> The server runs under your developer permissions. Do not give it to "
+        "customers or end users; keep it as an internal developer tool.</li>\n"
+        "<li><strong>Feature groups.</strong> Groups your connection supports are enabled by default, except Storage. "
+        "Restrict them with <code>features</code> (comma-separated, for example <code>database,docs</code>). Branching "
+        "tools require a paid plan. Notebooks exist only on hosted connections, not on the local CLI or self-hosted "
+        "Studio. Keep manual tool-call approval enabled for interactive work.</li>\n"
+        "</ul>\n"
+        "<p>Read-only MCP will not write a migration with RLS off, but the agent can still emit that SQL in your repo. "
+        "Pair inspection with the rules in your migrations.</p>\n"
+    )
+
+
 def related_cta(entry: dict) -> str:
     pack_id = entry.get("relatedPack")
     if not pack_id:
@@ -287,7 +400,7 @@ def write_detail(entry: dict) -> None:
         "url": canonical,
         "mainEntityOfPage": canonical,
         "datePublished": "2026-10-21",
-        "dateModified": "2026-10-21",
+        "dateModified": entry.get("dateModified", "2026-10-21"),
         "image": f"{SITE}/og.png",
         "author": {"@type": "Organization", "name": "AgentKit Drawer", "url": f"{SITE}/"},
         "publisher": {
@@ -309,10 +422,10 @@ def write_detail(entry: dict) -> None:
 <h1>{escape(entry["heading"])}</h1>
 {tag_pills(entry)}
 <p class="dir-meta mono">By {escape(entry["creator"])} · License: {escape(license_note)}</p>
-<p>{entry["lede"]}</p>
+{detail_intro(entry)}<p>{entry["lede"]}</p>
 {launch_buy("directory-" + slug)}
 <p><a class="btn" href="{escape(entry["url"])}" target="_blank" rel="noopener">Open {escape(entry["name"])}</a></p>
-<h2>What it does</h2>
+{detail_extra(entry)}<h2>What it does</h2>
 {paras(entry["what"])}
 <h2>Who it is for</h2>
 {paras(entry["who"])}

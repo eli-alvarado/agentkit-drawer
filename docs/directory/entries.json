@@ -583,6 +583,7 @@
       "heading": "Supabase MCP: let the agent see the project, preferably read-only",
       "title": "Supabase MCP: official project tools for agents",
       "metaDescription": "supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.",
+      "dateModified": "2026-11-09",
       "url": "https://github.com/supabase/mcp",
       "creator": "Supabase",
       "license": "Apache-2.0",

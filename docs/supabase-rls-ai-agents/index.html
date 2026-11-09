@@ -86,6 +86,7 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Supabase RLS for AI agents</p>
 <h1>Stop AI agents creating Supabase tables without RLS</h1>
+<p class="tldr"><strong>Short answer:</strong> Tables an agent creates in SQL (a migration or the SQL Editor) start with row-level security off, and the service-role key hides that because it bypasses RLS. Make the rule “enable RLS and write one policy per command in the same migration, or the table does not ship”, never disable RLS to “make it work”, keep the service-role key server-only, and prove it with a pgTAP test. The copy-paste rule is further down.</p>
 <p>AI coding agents write a clean <code>create table</code>, add a foreign key, and move on. They skip row-level security because the query works from the SQL editor and the type generator is happy. That table is then reachable through the Data API by any role that has a grant. The <a href="https://supabase.com/docs/guides/api/securing-your-api" target="_blank" rel="noopener noreferrer">Supabase API security guide</a> is blunt: tables exposed without RLS can be accessed by any role with matching grants.</p>
 <p>This page is the RLS rule itself: enable it in the same migration, write policies, and never turn it off to “make it work”. For the rest of a Next.js + Supabase Cursor setup (auth helpers, env, Stripe), use <a href="/cursor-rules-nextjs-supabase/">Cursor rules for Next.js + Supabase</a>.</p>
 

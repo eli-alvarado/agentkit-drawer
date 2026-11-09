@@ -6,7 +6,7 @@
 <link rel="preload" href="/fonts/Archivo-400-900-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/style.css"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#15130f"><meta name="twitter:title" content="Supabase MCP: official project tools for agents"><meta name="twitter:description" content="supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agentkitdrawer.com/"},{"@type":"ListItem","position":2,"name":"Directory","item":"https://agentkitdrawer.com/directory/"},{"@type":"ListItem","position":3,"name":"Supabase MCP","item":"https://agentkitdrawer.com/directory/supabase-mcp/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Supabase MCP: official project tools for agents","description":"supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.","url":"https://agentkitdrawer.com/directory/supabase-mcp/","mainEntityOfPage":"https://agentkitdrawer.com/directory/supabase-mcp/","datePublished":"2026-10-21","dateModified":"2026-10-21","image":"https://agentkitdrawer.com/og.png","author":{"@type":"Organization","name":"AgentKit Drawer","url":"https://agentkitdrawer.com/"},"publisher":{"@type":"Organization","name":"AgentKit Drawer","url":"https://agentkitdrawer.com/","logo":{"@type":"ImageObject","url":"https://agentkitdrawer.com/icon-512.png"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Supabase MCP: official project tools for agents","description":"supabase/mcp connects Cursor or Claude to a Supabase project. Use read_only=true. It does not replace RLS rules in your migrations.","url":"https://agentkitdrawer.com/directory/supabase-mcp/","mainEntityOfPage":"https://agentkitdrawer.com/directory/supabase-mcp/","datePublished":"2026-10-21","dateModified":"2026-11-09","image":"https://agentkitdrawer.com/og.png","author":{"@type":"Organization","name":"AgentKit Drawer","url":"https://agentkitdrawer.com/"},"publisher":{"@type":"Organization","name":"AgentKit Drawer","url":"https://agentkitdrawer.com/","logo":{"@type":"ImageObject","url":"https://agentkitdrawer.com/icon-512.png"}}}</script>
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top wrap"><a class="logo" href="/"><span class="logo-box" aria-hidden="true"><i></i><i></i><i></i></span>AgentKit&nbsp;Drawer</a>
@@ -16,9 +16,47 @@
 <h1>Supabase MCP: let the agent see the project, preferably read-only</h1>
 <p class="dir-tags"><span class="tag mono">MCP</span><span class="tag mono">CURSOR</span><span class="tag mono">CLAUDE CODE</span><span class="tag mono">SUPABASE</span><span class="tag mono">NEXT.JS</span></p>
 <p class="dir-meta mono">By Supabase · License: Apache-2.0</p>
+<p class="tldr"><strong>Short answer:</strong> The hosted endpoint is <code>https://mcp.supabase.com/mcp</code>. In Cursor, put the JSON below in <code>.cursor/mcp.json</code> (or <code>~/.cursor/mcp.json</code> for every project). In Claude Code, run <code>claude mcp add --scope project --transport http supabase "https://mcp.supabase.com/mcp"</code>. Append <code>?project_ref=&lt;project-ref&gt;&amp;read_only=true</code> so SQL runs as a read-only Postgres user on one project. You sign in with OAuth; you don't need a personal access token.</p>
+<div class="snip"><div class="bar"><span>.cursor/mcp.json (read-only, one project)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
+  &quot;mcpServers&quot;: {
+    &quot;supabase&quot;: {
+      &quot;url&quot;: &quot;https://mcp.supabase.com/mcp?project_ref=&lt;project-ref&gt;&amp;read_only=true&quot;
+    }
+  }
+}</pre></div>
 <p>Supabase's MCP server gives an assistant project context: tables, config, logs, SQL. That is powerful and, on a production project, easy to regret.</p>
 
 <p><a class="btn" href="https://github.com/supabase/mcp" target="_blank" rel="noopener">Open Supabase MCP</a></p>
+<h2>Set up the Supabase MCP server</h2>
+<p>The hosted server is at <code>https://mcp.supabase.com/mcp</code>. If you are developing locally with the Supabase CLI, use <code>http://localhost:54321/mcp</code> instead (limited tools, no OAuth 2.1). You can also generate a project-scoped URL from the MCP connection tab in the Supabase dashboard. Setup below follows <a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener noreferrer">Supabase's MCP docs</a> and the <a href="https://github.com/supabase/mcp" target="_blank" rel="noopener noreferrer">supabase/mcp README</a>.</p>
+<p><strong>Cursor.</strong> Add the JSON in the snippet above to <code>.cursor/mcp.json</code> in the repo, or to <code>~/.cursor/mcp.json</code> to share it across projects. Cursor IDE and the Cursor CLI (<code>agent</code>) read the same file. After you save it, from a terminal:</p>
+<div class="snip"><div class="bar"><span>Cursor CLI</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>agent mcp enable supabase
+agent mcp login supabase
+agent mcp list</pre></div>
+<p>Some clients prompt you to log in during setup; either path opens a browser so you can sign in to Supabase and grant access. Choose the organization that contains the project you want. Then in Cursor go to Settings → Cursor Settings → Tools &amp; MCP and check that the server is connected. You may need to restart Cursor after authorizing. A quick check: ask it &quot;What tables are there in the database? Use MCP tools.&quot;</p>
+<p><strong>Claude Code.</strong> From the project directory:</p>
+<div class="snip"><div class="bar"><span>Claude Code</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>claude mcp add --scope project --transport http supabase &quot;https://mcp.supabase.com/mcp&quot;</pre></div>
+<p>Or put this in <code>.mcp.json</code>:</p>
+<div class="snip"><div class="bar"><span>.mcp.json</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>{
+  &quot;mcpServers&quot;: {
+    &quot;supabase&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://mcp.supabase.com/mcp&quot;
+    }
+  }
+}</pre></div>
+<p>Authenticate in a regular terminal (not the IDE extension): run <code>claude /mcp</code>, select the <code>supabase</code> server, then Authenticate.</p>
+<p>Query parameters go on the URL. <code>project_ref</code> scopes the server to one project. <code>read_only=true</code> runs queries as a read-only Postgres user. <code>features=database,docs</code> enables only those tool groups. They combine: <code>https://mcp.supabase.com/mcp?project_ref=abc123&amp;read_only=true</code>.</p>
+<h2>Guardrails: read-only, project scope, production</h2>
+<p>Connecting an LLM to your Supabase projects carries security risks. Supabase's docs ask you to read their <a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener noreferrer">security best practices</a> before running the server. The controls they document:</p>
+<ul>
+<li><strong>Read-only mode.</strong> <code>read_only=true</code> executes all queries as a read-only Postgres user. Use it for unattended monitoring and diagnostic routines. The Feedback group is disabled in read-only mode.</li>
+<li><strong>Project scoping.</strong> <code>project_ref</code> limits access to that project's resources so the model cannot see other projects in the account. Account-management tools (list/create/pause projects, organizations, legacy cost helpers) are disabled when the connection is project-scoped.</li>
+<li><strong>Production data.</strong> Connect to a production project only when the task requires production evidence. Use project scoping, read-only mode, restricted feature groups, and the narrowest query that can answer the question. Do not include secrets or unrelated personal data in prompts.</li>
+<li><strong>Not for customers.</strong> The server runs under your developer permissions. Do not give it to customers or end users; keep it as an internal developer tool.</li>
+<li><strong>Feature groups.</strong> Groups your connection supports are enabled by default, except Storage. Restrict them with <code>features</code> (comma-separated, for example <code>database,docs</code>). Branching tools require a paid plan. Notebooks exist only on hosted connections, not on the local CLI or self-hosted Studio. Keep manual tool-call approval enabled for interactive work.</li>
+</ul>
+<p>Read-only MCP will not write a migration with RLS off, but the agent can still emit that SQL in your repo. Pair inspection with the rules in your migrations.</p>
 <h2>What it does</h2>
 <p>The hosted endpoint is <code>https://mcp.supabase.com/mcp</code>. Clients use HTTP MCP and OAuth. You can generate a project-scoped URL in the dashboard. Docs also describe <code>http://localhost:54321/mcp</code> for the local CLI, with fewer tools and no OAuth.</p><p>Query parameters matter. <code>project_ref</code> pins one project. <code>read_only=true</code> runs SQL as a read-only role. Self-hosted Supabase has a more limited MCP.</p><p>The repo and the docs page both resolved. The docs walk through security practices; read those before you paste the JSON into Cursor.</p>
 <h2>Who it is for</h2>

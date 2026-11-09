@@ -1,5 +1,9 @@
 # SEO changelog
 
+## 2026-11-09: /directory/supabase-mcp/ setup + guardrails
+- Expanded the Supabase MCP directory page with a Short answer, a copyable `.cursor/mcp.json` (read-only, `project_ref`), Cursor and Claude Code setup from official docs, and a guardrails section (read-only, project scope, production, feature groups). Title and meta unchanged.
+- Contextual inlinks from /supabase-nextjs-agent-kit/ and /cursor-rules-nextjs-supabase/. Sitemap lastmod bumped for those three pages.
+
 ## 2026-11-09: /packs/ CLS, sitemap lastmod, title trims (this PR)
 - /packs/ CLS: the remaining shift (local Lighthouse mobile 0.147 on `section#drawers > div.snip`, 3 of 3 runs against the live site) came from the **Archivo** swap, not JetBrains Mono: delaying only JetBrains Mono gave CLS 0, delaying only Archivo gave 0.147. In the fallback the "Short answer" paragraph wraps to 9 lines instead of 8 (+27.7 px), so the snippet box below moves up when Archivo arrives. Fallback width vs Archivo varies by text (-1% to +2%), so size-adjust can't fix every rewrap. Archivo now uses `font-display: optional` (preloaded on every page, so it normally renders on first paint; if it's late the fallback stays and nothing shifts). Re-inlined into / and /packs/. Local Lighthouse /packs/ with fonts delayed 500 ms: CLS 0.147 → 0.001, perf 92 → 98 (3 runs each).
 - Titles/descriptions: /codex-agents-md-template/ title 68→52 and description 169→157; /windsurf-rules/ title 67→61; /agents-md-game-modding/ description 167→156. Same wording, primary query first, no new claims (og/twitter/JSON-LD copies updated where identical).

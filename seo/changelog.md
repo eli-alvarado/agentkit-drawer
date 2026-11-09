@@ -1,5 +1,30 @@
 # SEO changelog
 
+## 2026-11-09: /packs/ CLS, sitemap lastmod, title trims (this PR)
+- /packs/ CLS: the remaining shift (local Lighthouse mobile 0.147 on `section#drawers > div.snip`, 3 of 3 runs against the live site) came from the **Archivo** swap, not JetBrains Mono: delaying only JetBrains Mono gave CLS 0, delaying only Archivo gave 0.147. In the fallback the "Short answer" paragraph wraps to 9 lines instead of 8 (+27.7 px), so the snippet box below moves up when Archivo arrives. Fallback width vs Archivo varies by text (-1% to +2%), so size-adjust can't fix every rewrap. Archivo now uses `font-display: optional` (preloaded on every page, so it normally renders on first paint; if it's late the fallback stays and nothing shifts). Re-inlined into / and /packs/. Local Lighthouse /packs/ with fonts delayed 500 ms: CLS 0.147 → 0.001, perf 92 → 98 (3 runs each).
+- Titles/descriptions: /codex-agents-md-template/ title 68→52 and description 169→157; /windsurf-rules/ title 67→61; /agents-md-game-modding/ description 167→156. Same wording, primary query first, no new claims (og/twitter/JSON-LD copies updated where identical).
+- Sitemap: lastmod regenerated from git dates for 46 of 48 URLs (stale since PRs from Oct 22 on edited pages without bumping it; e.g. / and /packs/ said 2026-10-26). New `scripts/sitemap-lastmod.py` (rewrite, or `--check`) and `.github/workflows/sitemap.yml` running the check on every PR and push to main.
+
+## 2026-11-09: Short answer on /supabase-rls-ai-agents/ (#65)
+- One answer-first `.tldr` paragraph under the H1. No title, meta or URL change. (Also #66 the same day: Game Jam Kit shortcut on /agents-md-godot/, conversion only.)
+
+## 2026-11-08: Short answer on /codex-agents-md-template/ (#64)
+- One `.tldr` paragraph under the H1 (most-visited content page with /agents-md-godot/). No title, meta or URL change.
+
+## 2026-11-07: homepage Short answer + where-to-buy link (#63)
+- `.tldr` on / after the hero; contextual link to /where-to-buy-cursor-rules/; removed unused LAUNCH CSS/JS. No title, meta or URL change.
+
+## 2026-11-06: new guide /where-to-buy-cursor-rules/ (#62) and answer-first blocks (#61)
+- #62: comparison of free sources and paid packs (AI-search fix 3). Title "Where to buy Cursor rules - AgentKit Drawer" (43), description 156. Sitemap, /guides/, feed, llms.txt, llms-full.txt; inlinks from /packs/ and /cursor-rules-nextjs-supabase/. Indexing requested 2026-11-06 and 2026-11-09 (unknown to Google on both dates).
+- #61: Short answer + copyable snippet under the H1 on /cursor-rules-nextjs-supabase/ (duplicate lower snippet removed) and /claude-code-hooks-examples/.
+
+## 2026-11-04: answer-first summaries (#59)
+- Short answer + copyable snippet under the H1 on /agents-md-godot/, /packs/ and /supabase-nextjs-agent-kit/ (AI-visibility fix 1). This /packs/ snippet box is the `div.snip` that later showed the font-swap shift.
+
+## 2026-11-02: CLS fixes on / and /packs/ (#48, #50)
+- #48: header height no longer depends on the webfont below 440px (CLS on / was 0.199 in 2 of 3 local runs).
+- #50: metric-matched Archivo fallback `@font-face` (`size-adjust`, Arial/Liberation Sans and Roboto). Audit 2026-11-09: / CLS 0 in 3 of 3 runs; /packs/ 0.367 → 0.147 (fixed in the 2026-11-09 entry above).
+
 ## 2026-10-22: post-#29 anchor audit (/packs/)
 - Grepped the whole repo (guides, directory pages + scripts/build-directory.py, llms.txt, llms-full.txt, feed, JSON-LD) for links to the removed homepage anchors /#drw-01..05, /#bundle, /#drawers: none left; all point to /packs/#... Only a code comment in drawers.js still said /#drw-04; updated.
 - /packs/ live: 200, self-canonical, unique title ("All AgentKit Drawer packs: AGENTS.md, Cursor rules and Claude Code kits") and meta, listed in sitemap.xml.

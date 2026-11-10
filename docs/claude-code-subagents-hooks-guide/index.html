@@ -86,8 +86,9 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Claude Code subagents + hooks</p>
 <h1>Claude Code subagents, hooks and slash commands: a working setup</h1>
+<p class="tldr"><strong>Short answer:</strong> Subagents are Markdown files in <code>.claude/agents/</code> with YAML frontmatter (<code>name</code>, a <code>description</code> that says when to delegate, optional <code>tools</code>; give reviewers <code>Read, Grep, Glob</code> only). Hooks go in <code>.claude/settings.json</code> under <code>"hooks"</code>: a PreToolUse hook on <code>Bash</code> gets the tool call as JSON on stdin, and exit code 2 blocks it and sends your stderr back to Claude. Each <code>.claude/commands/*.md</code> file becomes a slash command. The free copy-paste hook that blocks <code>rm -rf</code> and force-push is further down.</p>
 <p><code>CLAUDE.md</code> tells Claude Code what to do. Subagents, hooks and slash commands are how you make it actually happen: focused reviewers with limited tools, shell scripts that <em>enforce</em> your rules instead of hoping the model remembers them, and one-word commands for your workflow.</p>
-<h2>Subagents: <code>.claude/agents/*.md</code></h2>
+<h2>Subagents: <code>.claude/<wbr>agents/<wbr>*.md</code></h2>
 <p>A subagent is a Markdown file with YAML frontmatter: <code>name</code>, a <code>description</code> that tells Claude <em>when</em> to delegate (write “Use PROACTIVELY after…” to get it used automatically), and an optional <code>tools</code> list. Each subagent runs in its own fresh context, so it does not clutter the main conversation, and it does not see that conversation either: pass it the exact files and goal.</p>
 <ul><li><strong>Least privilege:</strong> a reviewer or security auditor gets <code>Read, Grep, Glob</code> only. If it cannot edit, it cannot “fix” things you did not ask for.</li>
 <li><strong>One job each:</strong> planner, code-reviewer, test-writer, debugger, security-auditor, docs-writer covers most teams.</li>
@@ -103,7 +104,7 @@
 <li><strong>Stop:</strong> run tests when code changed; exit 2 keeps Claude working. Check <code>stop_hook_active</code> to avoid loops.</li></ul>
 <p>Hooks run with your user's permissions. Read every script before enabling it and keep them in version control. Pair them with <code>permissions.deny</code> entries in the same file for a second layer.</p>
 <p>Want more? See <a href="/claude-code-hooks-examples/">7 copy-paste Claude Code hooks examples</a>: auto-format, protect .env, notifications, context after /compact and more.</p>
-<h2>Slash commands: <code>.claude/commands/*.md</code></h2>
+<h2>Slash commands: <code>.claude/<wbr>commands/<wbr>*.md</code></h2>
 <p>Each file becomes <code>/filename</code>. Use <code>$ARGUMENTS</code> for what you type after the command, and frontmatter such as <code>description</code>, <code>argument-hint</code> and <code>allowed-tools</code>. Good commands chain your subagents: <code>/feature</code> = plan → implement → test-writer → tests → code-reviewer → summary.</p>
 <h2>Free snippet: copy it</h2>
 <div class="snip"><div class="bar"><span>.claude/hooks/block-dangerous-bash.sh</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>#!/usr/bin/env bash

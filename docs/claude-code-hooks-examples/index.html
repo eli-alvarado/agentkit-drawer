@@ -199,7 +199,7 @@ exit 0</pre></div>
 <h2>When a hook doesn't fire</h2>
 <ul><li>Run <code>/hooks</code> and check it's under the right event. Matchers are case-sensitive: <code>Bash</code>, not <code>bash</code>.</li>
 <li>Scripts must be executable (<code>chmod +x</code>). Use <code>"$CLAUDE_PROJECT_DIR"</code> for paths.</li>
-<li>Test a script by piping sample JSON: <code>echo '{"tool_name":"Bash","tool_input":{"command":"ls"}}' | ./my-hook.sh; echo $?</code></li>
+<li>Test a script by piping sample JSON: <code>echo '{"tool_name":"Bash",<wbr>"tool_input":{"command":"ls"}}' | ./my-hook.sh; echo $?</code></li>
 <li>Invalid JSON in settings (a trailing comma) silently drops your hooks.</li></ul>
 <p>Hooks run with your user's permissions. Read every script before you enable it.</p>
 <h2 id="faq">FAQ</h2>

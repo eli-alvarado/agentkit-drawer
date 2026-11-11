@@ -142,7 +142,7 @@ export async function POST(req: Request) {
 </ul>
 
 <h2>Handle duplicate events</h2>
-<p>Stripe retries. Your own replay script may run twice. The same Checkout Session can also produce two different events (<code>checkout.session.completed</code> and later <code>checkout.session.async_payment_succeeded</code> for delayed methods). Dedup on <code>event.id</code> <em>and</em> on the business object.</p>
+<p>Stripe retries. Your own replay script may run twice. The same Checkout Session can also produce two different events (<code>checkout.session.completed</code> and later <code>checkout.<wbr>session.<wbr>async_payment_succeeded</code> for delayed methods). Dedup on <code>event.id</code> <em>and</em> on the business object.</p>
 <div class="snip"><div class="bar"><span>lib/fulfill-checkout.ts</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre>export async function fulfillCheckout(sessionId: string) {
   // 1. If this session is already fulfilled, return.
   // 2. Mark it processing (unique on sessionId) so a concurrent retry exits.
@@ -164,7 +164,7 @@ export async function recordStripeEvent(eventId: string): Promise&lt;boolean&gt;
 <h2>Which events grant access</h2>
 <ul>
 <li><strong><code>checkout.session.completed</code></strong> — the session finished. For card payments that is usually paid. For ACH and other delayed methods the session can complete while payment is still processing.</li>
-<li><strong><code>checkout.session.async_payment_succeeded</code></strong> — the delayed payment actually landed. Handle both, and let <code>fulfillCheckout</code> no-op the second time.</li>
+<li><strong><code>checkout.<wbr>session.<wbr>async_payment_succeeded</code></strong> — the delayed payment actually landed. Handle both, and let <code>fulfillCheckout</code> no-op the second time.</li>
 <li><strong>Retrieve, don’t trust the snapshot alone</strong> if you need line items or a later status. Expand <code>line_items</code> on retrieve, then check <code>payment_status</code>.</li>
 </ul>
 <p>Subscriptions have their own objects (<code>invoice.paid</code>, <code>customer.subscription.updated</code>). Same rules: verify, then idempotent write. Do not chain “I already saw invoice.created so invoice.paid must be next.”</p>
@@ -192,7 +192,7 @@ alwaysApply: false
 <details><summary>Can I grant paid access on the Stripe success URL?</summary><p>No. <code>success_url</code> is a browser redirect anyone can visit, and paying customers may close the tab before they reach it. Fulfill from a verified webhook, then use <code>/success</code> only to show status.</p></details>
 <details><summary>How do I verify a Stripe webhook?</summary><p>Read the raw request body and the <code>Stripe-Signature</code> header, then call the official <code>constructEvent</code> helper with your endpoint secret. Return 400 if verification fails. Do not <code>JSON.parse</code> the body first.</p></details>
 <details><summary>Why do Stripe webhooks fire twice?</summary><p>Stripe retries deliveries and may send the same event more than once. Store processed event IDs and return 200 without doing the work again. Also key fulfillment on the Checkout Session ID so <code>checkout.session.completed</code> and <code>async_payment_succeeded</code> cannot double-grant.</p></details>
-<details><summary>Which events should grant access?</summary><p>For Checkout, handle <code>checkout.session.completed</code> and <code>checkout.session.async_payment_succeeded</code>. Retrieve the session, check <code>payment_status</code>, then fulfill once per session. Delayed methods such as ACH are not paid on completed alone.</p></details>
+<details><summary>Which events should grant access?</summary><p>For Checkout, handle <code>checkout.session.completed</code> and <code>checkout.<wbr>session.<wbr>async_payment_succeeded</code>. Retrieve the session, check <code>payment_status</code>, then fulfill once per session. Delayed methods such as ACH are not paid on completed alone.</p></details>
 <details><summary>Should the success page retrieve the Checkout Session?</summary><p>You can retrieve it to render a receipt, but do not write entitlements there. Customers may never land on the page. Stripe’s fulfillment docs treat the webhook as the source of truth.</p></details>
 </div>
 

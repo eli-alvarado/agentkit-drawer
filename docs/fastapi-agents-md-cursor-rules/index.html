@@ -99,7 +99,7 @@
 <h2>A layout that works</h2>
 <p><code>00-core</code> (always on), <code>10-structure</code> (app/**), <code>20-api-routes</code> (app/api/**), <code>30-pydantic-schemas</code> (app/schemas/**), <code>40-sqlalchemy-models</code> (models, services), <code>50-alembic-migrations</code> (alembic/**), <code>60-security</code> (core, deps, auth routes), <code>70-testing</code> (tests/**).</p>
 <h2>The three rules that matter most</h2>
-<ul><li><strong>Authorization in the query:</strong> <code>select(Invoice).where(Invoice.id == id, Invoice.owner_id == user.id)</code>, with 404 for other users’ objects.</li>
+<ul><li><strong>Authorization in the query:</strong> <code>select(Invoice).<wbr>where(Invoice.id == id, Invoice.owner_id == user.id)</code>, with 404 for other users’ objects.</li>
 <li><strong>Migrations are reviewed code:</strong> autogenerate, then read and fix it; every migration has a working <code>downgrade()</code> and is round-trip tested.</li>
 <li><strong>Every endpoint gets four tests:</strong> happy path, 422, 401, and 404 for another user, against a real Postgres in a rolled-back transaction.</li></ul>
 <h2>Free snippet: copy it</h2>

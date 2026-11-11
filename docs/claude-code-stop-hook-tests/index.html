@@ -148,7 +148,7 @@ exit 0
 </pre></div>
 <p>Point the test line at what CI runs. A Python repo uses <code>pytest -q</code>; a pnpm monorepo uses the package script, not a raw <code>npm test</code> the agent guessed. Write the command in <code>AGENTS.md</code> so the hook and the model agree.</p>
 
-<h2>Why <code>stop_hook_active</code> matters</h2>
+<h2 style="flex-wrap:wrap">Why <code>stop_<wbr>hook_<wbr>active</code> matters</h2>
 <p>Without the guard, a red suite that Claude cannot fix becomes: stop → exit 2 → Claude retries → stop → exit 2, up to eight times. That is tokens and time, then an override. Checking <code>stop_hook_active</code> gives you <strong>one</strong> forced retry, then a stop so a human can look.</p>
 <p>If you want Claude to keep iterating, omit the early exit and rely on the eight-block cap (or raise <code>CLAUDE_CODE_STOP_HOOK_BLOCK_CAP</code>). The safer default for a shared repo hook is: block once, then stand down. The input’s <code>background_tasks</code> array distinguishes “done” from “paused on a long task”.</p>
 

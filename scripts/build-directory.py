@@ -419,7 +419,7 @@ def write_detail(entry: dict) -> None:
 {NAV}</header>
 <main id="main" class="wrap article">
 {crumbs}
-<h1>{escape(entry["heading"])}</h1>
+<h1>{escape(entry["heading"]).replace("/", "/<wbr>")}</h1>
 {tag_pills(entry)}
 <p class="dir-meta mono">By {escape(entry["creator"])} · License: {escape(license_note)}</p>
 {detail_intro(entry)}<p>{entry["lede"]}</p>

@@ -12,6 +12,7 @@
 <nav aria-label="Main"><a href="/#demo">Demo</a><a href="/packs/">Packs</a><a href="/guides/">Guides</a><a href="/directory/">Directory</a><a href="/#faq">FAQ</a><a href="https://github.com/eli-alvarado/agentkit-drawer" target="_blank" rel="noopener noreferrer">GitHub</a></nav></header>
 <main id="main" class="wrap article"><p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / CLAUDE.md template for Claude Code</p>
 <h1>CLAUDE.md examples and a template for Claude Code</h1>
+<p class="tldr"><strong>Short answer:</strong> Commit a short <code>CLAUDE.md</code> at your repo root (or <code>.claude/CLAUDE.md</code>) with your stack, the exact dev, test and lint commands, the 5 to 10 hard rules that must never break, and a plan-first workflow. Keep it under 200 lines. Personal preferences go in <code>~/.claude/CLAUDE.md</code>, private notes in a gitignored <code>CLAUDE.local.md</code>, and <code>@path</code> imports keep the main file short. Run <code>/init</code> for a first draft. Already have <code>AGENTS.md</code>? Make <code>CLAUDE.md</code> an <code>@AGENTS.md</code> line plus Claude-only notes. Five examples and the free template are below.</p>
 <p>Claude Code reads <code>CLAUDE.md</code> from your repo root at the start of every session. A good one is short, specific and boring. A bad one is a 600-line wish list the agent skims and ignores.</p>
 <h2>What belongs in CLAUDE.md</h2>
 <ul><li><strong>Project facts:</strong> stack, package manager, where things live.</li>

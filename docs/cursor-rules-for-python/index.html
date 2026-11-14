@@ -86,6 +86,7 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Cursor rules for Python</p>
 <h1>Cursor rules for Python backends: AGENTS.md and .cursor/rules</h1>
+<p class="tldr"><strong>Short answer:</strong> Put a short <code>AGENTS.md</code> at the repo root with your stack, a repo-root <code>.venv</code>, the exact install, <code>pytest</code>, lint and typecheck commands, and a few hard rules: never print, log or commit secrets, type-hint public functions without <code># type: ignore</code>, never skip or delete tests to go green, and plan first for auth, payments, migrations or deleting data. Add one always-on <code>.cursor/rules/00-core.mdc</code> with the same core, and glob-scoped rules for <code>tests/**</code> later. Cursor, Codex and Windsurf read <code>AGENTS.md</code>; Claude Code picks it up through <code>@AGENTS.md</code> in <code>CLAUDE.md</code>. Both files are below.</p>
 <p>AI agents write Python that imports. The problem is what they quietly skip:</p>
 <ul>
 <li><strong>No project venv.</strong> Packages land in the system interpreter, or a new virtualenv appears in a random folder.</li>

@@ -86,9 +86,10 @@
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / AGENTS.md vs CLAUDE.md vs Cursor rules</p>
 <h1>AGENTS.md vs CLAUDE.md vs Cursor rules: which one is read?</h1>
+<p class="tldr"><strong>Short answer:</strong> Each tool reads its own file. Codex, Cursor and other AGENTS.md-aware agents read <code>AGENTS.md</code>; Claude Code reads <code>CLAUDE.md</code>; Cursor also loads scoped rules from <code>.cursor/rules/*.mdc</code>; Windsurf reads <code>.windsurf/rules/</code>. Keep one source of truth: write <code>AGENTS.md</code> first, add a thin <code>CLAUDE.md</code> that starts with <code>@AGENTS.md</code>, and add small scoped <code>.mdc</code> rules only for paths that need extra precision. Migrate away from the legacy <code>.cursorrules</code>.</p>
 <p>Different AI coding tools look for different instruction files. If you only keep rules in one tool's format, the others guess. If you copy the same wall of text into every format, the copies drift. This guide maps what each file is for, and a setup that stays maintainable.</p>
 
-<h2>The short answer</h2>
+<h2>Which file each tool reads</h2>
 <ul>
   <li><strong><code>AGENTS.md</code></strong> is the cross-tool open convention. OpenAI Codex, Cursor, and many other agents read it as plain Markdown project instructions.</li>
   <li><strong><code>CLAUDE.md</code></strong> is Claude Code's project memory file. It can pull in other files with <code>@path</code> syntax (for example <code>@AGENTS.md</code>).</li>

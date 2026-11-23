@@ -1,8 +1,8 @@
 # SEO changelog
 
 ## 2026-11-23: Cursor-vs-AGENTS.md section, Codex title, where-to-buy inlinks (this PR)
-- /agents-md-vs-claude-md-vs-cursor-rules/: H2 "Cursor rules vs AGENTS.md" plus FAQ "Does Cursor use AGENTS.md?" (visible + FAQPage JSON-LD, same answer text), sourced from cursor.com/docs/rules.
-- /codex-agents-md-template/: title/meta lead with "OpenAI Codex AGENTS.md"; H1 left as-is.
+- /agents-md-vs-claude-md-vs-cursor-rules/: H2 "Cursor rules vs AGENTS.md" (sourced from cursor.com/docs/rules) plus a contextual link to /codex-agents-md-template/. FAQ "Does Cursor use AGENTS.md?" lives only on the Codex page (#77).
+- /codex-agents-md-template/: title/meta lead with "OpenAI Codex AGENTS.md"; keep #77 H2, snippet, FAQ, and FAQPage JSON-LD; H1 left as-is.
 - Contextual inlinks to /where-to-buy-cursor-rules/ from /cursor-rules-for-python/, /windsurf-rules/, and /directory/awesome-cursorrules/ (builder keeps the directory sentence).
 
 ## 2026-11-16: Short answer on /stripe-webhooks-ai-agents/ (#75)

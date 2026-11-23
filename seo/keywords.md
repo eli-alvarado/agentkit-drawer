@@ -29,7 +29,7 @@ Google Search Console, last 7 days vs previous 7 (pulled 2026-11-23).
 | Keyword | Page | Status |
 |---|---|---|
 | cursor rules vs agents.md | /agents-md-vs-claude-md-vs-cursor-rules/ | GSC: 7 impr, pos 72 (prev 8 / 90.6); H2 + FAQ added 2026-11-23 |
-| does cursor use agents.md | /agents-md-vs-claude-md-vs-cursor-rules/ | GSC: 4 impr, pos 65 (new); FAQ "Does Cursor use AGENTS.md?" added 2026-11-23 |
+| does cursor use agents.md | /codex-agents-md-template/ | GSC: 4 impr, pos 65 (new, previously ranking on the comparison page); FAQ "Does Cursor use AGENTS.md?" on Codex page 2026-11-23 (#77); comparison H2 links here |
 | codex agent md | /codex-agents-md-template/ | GSC: 4 impr; title/meta lead with "OpenAI Codex AGENTS.md" 2026-11-23 |
 | agents.md codex openai | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |
 | openai codex agents.md | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |

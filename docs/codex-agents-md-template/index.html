@@ -32,6 +32,14 @@
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "Does Cursor use AGENTS.md?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Cursor reads AGENTS.md as a simple alternative to Project Rules in .cursor/rules. Place it in the project root; Cursor also supports nested AGENTS.md in any subdirectory, applied when you work with files in that directory or its children, with more specific nested instructions taking precedence. Codex also reads AGENTS.md (and AGENTS.override.md) from the repo root toward the current working directory."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "What file does OpenAI Codex read for project instructions?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -89,6 +97,27 @@
 <p class="tldr"><strong>Short answer:</strong> Codex reads <code>AGENTS.md</code> / <code>AGENTS.override.md</code> before it works, discovering global <code>~/.codex/</code> first, then project files from the repo root toward cwd so closer files win. Keep the root file short (combined project instructions cap at about 32&nbsp;KiB) and nest specialist rules; Codex does not read <code>CLAUDE.md</code> or <code>.cursor/rules</code>. The copy-paste template is further down.</p>
 <p>OpenAI Codex reads <code>AGENTS.md</code> before it does any work. That file is the Codex CLI agent instructions for the repo: stack, commands, hard never-dos, and what “done” means. A short, specific file gets followed. A 600-line essay gets skimmed.</p>
 <p>This guide is a Codex <code>AGENTS.md</code> template you can paste today, plus how Codex actually discovers those files, and how that differs from <code>CLAUDE.md</code> and Cursor rules.</p>
+
+<h2>Does Cursor use AGENTS.md?</h2>
+<p><strong>Yes.</strong> Cursor reads <code>AGENTS.md</code> as a simple alternative to Project Rules in <code>.cursor/rules</code> (<code>.mdc</code> files). Official Cursor docs: place it in the project root; Cursor also supports nested <code>AGENTS.md</code> in any subdirectory, applied when you work with files in that directory or its children, with more specific nested instructions taking precedence. See <a href="https://cursor.com/docs/context/rules" target="_blank" rel="noopener noreferrer">Cursor Rules</a>.</p>
+<p>Unlike those <code>.mdc</code> rules, <code>AGENTS.md</code> is plain Markdown with no <code>description</code>, <code>globs</code>, or <code>alwaysApply</code> frontmatter. OpenAI Codex also reads <code>AGENTS.md</code> before it works: from the repo root down to the current working directory, concatenating files so closer ones override. Official discovery: <a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener noreferrer">Custom instructions with AGENTS.md</a>.</p>
+<div class="snip"><div class="bar"><span>AGENTS.md (Cursor + Codex)</span><button type="button" onclick="navigator.clipboard.writeText(this.closest('.snip').querySelector('pre').innerText);this.textContent='copied'">copy</button></div><pre># AGENTS.md
+&lt;!-- Shared: Cursor and Codex both read this file. --&gt;
+
+## Project
+- App: &lt;&lt;FILL: name and one-line purpose&gt;&gt;
+- Stack: &lt;&lt;FILL&gt;&gt;
+- Test / lint: &lt;&lt;FILL&gt;&gt;
+
+## Hard rules
+- Never print, log, or commit secrets.
+- Keep diffs small. Never edit generated files.
+- For auth, payments, or migrations: write a short plan and wait for go.
+
+## Done means
+Listed commands pass, the change is described in plain words, and you did not expand the scope.
+</pre></div>
+<p>Cursor's docs call <code>AGENTS.md</code> an alternative to <code>.cursor/rules</code> for straightforward cases — keep shared instructions here, and add <code>.mdc</code> Project Rules only when you need path globs or <code>alwaysApply</code>.</p>
 
 <h2>What Codex reads</h2>
 <p>Codex builds an instruction chain once per run (in the TUI, once per session):</p>
@@ -187,6 +216,7 @@ The commands above pass, the change is described in plain words, and you did not
 
 <h2 id="faq">FAQ</h2>
 <div class="faq">
+<details><summary>Does Cursor use AGENTS.md?</summary><p>Yes. Cursor reads <code>AGENTS.md</code> in the project root and in nested subdirectories as a simple alternative to <code>.cursor/rules/*.mdc</code> Project Rules. Codex also reads <code>AGENTS.md</code> (and <code>AGENTS.override.md</code>) from the repo root toward cwd.</p></details>
 <details><summary>What file does OpenAI Codex read?</summary><p>Codex CLI reads <code>AGENTS.md</code> (and <code>AGENTS.override.md</code> when present) before it starts work. Personal defaults can live in <code>~/.codex/AGENTS.md</code>. It does not read <code>CLAUDE.md</code> or Cursor <code>.mdc</code> rules.</p></details>
 <details><summary>Does Codex read CLAUDE.md or .cursor/rules?</summary><p>No. Keep shared rules in <code>AGENTS.md</code>. Point Claude Code at that file with <code>@AGENTS.md</code>. Keep Cursor path rules in <code>.cursor/rules/*.mdc</code>.</p></details>
 <details><summary>Where should the Codex AGENTS.md template live?</summary><p>Repo root, next to your lockfile. Nested <code>AGENTS.md</code> files refine the root file for a subdirectory. Codex concatenates from the Git root down to the working directory.</p></details>

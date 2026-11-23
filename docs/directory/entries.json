@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-21",
-  "indexMetaDescription": "Hand-picked agent kits, Cursor rules, CLAUDE.md templates, Claude Code plugins and MCP setups. Twenty entries, each with a verified URL. No invented stats.",
+  "indexMetaDescription": "20 hand-picked MCP servers (Supabase, Stripe, Playwright, Context7, FastMCP), Cursor rules, CLAUDE.md templates and Claude Code plugins, each URL verified.",
   "indexLede": "A free, curated list of agent kits, Cursor rules, CLAUDE.md and AGENTS.md templates, Claude Code skills or plugins, and MCP setups from other people. We wrote an honest page for each one. We are not the authors, and we do not invent popularity numbers.",
   "entries": [
     {

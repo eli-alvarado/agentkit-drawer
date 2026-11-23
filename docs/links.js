@@ -35,6 +35,7 @@
 })();
 // After a free Starter download or signup, show one One-File ($9) upsell under the form, once.
 // Tagged client_reference_id/utm_content=starter-dl so buy clicks are countable via the beacon above.
+// On a page with a kit box, keep the previous in-page kit link as a plain-text second line.
 function akdNextStep(f){
   if(!f||f.querySelector(".news-up"))return;
   var p=document.createElement("p");p.className="news-up mono";
@@ -44,7 +45,17 @@ function akdNextStep(f){
   a.href="https://buy.stripe.com/fZu7sKdJ20oP7md93o7kc06?client_reference_id=drw-00_starter-dl&utm_source=agentkitdrawer&utm_medium=site&utm_campaign=starter&utm_content=starter-dl";
   a.target="_blank";a.rel="noopener noreferrer";
   a.textContent="Buy One-File Agent Rules \u00b7 $9";
-  p.appendChild(document.createElement("br"));p.appendChild(a);f.appendChild(p);
+  p.appendChild(document.createElement("br"));p.appendChild(a);
+  var box=document.querySelector("main .ctabox"),b=box&&box.querySelector(".cta a.btn:not(.ghost)");
+  var m=b&&(b.textContent||"").trim().match(/^(?:Buy|See) (.+?) \u00b7 (\$\d+)$/);
+  if(m){
+    if(!box.id)box.id="kit";
+    p.appendChild(document.createElement("br"));
+    p.appendChild(document.createTextNode("Next step for this page: "+m[1]+" ("+m[2]+"). "));
+    var k=document.createElement("a");k.href="#"+box.id;k.textContent="See what's in it";
+    p.appendChild(k);
+  }
+  f.appendChild(p);
 }
 (function(){
   document.querySelectorAll(".news-f .news-m").forEach(function(m){

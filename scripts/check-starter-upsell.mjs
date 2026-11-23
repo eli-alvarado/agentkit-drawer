@@ -188,6 +188,7 @@ async function main() {
   if (heroBox.target !== "_blank" || heroBox.rel !== "noopener noreferrer") fail("home hero: target/rel");
   if (!heroBox.btn) fail("home hero: not .btn");
   if (heroBox.stripeCount !== 1) fail("home hero: not one Stripe link");
+  if (/Next step for this page/.test(heroBox.text)) fail("home hero: unexpected page-kit link");
   for (const bit of ["$9", "14-day refund", "Next.js + Supabase", "FastAPI", "Node", "Godot", "/plan", "/review", "/fix", "/test", "/ship", "self-review", "per-tool"]) {
     if (!heroBox.text.includes(bit)) fail(`home hero: copy missing ${bit}`);
   }
@@ -208,18 +209,31 @@ async function main() {
   if (freeCount !== 1) fail(`home #free: ${freeCount} upsells`);
   console.log("home email success path ok");
 
-  // Guide with a kit ctabox must still upsell One-File (tagged), not the page kit.
+  // Guide with a kit ctabox: DRW-00 button plus the previous in-page kit link.
   await page.goto(origin + "/cursor-rules-nextjs-supabase/", { waitUntil: "domcontentloaded" });
   await page.waitForSelector("form.news-f .news-dl a.btn");
   await clickStarterDownload(page.locator("form.news-f"));
   await page.locator("form.news-f .news-up").waitFor();
-  const guide = await page.locator("form.news-f .news-up").evaluate((el) => ({
-    href: el.querySelector("a") && el.querySelector("a").getAttribute("href"),
-    text: el.textContent,
-  }));
-  if (guide.href !== BUY) fail(`guide: href ${guide.href}`);
-  if (/Next step for this page/.test(guide.text)) fail("guide: still pointing at the page kit");
-  console.log("guide kit page upsells One-File ok");
+  const guide = await page.locator("form.news-f .news-up").evaluate((el) => {
+    const as = [...el.querySelectorAll("a")];
+    return {
+      hrefs: as.map((a) => a.getAttribute("href")),
+      btn: as.map((a) => a.classList.contains("btn")),
+      texts: as.map((a) => a.textContent),
+      text: el.textContent,
+      stripeCount: el.querySelectorAll('a[href*="buy.stripe.com/"]').length,
+    };
+  });
+  if (guide.hrefs[0] !== BUY) fail(`guide: first href ${guide.hrefs[0]}`);
+  if (!guide.btn[0]) fail("guide: first link is not .btn");
+  if (guide.stripeCount !== 1) fail(`guide: ${guide.stripeCount} Stripe links`);
+  if (guide.hrefs[1] !== "#drw-06-kit") fail(`guide: kit href ${guide.hrefs[1]}`);
+  if (guide.btn[1]) fail("guide: kit link should be plain text, not .btn");
+  if (guide.texts[1] !== "See what's in it") fail(`guide: kit link text ${guide.texts[1]}`);
+  if (!/Next step for this page: Supabase \+ Next\.js Kit \(\$19\)/.test(guide.text)) {
+    fail(`guide: missing previous kit line: ${guide.text}`);
+  }
+  console.log("guide kit page has One-File + secondary kit link ok");
 
   // Buy-click beacon uses client_reference_id (p=drw-00, pg=starter-dl).
   beacons.length = 0;

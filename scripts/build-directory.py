@@ -471,10 +471,12 @@ def write_index(data: dict) -> None:
         for s in stacks
     ]
     # CollectionPage + ItemList + BreadcrumbList so search engines see the index as a list of entries.
+    index_title = "Free MCP server and Cursor rules directory | AgentKit Drawer"
+    index_name = "Free MCP server and Cursor rules directory"
     collection = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Free directory of agent kits and MCP setups",
+        "name": index_name,
         "description": data["indexMetaDescription"],
         "url": canonical,
         "isPartOf": {"@type": "WebSite", "name": "AgentKit Drawer", "url": f"{SITE}/"},
@@ -496,7 +498,19 @@ def write_index(data: dict) -> None:
             {"@type": "ListItem", "position": 2, "name": "Directory", "item": canonical},
         ],
     }
-    html = f"""{head("Free directory of agent kits and MCP setups | AgentKit Drawer", data["indexMetaDescription"], canonical)}
+    lede = data["indexLede"]
+    first, sep, rest = lede.partition(". ")
+    if not sep:
+        raise SystemExit("indexLede has no first sentence to insert after")
+    mcp_starters = (
+        "MCP setups to start with: "
+        '<a href="/directory/supabase-mcp/">Supabase MCP</a>, '
+        '<a href="/directory/stripe-mcp/">Stripe MCP</a>, '
+        '<a href="/directory/playwright-mcp/">Playwright MCP</a>, '
+        '<a href="/directory/context7/">Context7</a>.'
+    )
+    intro = f"<p>{first}.</p>\n<p>{mcp_starters}</p>\n<p>{rest}</p>"
+    html = f"""{head(index_title, data["indexMetaDescription"], canonical)}
 <link rel="alternate" type="application/atom+xml" title="AgentKit Drawer guides" href="/feed.xml">
 <script type="application/ld+json">{json.dumps(index_crumbs, separators=(",", ":"))}</script>
 <script type="application/ld+json">{json.dumps(collection, separators=(",", ":"))}</script>
@@ -507,7 +521,7 @@ def write_index(data: dict) -> None:
 <main id="main" class="wrap article">
 <p class="crumb"><a href="/">Home</a> / Directory</p>
 <h1>Directory</h1>
-<p>{data["indexLede"]}</p>
+{intro}
 <p>This first cut is {len(entries)} hand-picked entries. We checked that each outbound URL resolves. We do not invent star counts, download numbers or rankings. Featured slots are coming later; nothing here is paid placement.</p>
 <p><a class="btn" href="mailto:hello@agentkitdrawer.com?subject=Directory%20submission">Submit a kit</a></p>
 <p class="kitnote"><strong>New to agent rules?</strong> Start with our <a href="#free">free Starter AGENTS.md</a> (one file, emailed instantly), then add a kit from this list.</p>

@@ -1,5 +1,31 @@
 # SEO changelog
 
+## 2026-11-23: Cursor-vs-AGENTS.md section, Codex title, where-to-buy inlinks (this PR)
+- /agents-md-vs-claude-md-vs-cursor-rules/: H2 "Cursor rules vs AGENTS.md" (sourced from cursor.com/docs/rules) plus a contextual link to /codex-agents-md-template/. FAQ "Does Cursor use AGENTS.md?" lives only on the Codex page (#77).
+- /codex-agents-md-template/: title/meta lead with "OpenAI Codex AGENTS.md"; keep #77 H2, snippet, FAQ, and FAQPage JSON-LD; H1 left as-is.
+- Contextual inlinks to /where-to-buy-cursor-rules/ from /cursor-rules-for-python/, /windsurf-rules/, and /directory/awesome-cursorrules/ (builder keeps the directory sentence).
+
+## 2026-11-16: Short answer on /stripe-webhooks-ai-agents/ (#75)
+- One `.tldr` under the H1 (most-loaded guide in 7d without one). Sitemap lastmod only.
+
+## 2026-11-15: Short answer on /agents-md-vs-claude-md-vs-cursor-rules/ (#74)
+- One `.tldr` under the H1; renamed H2 "The short answer" to "Which file each tool reads". Sitemap lastmod only.
+
+## 2026-11-14: Short answer on /cursor-rules-for-python/ (#73)
+- One `.tldr` under the H1, restating facts already on the page. Sitemap lastmod only.
+
+## 2026-11-13: Short answer on /claude-code-claude-md-template/ (#72)
+- One `.tldr` under the H1 (most-visited guide outside / and /packs/ without one). Sitemap lastmod only.
+
+## 2026-11-12: narrow-phone wrap site-wide (#71)
+- CSS: wrap code H2s, long inline code at ≤360px, snippet labels, H1 overflow-wrap; directory H1 `<wbr>` after `/`. No copy/title/meta changes.
+
+## 2026-11-11: 390px wrap on 4 guides (#70)
+- `<wbr>` in long inline code on /stripe-webhooks-ai-agents/, /claude-code-hooks-examples/, /claude-code-stop-hook-tests/, /fastapi-agents-md-cursor-rules/. Visible text unchanged.
+
+## 2026-11-10: Short answer on /claude-code-subagents-hooks-guide/ (#69)
+- One `.tldr` under the H1; `<wbr>` in two code H2s to stop 390px sideways scroll. Sitemap lastmod only.
+
 ## 2026-11-09: /directory/supabase-mcp/ setup + guardrails
 - Expanded the Supabase MCP directory page with a Short answer, a copyable `.cursor/mcp.json` (read-only, `project_ref`), Cursor and Claude Code setup from official docs, and a guardrails section (read-only, project scope, production, feature groups). Title and meta unchanged.
 - Contextual inlinks from /supabase-nextjs-agent-kit/ and /cursor-rules-nextjs-supabase/. Sitemap lastmod bumped for those three pages.

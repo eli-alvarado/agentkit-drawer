@@ -23,6 +23,21 @@ Score = buying intent / winnability / fit (1-3).
 | fastapi async def blocking | /fastapi-async-blocking-ai-agents/ | new page |
 | claude code stop hook tests | /claude-code-stop-hook-tests/ | new page |
 
+## 2026-11-23
+Google Search Console, last 7 days vs previous 7 (pulled 2026-11-23).
+
+| Keyword | Page | Status |
+|---|---|---|
+| cursor rules vs agents.md | /agents-md-vs-claude-md-vs-cursor-rules/ | GSC: 7 impr, pos 72 (prev 8 / 90.6); H2 + FAQ added 2026-11-23 |
+| does cursor use agents.md | /codex-agents-md-template/ | GSC: 4 impr, pos 65 (new, previously ranking on the comparison page); FAQ "Does Cursor use AGENTS.md?" on Codex page 2026-11-23 (#77); comparison H2 links here |
+| codex agent md | /codex-agents-md-template/ | GSC: 4 impr; title/meta lead with "OpenAI Codex AGENTS.md" 2026-11-23 |
+| agents.md codex openai | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |
+| openai codex agents.md | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |
+| openai codex cli agents.md instructions file | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |
+| codex agents md | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78 |
+| codex app agents.md | /codex-agents-md-template/ | GSC: 1 impr, pos 36–78; page is CLI template (title does not claim Codex app) |
+| where to buy cursor rules | /where-to-buy-cursor-rules/ | GSC: 5 impr, pos 9.4, indexed; inlinks added from /cursor-rules-for-python/, /windsurf-rules/, /directory/awesome-cursorrules/ 2026-11-23 |
+
 ## 2026-11-09
 No Search Console query data for these pages in this update (2026-11-09 snapshot kept only AgentKit totals: 87 impressions, 3 clicks, avg position 44.2 for Nov 1-7).
 
